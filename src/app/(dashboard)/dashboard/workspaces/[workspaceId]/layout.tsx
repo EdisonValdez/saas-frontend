@@ -1,0 +1,57 @@
+import { redirect } from 'next/navigation'
+
+import { Workspace } from '@/types/workspaces'
+
+import { getUserWorkspaces } from '@/lib/user-workspaces'
+import { getCurrentUserServer } from '@/lib/session'
+import { signIn } from '@/lib/auth'
+
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb'
+import { AppSidebar } from '@/components/app-sidebar'
+import { Separator } from '@/components/ui/separator'
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { UserDetails } from '@/types/auth'
+
+interface WorkspaceLayoutProps {
+    children: React.ReactNode
+    params: Promise<{
+        workspaceId: string
+    }>
+}
+
+export default async function WorkspaceLayout(props: WorkspaceLayoutProps) {
+    const params = await props.params
+
+    const { children } = props
+
+    const userData = getCurrentUserServer()
+    const workspacesData = getUserWorkspaces()
+
+    const [user, workspaces] = await Promise.all([userData, workspacesData])
+
+    if (!user) {
+        redirect(await signIn())
+    }
+
+    const workspace = workspaces?.filter((w) => w.id === params.workspaceId)[0] as Workspace
+
+    if (!workspace) {
+        redirect('/')
+    }
+
+    return (
+        <SidebarProvider>
+            <AppSidebar workspaces={workspaces as Workspace[]} user={user as UserDetails} />
+            <SidebarInset>
+                <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+                    <div className="flex items-center gap-2 px-4">
+                        <SidebarTrigger className="-ml-1" />
+                        <Separator orientation="vertical" className="mr-2 h-4" />
+                        <DynamicBreadcrumb />
+                    </div>
+                </header>
+                <div>{children}</div>
+            </SidebarInset>
+        </SidebarProvider>
+    )
+}
