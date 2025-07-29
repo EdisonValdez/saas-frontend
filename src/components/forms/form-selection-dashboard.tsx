@@ -821,41 +821,13 @@ export default function FormSelectionDashboard() {
         ))}
       </Tabs>
 
-      {/* Form Preview Dialog */}
-      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle className="flex items-center space-x-2">
-              <FileText className="w-5 h-5" />
-              <span>{selectedForm?.formNumber} - {selectedForm?.title}</span>
-            </DialogTitle>
-            <DialogDescription>
-              Preview form template and data population
-            </DialogDescription>
-          </DialogHeader>
-          
-          {selectedForm && (
-            <div className="grid grid-cols-2 gap-6 h-96">
-              <div>
-                <h4 className="font-medium mb-2">Form Template</h4>
-                <div className="border rounded-lg p-4 bg-gray-50 h-full overflow-auto">
-                  <p className="text-sm text-gray-600">
-                    Form template preview would be displayed here...
-                  </p>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-medium mb-2">Data Population</h4>
-                <div className="border rounded-lg p-4 h-full overflow-auto">
-                  <p className="text-sm text-gray-600">
-                    Field-by-field data mapping preview would be displayed here...
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      {/* Enhanced Form Preview Dialog */}
+      <FormPreviewDialog
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        formId={selectedForm?.id || ''}
+        clientId="client-123" // This would come from context or props
+      />
     </div>
   )
 }
