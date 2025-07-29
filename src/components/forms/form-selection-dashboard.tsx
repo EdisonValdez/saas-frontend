@@ -13,7 +13,7 @@ import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import FormPreviewDialog from './form-preview-dialog'
 import { 
   Search, Filter, Download, Eye, Edit3, Check, Clock, AlertTriangle, 
   FileText, Users, Building, Briefcase, Heart, Star, History, 
