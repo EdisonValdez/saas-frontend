@@ -206,11 +206,14 @@ export function TaxAgentChat() {
 
             const data: AgentResponse = await response.json()
 
-            setMessages(prev => prev.map(msg => 
-                msg.id === agentMessage.id 
+            setMessages(prev => prev.map(msg =>
+                msg.id === agentMessage.id
                     ? { ...msg, content: data.response, status: 'sent' }
                     : msg
             ))
+
+            // Announce response received
+            announce('Response received from tax assistant')
 
         } catch (error) {
             console.error('Agent chat error:', error)
