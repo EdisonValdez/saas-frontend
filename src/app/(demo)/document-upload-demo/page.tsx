@@ -4,7 +4,10 @@ import { useState } from 'react'
 import { DocumentUpload } from '@/components/documents/document-upload'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { CheckCircle2, AlertCircle } from 'lucide-react'
+import { CheckCircle2, AlertCircle, FileText, Upload, Eye, Settings, ChevronRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
 
 export default function DocumentUploadDemo() {
     const [uploadStatus, setUploadStatus] = useState<{
