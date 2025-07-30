@@ -395,9 +395,14 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
     }
 
     return (
-        <div className={cn("h-screen flex flex-col bg-background", className)}>
+        <div
+            className={cn("h-screen flex flex-col bg-background", className)}
+            role="main"
+            aria-label="Email Agent Interface"
+            id="main-content"
+        >
             {/* Top Toolbar */}
-            <div className="border-b bg-white px-4 py-3">
+            <div className="border-b bg-white px-4 py-3" role="toolbar" aria-label="Email toolbar">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <h1 className="text-xl font-semibold">Email Agent</h1>
