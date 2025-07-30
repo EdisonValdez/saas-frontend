@@ -1,3 +1,5 @@
+'use client'
+
 import TaxAssistantChat from '@/components/chat/tax-assistant-chat'
 
 export default function TaxAssistantChatDemo() {
