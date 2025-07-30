@@ -79,14 +79,7 @@ export const Icons = {
     edit: Edit,
 
     logo: (props: LucideProps) => (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            {...props}
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}>
             <circle cx="12" cy="12" r="11" fill="#6366F1" />
             <path
                 d="M7 7h4.5c2.485 0 4.5 2.015 4.5 4.5S13.985 16 11.5 16H9v1H7V7zm2 2v5h2.5c1.381 0 2.5-1.119 2.5-2.5S12.381 9 11.5 9H9z"
