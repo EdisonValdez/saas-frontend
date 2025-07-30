@@ -65,9 +65,9 @@ export function DashboardMainNav({ items, children, workspaces = [], user }: Mai
                 </SheetTrigger>
                 <SheetContent side="left">
                     <nav className="grid gap-6 text-lg font-medium">
-                        <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
+                        <Link href="/dashboard" className="flex items-center gap-2 text-lg font-semibold">
                             <Icons.logo />
-                            <span className="sr-only">{siteConfig.name}</span>
+                            <span className="font-bold">{siteConfig.name}</span>
                         </Link>
 
                         {items?.map((item) => (
