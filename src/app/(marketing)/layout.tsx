@@ -16,9 +16,9 @@ export default async function MarketingLayout({ children }: MarketingLayoutProps
     return (
         <div className="flex min-h-screen flex-col">
             <NextAuthSesionProvider session={session}>
-                {/* Only show header/footer for non-home pages */}
-                {/* Our main page now handles its own layout completely */}
+                <Header1 navigationItems={marketingConfig.mainNav} />
                 <main className="flex-1">{children}</main>
+                <Footer1 />
             </NextAuthSesionProvider>
         </div>
     )
