@@ -84,7 +84,7 @@ export function TaxAssistantCreateModal({ workspaceId }: TaxAssistantCreateModal
 
             const payload = {
                 name: sessionName.trim(),
-                client_id: selectedClientId || null,
+                client_id: selectedClientId && selectedClientId !== 'none' ? selectedClientId : null,
                 client_name: selectedClient?.name || null,
             }
 
