@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 
 import { Frame, PieChart, Settings, MessageSquare, Languages, Building2, CreditCard, Presentation, Mail } from 'lucide-react'
 
