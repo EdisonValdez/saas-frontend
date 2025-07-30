@@ -9,8 +9,8 @@ import { getUserWorkspaces } from '@/lib/user-workspaces'
 import { WorkspaceDashboard } from '@/components/workspaces/workspace-dashboard'
 
 export const metadata: Metadata = {
-    title: 'Workspace Home',
-    description: 'Welcome to your workspace',
+    title: 'Workspace',
+    description: 'PromptAx Workspace - Collaborate with your team on tax document processing and AI automation.',
 }
 
 export default async function WorkspaceDetailPage(props: { params: Promise<{ workspaceId: string }> }) {
