@@ -1,8 +1,10 @@
 import FormSelectionDashboard from '@/components/forms/form-selection-dashboard'
+import { DemoLayout } from '@/components/layouts/demo-layout'
 
 export default function FormSelectionDemo() {
   return (
-    <div className="container mx-auto py-8">
+    <DemoLayout>
+      <div className="container mx-auto py-8">
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold mb-4">Tax Form Selection & Generation Dashboard</h1>
         <p className="text-lg text-gray-600 max-w-4xl mx-auto">
@@ -98,7 +100,8 @@ export default function FormSelectionDemo() {
         </div>
       </div>
 
-      <FormSelectionDashboard />
-    </div>
+        <FormSelectionDashboard />
+      </div>
+    </DemoLayout>
   )
 }
