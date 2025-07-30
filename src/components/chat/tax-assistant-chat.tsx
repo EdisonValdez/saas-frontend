@@ -12,10 +12,10 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
-import { 
+import {
   Send, Paperclip, Search, Bookmark, Download, MoreHorizontal,
-  Calculator, Calendar, FileText, Shield, Eye, EyeOff, 
-  MessageSquare, Users, Bot, User, Clock, CheckCheck,
+  Calculator, Calendar, FileText, Shield, Eye, EyeOff,
+  MessageSquare, Users, Bot, User, Clock, CheckCheck, Check,
   AlertTriangle, Info, Zap, Upload, X, Maximize2, Minimize2,
   Hash, Lock, Unlock, Flag, Star, Archive, Filter
 } from 'lucide-react'
