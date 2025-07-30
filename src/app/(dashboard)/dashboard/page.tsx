@@ -11,6 +11,7 @@ import { getUserWorkspaces } from '@/lib/user-workspaces'
 
 import { WorkspaceListV2 } from '@/components/workspaces/workspace-list-v2'
 import { DashboardMainNav } from '@/components/dashboard/main-nav'
+import { FeatureNavigation } from '@/components/dashboard/feature-navigation'
 
 export const metadata = {
     title: 'Dashboard',
