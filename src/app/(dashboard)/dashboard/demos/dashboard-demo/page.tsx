@@ -34,29 +34,29 @@ export default function DashboardDemo() {
         {
             id: 'demo-workspace-123',
             name: 'Tax Office Pro',
-            description: 'Full-featured workspace with comprehensive data and alerts'
+            description: 'Full-featured workspace with comprehensive data and alerts',
         },
         {
             id: 'small-practice-456',
             name: 'Small Practice',
-            description: 'Smaller operation with moderate activity levels'
+            description: 'Smaller operation with moderate activity levels',
         },
         {
             id: 'corporate-clients-789',
             name: 'Corporate Focus',
-            description: 'High-volume workspace focused on business clients'
+            description: 'High-volume workspace focused on business clients',
         },
         {
             id: 'quiet-workspace-000',
             name: 'Quiet Office',
-            description: 'Minimal activity workspace for testing empty states'
-        }
+            description: 'Minimal activity workspace for testing empty states',
+        },
     ]
 
     const handleUploadDocument = () => {
         setFeedback({
             type: 'success',
-            message: 'Upload Document action triggered - would navigate to document upload'
+            message: 'Upload Document action triggered - would navigate to document upload',
         })
         clearFeedback()
     }
@@ -64,7 +64,7 @@ export default function DashboardDemo() {
     const handleAddClient = () => {
         setFeedback({
             type: 'success',
-            message: 'Add Client action triggered - would open client creation form'
+            message: 'Add Client action triggered - would open client creation form',
         })
         clearFeedback()
     }
@@ -72,7 +72,7 @@ export default function DashboardDemo() {
     const handleProcessForms = () => {
         setFeedback({
             type: 'success',
-            message: 'Process Forms action triggered - would start batch processing'
+            message: 'Process Forms action triggered - would start batch processing',
         })
         clearFeedback()
     }
@@ -80,7 +80,7 @@ export default function DashboardDemo() {
     const handleViewActivity = (activity: RecentActivity) => {
         setFeedback({
             type: 'success',
-            message: `Viewing activity: ${activity.title} for ${activity.client_name || 'system'}`
+            message: `Viewing activity: ${activity.title} for ${activity.client_name || 'system'}`,
         })
         clearFeedback()
     }
@@ -88,7 +88,7 @@ export default function DashboardDemo() {
     const handleError = (error: string) => {
         setFeedback({
             type: 'error',
-            message: error
+            message: error,
         })
         clearFeedback()
     }
@@ -112,7 +112,8 @@ export default function DashboardDemo() {
             <div className="mb-8">
                 <h1 className="text-3xl font-bold mb-4">Dashboard Overview Demo</h1>
                 <p className="text-gray-600 text-lg">
-                    Comprehensive dashboard for tax form management system with real-time metrics, activity tracking, and intelligent alerts.
+                    Comprehensive dashboard for tax form management system with real-time metrics, activity tracking,
+                    and intelligent alerts.
                 </p>
             </div>
 
@@ -131,15 +132,13 @@ export default function DashboardDemo() {
                             {demoWorkspaces.map((workspace) => (
                                 <Button
                                     key={workspace.id}
-                                    variant={currentWorkspace === workspace.id ? "default" : "outline"}
+                                    variant={currentWorkspace === workspace.id ? 'default' : 'outline'}
                                     className="w-full justify-start text-left h-auto p-3"
                                     onClick={() => setCurrentWorkspace(workspace.id)}
                                 >
                                     <div>
                                         <div className="font-medium">{workspace.name}</div>
-                                        <div className="text-sm text-gray-500 mt-1">
-                                            {workspace.description}
-                                        </div>
+                                        <div className="text-sm text-gray-500 mt-1">{workspace.description}</div>
                                     </div>
                                 </Button>
                             ))}
@@ -167,11 +166,7 @@ export default function DashboardDemo() {
                                     className="mt-1"
                                 />
                             </div>
-                            <Button
-                                onClick={loadCustomWorkspace}
-                                disabled={!customWorkspace.trim()}
-                                className="w-full"
-                            >
+                            <Button onClick={loadCustomWorkspace} disabled={!customWorkspace.trim()} className="w-full">
                                 Load Workspace
                             </Button>
                             <p className="text-xs text-gray-500">
@@ -190,30 +185,36 @@ export default function DashboardDemo() {
                         <div className="space-y-3">
                             <div>
                                 <Label className="text-sm text-gray-600">Active Workspace</Label>
-                                <p className="font-mono text-sm bg-gray-100 p-2 rounded mt-1">
-                                    {currentWorkspace}
-                                </p>
+                                <p className="font-mono text-sm bg-gray-100 p-2 rounded mt-1">{currentWorkspace}</p>
                             </div>
-                            
+
                             <div className="space-y-2">
                                 <div className="flex items-center space-x-2">
-                                    <Badge variant="outline" className="text-xs">✓</Badge>
+                                    <Badge variant="outline" className="text-xs">
+                                        ✓
+                                    </Badge>
                                     <span className="text-sm">Real-time metrics</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <Badge variant="outline" className="text-xs">✓</Badge>
+                                    <Badge variant="outline" className="text-xs">
+                                        ✓
+                                    </Badge>
                                     <span className="text-sm">Interactive charts</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <Badge variant="outline" className="text-xs">✓</Badge>
+                                    <Badge variant="outline" className="text-xs">
+                                        ✓
+                                    </Badge>
                                     <span className="text-sm">Activity tracking</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <Badge variant="outline" className="text-xs">✓</Badge>
+                                    <Badge variant="outline" className="text-xs">
+                                        ✓
+                                    </Badge>
                                     <span className="text-sm">Smart alerts</span>
                                 </div>
                             </div>
-                            
+
                             {feedback.type && (
                                 <Alert variant={feedback.type === 'error' ? 'destructive' : 'default'}>
                                     {feedback.type === 'success' ? (
@@ -221,9 +222,7 @@ export default function DashboardDemo() {
                                     ) : (
                                         <AlertCircle className="h-4 w-4" />
                                     )}
-                                    <AlertDescription className="text-xs">
-                                        {feedback.message}
-                                    </AlertDescription>
+                                    <AlertDescription className="text-xs">{feedback.message}</AlertDescription>
                                 </Alert>
                             )}
                         </div>
@@ -251,27 +250,39 @@ export default function DashboardDemo() {
                     <CardContent>
                         <ul className="space-y-2 text-sm">
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">📊</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    📊
+                                </Badge>
                                 <span>Real-time key performance metrics with trend indicators</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">📈</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    📈
+                                </Badge>
                                 <span>Interactive charts showing form distribution and status</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">🔄</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    🔄
+                                </Badge>
                                 <span>Recent activity feed with detailed information</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">⚡</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    ⚡
+                                </Badge>
                                 <span>Quick action buttons for common tasks</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">🚨</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    🚨
+                                </Badge>
                                 <span>Smart alerts and notifications system</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">📱</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    📱
+                                </Badge>
                                 <span>Fully responsive design for all devices</span>
                             </li>
                         </ul>
@@ -285,27 +296,39 @@ export default function DashboardDemo() {
                     <CardContent>
                         <ul className="space-y-2 text-sm">
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">📄</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    📄
+                                </Badge>
                                 <span>Total documents processed</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">✅</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    ✅
+                                </Badge>
                                 <span>Processing accuracy percentage</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">⏱️</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    ⏱️
+                                </Badge>
                                 <span>Average processing time tracking</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">👥</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    👥
+                                </Badge>
                                 <span>Active client count</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">📋</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    📋
+                                </Badge>
                                 <span>Pending tasks queue</span>
                             </li>
                             <li className="flex items-start space-x-2">
-                                <Badge variant="outline" className="mt-0.5 text-xs">📊</Badge>
+                                <Badge variant="outline" className="mt-0.5 text-xs">
+                                    📊
+                                </Badge>
                                 <span>Trend analysis with period comparisons</span>
                             </li>
                         </ul>
@@ -319,24 +342,26 @@ export default function DashboardDemo() {
                     <CardContent>
                         <div className="space-y-3 text-sm">
                             <div>
-                                <Badge variant="outline" className="mb-1">GET</Badge>
-                                <p className="font-mono text-xs bg-gray-100 p-2 rounded">
-                                    /api/dashboard/metrics/
-                                </p>
+                                <Badge variant="outline" className="mb-1">
+                                    GET
+                                </Badge>
+                                <p className="font-mono text-xs bg-gray-100 p-2 rounded">/api/dashboard/metrics/</p>
                                 <p className="text-gray-600 mt-1">System metrics and chart data</p>
                             </div>
                             <div>
-                                <Badge variant="outline" className="mb-1">GET</Badge>
+                                <Badge variant="outline" className="mb-1">
+                                    GET
+                                </Badge>
                                 <p className="font-mono text-xs bg-gray-100 p-2 rounded">
                                     /api/dashboard/recent-activity/
                                 </p>
                                 <p className="text-gray-600 mt-1">Recent user and system activity</p>
                             </div>
                             <div>
-                                <Badge variant="outline" className="mb-1">GET</Badge>
-                                <p className="font-mono text-xs bg-gray-100 p-2 rounded">
-                                    /api/dashboard/alerts/
-                                </p>
+                                <Badge variant="outline" className="mb-1">
+                                    GET
+                                </Badge>
+                                <p className="font-mono text-xs bg-gray-100 p-2 rounded">/api/dashboard/alerts/</p>
                                 <p className="text-gray-600 mt-1">System alerts and notifications</p>
                             </div>
                         </div>
@@ -377,7 +402,7 @@ export default function DashboardDemo() {
                 </CardHeader>
                 <CardContent>
                     <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
-{`import { DashboardOverview } from '@/components/dashboard/dashboard-overview'
+                        {`import { DashboardOverview } from '@/components/dashboard/dashboard-overview'
 
 function MyDashboard() {
     const handleUploadDocument = () => {
