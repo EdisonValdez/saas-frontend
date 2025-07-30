@@ -15,6 +15,11 @@ import { fontSans } from '@/lib/fonts'
 import { Toaster } from '@/components/ui/toaster'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
+import { PromptaxNavbar } from '@/components/promptax-navbar'
+import { NextAuthSesionProvider } from '@/components/auth/session-provider'
+
+// Authentication
+import { auth } from '@/lib/auth'
 
 export const viewport: Viewport = {
     themeColor: [
