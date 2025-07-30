@@ -22,55 +22,57 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 
 export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
     const params = useParams<{ workspaceId: string }>()
+    const currentWorkspaceId = params.workspaceId || workspaces?.[0]?.id || 'default'
+    
     const data = {
         navMain: [
             {
                 title: 'Workspace',
-                url: `/dashboard/workspaces/${params.workspaceId}`,
+                url: `/dashboard/workspaces/${currentWorkspaceId}`,
                 icon: Building2,
                 isActive: true,
                 items: [
                     {
                         title: 'Home',
-                        url: `/dashboard/workspaces/${params.workspaceId}`,
+                        url: `/dashboard/workspaces/${currentWorkspaceId}`,
                     },
                     {
                         title: 'Details',
-                        url: `/dashboard/workspaces/${params.workspaceId}/details`,
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/details`,
                     },
                     {
                         title: 'Teams',
-                        url: `/dashboard/workspaces/${params.workspaceId}/teams`,
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/teams`,
                     },
                     {
                         title: 'Settings',
-                        url: `/dashboard/workspaces/${params.workspaceId}/settings`,
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/settings`,
                     },
                 ],
             },
             {
                 title: 'Chats',
-                url: `/dashboard/workspaces/${params.workspaceId}/chat`,
+                url: `/dashboard/workspaces/${currentWorkspaceId}/chat`,
                 icon: MessageSquare,
                 items: [
                     {
                         title: 'Chat',
-                        url: `/dashboard/workspaces/${params.workspaceId}/chat`,
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/chat`,
                     },
                     {
                         title: 'Chat History',
-                        url: `/dashboard/workspaces/${params.workspaceId}/chat/history/`,
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/chat/history/`,
                     },
                 ],
             },
             {
                 title: 'Translate',
-                url: `/dashboard/workspaces/${params.workspaceId}/translate/`,
+                url: `/dashboard/workspaces/${currentWorkspaceId}/translate/`,
                 icon: Languages,
                 items: [
                     {
                         title: 'Translate with AI',
-                        url: `/dashboard/workspaces/${params.workspaceId}/translate/`,
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/translate/`,
                     },
                 ],
             },
