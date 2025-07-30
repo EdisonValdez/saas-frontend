@@ -108,6 +108,18 @@ export function DashboardSidebar({ workspaceId, className }: DashboardSidebarPro
                   description: 'Team collaboration',
               },
               {
+                  title: 'Tax Assistant',
+                  href: `/dashboard/workspaces/${workspaceId}/tax-assistant`,
+                  icon: Calculator,
+                  description: 'AI tax consultation',
+              },
+              {
+                  title: 'Email Agent',
+                  href: `/dashboard/workspaces/${workspaceId}/email-agent`,
+                  icon: Mail,
+                  description: 'AI email composition',
+              },
+              {
                   title: 'Team Management',
                   href: `/dashboard/workspaces/${workspaceId}/teams`,
                   icon: UserPlus,
