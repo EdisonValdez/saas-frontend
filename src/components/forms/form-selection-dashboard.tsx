@@ -523,7 +523,7 @@ export default function FormSelectionDashboard() {
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all_categories">All Categories</SelectItem>
                 {FORM_CATEGORIES.map(cat => (
                   <SelectItem key={cat.value} value={cat.value}>
                     {cat.icon} {cat.label}
@@ -540,7 +540,7 @@ export default function FormSelectionDashboard() {
                 <SelectValue placeholder="Entity Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Entities</SelectItem>
+                <SelectItem value="all_entities">All Entities</SelectItem>
                 {ENTITY_TYPES.map(entity => (
                   <SelectItem key={entity.value} value={entity.value}>
                     {entity.label}
@@ -557,7 +557,7 @@ export default function FormSelectionDashboard() {
                 <SelectValue placeholder="Jurisdiction" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="all_jurisdictions">All</SelectItem>
                 <SelectItem value="federal">Federal</SelectItem>
                 <SelectItem value="state">State</SelectItem>
               </SelectContent>
@@ -571,7 +571,7 @@ export default function FormSelectionDashboard() {
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Years</SelectItem>
+                <SelectItem value="all_years">All Years</SelectItem>
                 <SelectItem value="2024">2024</SelectItem>
                 <SelectItem value="2023">2023</SelectItem>
                 <SelectItem value="2022">2022</SelectItem>
@@ -586,7 +586,7 @@ export default function FormSelectionDashboard() {
                 <SelectValue placeholder="Complexity" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Levels</SelectItem>
+                <SelectItem value="all_levels">All Levels</SelectItem>
                 {COMPLEXITY_LEVELS.map(level => (
                   <SelectItem key={level.value} value={level.value}>
                     {level.label}
@@ -603,7 +603,7 @@ export default function FormSelectionDashboard() {
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Statuses</SelectItem>
+                <SelectItem value="all_statuses">All Statuses</SelectItem>
                 {STATUS_OPTIONS.map(status => (
                   <SelectItem key={status.value} value={status.value}>
                     {status.label}
@@ -620,7 +620,7 @@ export default function FormSelectionDashboard() {
                 <SelectValue placeholder="Completion" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="all_completion">All</SelectItem>
                 <SelectItem value="not_started">Not Started</SelectItem>
                 <SelectItem value="in_progress">In Progress</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
