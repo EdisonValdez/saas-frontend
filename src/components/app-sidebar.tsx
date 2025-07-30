@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { useParams } from 'next/navigation'
 
-import { Frame, PieChart, Settings, MessageSquare, Languages, Building2, CreditCard } from 'lucide-react'
+import { Frame, PieChart, Settings, MessageSquare, Languages, Building2, CreditCard, Presentation } from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main'
 import { NavUser } from '@/components/nav-user'
@@ -107,6 +107,11 @@ export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
                 name: 'Billing',
                 url: '/dashboard/billing',
                 icon: CreditCard,
+            },
+            {
+                name: 'Demos',
+                url: '/dashboard/demos',
+                icon: Presentation,
             },
         ],
     }
