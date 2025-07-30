@@ -84,7 +84,7 @@ export function TaxAssistantCreateModal({ workspaceId }: TaxAssistantCreateModal
 
             const payload = {
                 name: sessionName.trim(),
-                client_id: selectedClientId || null,
+                client_id: selectedClientId && selectedClientId !== 'none' ? selectedClientId : null,
                 client_name: selectedClient?.name || null,
             }
 
@@ -166,7 +166,7 @@ export function TaxAssistantCreateModal({ workspaceId }: TaxAssistantCreateModal
                                     />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">No client selected</SelectItem>
+                                    <SelectItem value="none">No client selected</SelectItem>
                                     {clients.map((client) => (
                                         <SelectItem key={client.id} value={client.id}>
                                             {client.name}

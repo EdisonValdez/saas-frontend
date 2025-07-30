@@ -93,7 +93,7 @@ export function EmailAgentCreateModal({ workspaceId }: EmailAgentCreateModalProp
 
             const payload = {
                 name: sessionName.trim(),
-                client_id: selectedClientId || null,
+                client_id: selectedClientId && selectedClientId !== 'none' ? selectedClientId : null,
                 client_name: selectedClient?.name || null,
                 email_subject: emailSubject.trim() || null,
                 email_type: emailType,
@@ -206,7 +206,7 @@ export function EmailAgentCreateModal({ workspaceId }: EmailAgentCreateModalProp
                                     />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">No client selected</SelectItem>
+                                    <SelectItem value="none">No client selected</SelectItem>
                                     {clients.map((client) => (
                                         <SelectItem key={client.id} value={client.id}>
                                             {client.name}

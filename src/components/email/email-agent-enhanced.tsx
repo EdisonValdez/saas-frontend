@@ -296,7 +296,7 @@ export function EmailAgentEnhanced() {
                 prompt,
                 context: {
                     task: 'email_enhancement',
-                    client_id: selectedClient,
+                    client_id: selectedClient && selectedClient !== 'none' ? selectedClient : null,
                     workspace_id: workspaceId,
                 },
             })
@@ -520,7 +520,7 @@ export function EmailAgentEnhanced() {
                                                 <SelectValue placeholder="Select client for context" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="">No specific client</SelectItem>
+                                                <SelectItem value="none">No specific client</SelectItem>
                                                 {clients?.clients?.map((client) => (
                                                     <SelectItem key={client.id} value={client.id}>
                                                         {client.name}

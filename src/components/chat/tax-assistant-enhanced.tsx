@@ -162,7 +162,7 @@ export function TaxAssistantEnhanced() {
             // Prepare context for AI
             const context = {
                 session_id: activeSession.id,
-                client_id: selectedClient || null,
+                client_id: selectedClient && selectedClient !== 'none' ? selectedClient : null,
                 attached_documents: attachedDocuments,
                 workspace_id: workspaceId,
                 conversation_history: messages.slice(-5), // Last 5 messages for context
@@ -202,7 +202,7 @@ export function TaxAssistantEnhanced() {
         try {
             const sessionData = {
                 name: sessionName,
-                client_id: selectedClient || null,
+                client_id: selectedClient && selectedClient !== 'none' ? selectedClient : null,
                 workspace_id: workspaceId,
             }
 
@@ -279,7 +279,7 @@ export function TaxAssistantEnhanced() {
                                 <SelectValue placeholder="Select client (optional)" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">No specific client</SelectItem>
+                                <SelectItem value="none">No specific client</SelectItem>
                                 {clients?.clients?.map((client) => (
                                     <SelectItem key={client.id} value={client.id}>
                                         {client.name}
@@ -624,7 +624,7 @@ export function TaxAssistantEnhanced() {
                                     <SelectValue placeholder="Select a client for context" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">General tax questions</SelectItem>
+                                    <SelectItem value="none">General tax questions</SelectItem>
                                     {clients?.clients?.map((client) => (
                                         <SelectItem key={client.id} value={client.id}>
                                             {client.name}
