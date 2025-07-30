@@ -23,7 +23,7 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
     const params = useParams<{ workspaceId: string }>()
     const currentWorkspaceId = params.workspaceId || workspaces?.[0]?.id || 'default'
-    
+
     const data = {
         navMain: [
             {
