@@ -19,6 +19,8 @@ import {
     UserPlus,
     Presentation,
     HelpCircle,
+    Calculator,
+    Mail,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -104,6 +106,18 @@ export function DashboardSidebar({ workspaceId, className }: DashboardSidebarPro
                   href: `/dashboard/workspaces/${workspaceId}/chat`,
                   icon: MessageSquare,
                   description: 'Team collaboration',
+              },
+              {
+                  title: 'Tax Assistant',
+                  href: `/dashboard/workspaces/${workspaceId}/tax-assistant`,
+                  icon: Calculator,
+                  description: 'AI tax consultation',
+              },
+              {
+                  title: 'Email Agent',
+                  href: `/dashboard/workspaces/${workspaceId}/email-agent`,
+                  icon: Mail,
+                  description: 'AI email composition',
               },
               {
                   title: 'Team Management',
