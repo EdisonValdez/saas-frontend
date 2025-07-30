@@ -2,9 +2,22 @@
 
 import * as React from 'react'
 
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 
-import { Frame, PieChart, Settings, MessageSquare, Languages, Building2, CreditCard, Presentation } from 'lucide-react'
+import {
+    Frame,
+    PieChart,
+    Settings,
+    MessageSquare,
+    Languages,
+    Building2,
+    CreditCard,
+    Presentation,
+    Mail,
+    Users,
+    FileText,
+    Calculator,
+} from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main'
 import { NavUser } from '@/components/nav-user'
@@ -22,7 +35,11 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 
 export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
     const params = useParams<{ workspaceId: string }>()
+    const pathname = usePathname()
     const currentWorkspaceId = params.workspaceId || workspaces?.[0]?.id || 'default'
+
+    // Check if we're currently in a workspace-specific page
+    const isInWorkspace = pathname.startsWith(`/dashboard/workspaces/${currentWorkspaceId}`)
 
     const data = {
         navMain: [
@@ -30,7 +47,7 @@ export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
                 title: 'Workspace',
                 url: `/dashboard/workspaces/${currentWorkspaceId}`,
                 icon: Building2,
-                isActive: true,
+                isActive: isInWorkspace,
                 items: [
                     {
                         title: 'Home',
@@ -43,6 +60,31 @@ export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
                     {
                         title: 'Teams',
                         url: `/dashboard/workspaces/${currentWorkspaceId}/teams`,
+                    },
+                    {
+                        title: 'Clients',
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/clients`,
+                        icon: Users,
+                    },
+                    {
+                        title: 'Documents',
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/documents`,
+                        icon: FileText,
+                    },
+                    {
+                        title: 'Tax Forms',
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/forms`,
+                        icon: Calculator,
+                    },
+                    {
+                        title: 'Tax Assistant',
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/chat-agent`,
+                        icon: MessageSquare,
+                    },
+                    {
+                        title: 'Email Agent',
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/email-agent`,
+                        icon: Mail,
                     },
                     {
                         title: 'Settings',
@@ -94,16 +136,6 @@ export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
                 name: 'Dashboard',
                 url: '/dashboard',
                 icon: Frame,
-            },
-            {
-                name: 'Tax Assistant Chat',
-                url: '/dashboard/chat-agent',
-                icon: MessageSquare,
-            },
-            {
-                name: 'Email Agent',
-                url: '/dashboard/email-agent',
-                icon: MessageSquare,
             },
             {
                 name: 'Workspaces',

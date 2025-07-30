@@ -3,14 +3,14 @@ import { redirect } from 'next/navigation'
 
 import { signIn } from '@/lib/auth'
 import { getCurrentUserServer } from '@/lib/session'
-import { EmailAgentEnhanced } from '@/components/email/email-agent-enhanced'
+import { DocumentManagementSystem } from '@/components/documents/document-management-system'
 
 export const metadata: Metadata = {
-    title: 'Email Agent',
-    description: 'Create professional emails with AI assistance and templates',
+    title: 'Document Management',
+    description: 'Upload, process, and manage client documents with AI-powered OCR',
 }
 
-export default async function EmailAgentPage() {
+export default async function DocumentsPage() {
     const user = await getCurrentUserServer()
 
     if (!user) {
@@ -19,7 +19,7 @@ export default async function EmailAgentPage() {
 
     return (
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <EmailAgentEnhanced />
+            <DocumentManagementSystem showClientSelector={true} />
         </div>
     )
 }

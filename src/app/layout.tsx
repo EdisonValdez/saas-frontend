@@ -15,6 +15,7 @@ import { fontSans } from '@/lib/fonts'
 import { Toaster } from '@/components/ui/toaster'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
+import { ReactQueryProvider } from '@/lib/react-query'
 import { PromptaxNavbar } from '@/components/promptax-navbar'
 import { NextAuthSesionProvider } from '@/components/auth/session-provider'
 
@@ -53,12 +54,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 suppressHydrationWarning
             >
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                    <NextAuthSesionProvider session={session}>
-                        {!session && <PromptaxNavbar />}
-                        <main className={session ? '' : 'pt-16'}>{children}</main>
-                        <Toaster />
-                        <TailwindIndicator />
-                    </NextAuthSesionProvider>
+                    <ReactQueryProvider>
+                        <NextAuthSesionProvider session={session}>
+                            {!session && <PromptaxNavbar />}
+                            <main className={session ? '' : 'pt-16'}>{children}</main>
+                            <Toaster />
+                            <TailwindIndicator />
+                        </NextAuthSesionProvider>
+                    </ReactQueryProvider>
                 </ThemeProvider>
             </body>
         </html>

@@ -3,14 +3,14 @@ import { redirect } from 'next/navigation'
 
 import { signIn } from '@/lib/auth'
 import { getCurrentUserServer } from '@/lib/session'
-import { EmailAgentEnhanced } from '@/components/email/email-agent-enhanced'
+import { TaxFormManagement } from '@/components/forms/tax-form-management'
 
 export const metadata: Metadata = {
-    title: 'Email Agent',
-    description: 'Create professional emails with AI assistance and templates',
+    title: 'Tax Forms',
+    description: 'Create, manage, and file tax forms with intelligent automation',
 }
 
-export default async function EmailAgentPage() {
+export default async function TaxFormsPage() {
     const user = await getCurrentUserServer()
 
     if (!user) {
@@ -19,7 +19,7 @@ export default async function EmailAgentPage() {
 
     return (
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <EmailAgentEnhanced />
+            <TaxFormManagement />
         </div>
     )
 }

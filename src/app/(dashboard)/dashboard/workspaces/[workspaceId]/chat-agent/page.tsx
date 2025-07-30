@@ -3,14 +3,14 @@ import { redirect } from 'next/navigation'
 
 import { signIn } from '@/lib/auth'
 import { getCurrentUserServer } from '@/lib/session'
-import { EmailAgentEnhanced } from '@/components/email/email-agent-enhanced'
+import { TaxAssistantEnhanced } from '@/components/chat/tax-assistant-enhanced'
 
 export const metadata: Metadata = {
-    title: 'Email Agent',
-    description: 'Create professional emails with AI assistance and templates',
+    title: 'Tax Assistant Chat',
+    description: 'AI-powered tax consultation with workspace context and document integration',
 }
 
-export default async function EmailAgentPage() {
+export default async function ChatAgentPage() {
     const user = await getCurrentUserServer()
 
     if (!user) {
@@ -18,8 +18,8 @@ export default async function EmailAgentPage() {
     }
 
     return (
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <EmailAgentEnhanced />
+        <div className="h-[calc(100vh-4rem)]">
+            <TaxAssistantEnhanced />
         </div>
     )
 }

@@ -3,14 +3,14 @@ import { redirect } from 'next/navigation'
 
 import { signIn } from '@/lib/auth'
 import { getCurrentUserServer } from '@/lib/session'
-import { EmailAgentEnhanced } from '@/components/email/email-agent-enhanced'
+import { ClientManagementEnhanced } from '@/components/clients/client-management-enhanced'
 
 export const metadata: Metadata = {
-    title: 'Email Agent',
-    description: 'Create professional emails with AI assistance and templates',
+    title: 'Client Management',
+    description: 'Manage your clients, profiles, and subscription limits',
 }
 
-export default async function EmailAgentPage() {
+export default async function ClientManagementPage() {
     const user = await getCurrentUserServer()
 
     if (!user) {
@@ -19,7 +19,7 @@ export default async function EmailAgentPage() {
 
     return (
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <EmailAgentEnhanced />
+            <ClientManagementEnhanced />
         </div>
     )
 }

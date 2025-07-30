@@ -40,7 +40,7 @@ export default async function DashboardPage() {
             </div>
 
             {/* Simplified Feature Navigation */}
-            <SimplifiedFeatureNavigation workspaceId={defaultWorkspaceId} />
+            <SimplifiedFeatureNavigation workspaceId={defaultWorkspaceId || undefined} />
 
             {/* Workspace Management - Simplified */}
             {workspaces && workspaces.length > 0 ? (
