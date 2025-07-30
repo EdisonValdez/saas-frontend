@@ -1,10 +1,10 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-    name: 'Acme',
+    name: 'PromptAx',
     description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    url: 'https://www.acme.com/',
+        'Your AI-Powered Tax Workflow Assistant. Transform complex tax documents into completed forms in minutes with AI automation.',
+    url: 'https://landingpagepromptax.applikuapp.com/',
     ogImage: '/',
     links: {
         twitter: '/',
