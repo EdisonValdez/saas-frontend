@@ -11,6 +11,10 @@ export const dashboardConfig: DashboardConfig = {
             href: '/dashboard/workspaces',
         },
         {
+            title: 'Features',
+            href: '/dashboard',
+        },
+        {
             title: 'Settings',
             href: '/dashboard/settings',
         },
