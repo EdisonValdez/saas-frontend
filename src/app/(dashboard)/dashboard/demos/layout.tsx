@@ -8,7 +8,8 @@ import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb'
 import { AppSidebar } from '@/components/app-sidebar'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { UserDetails, Workspace } from '@/types'
+import { UserDetails } from '@/types/auth'
+import { Workspace } from '@/types/workspaces'
 
 interface DemosLayoutProps {
     children: React.ReactNode
