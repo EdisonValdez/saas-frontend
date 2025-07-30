@@ -672,7 +672,11 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                 </div>
 
                 {/* Right Panel - Email Detail/Conversation */}
-                <div className="flex-1 flex flex-col bg-white">
+                <div
+                    className="flex-1 flex flex-col bg-white"
+                    role="region"
+                    aria-label="Email detail and conversation"
+                >
                     {selectedEmail ? (
                         <>
                             {/* Email Header */}
