@@ -33,11 +33,18 @@ export default async function Dashboard({ children }: DashboardLayoutProps) {
     const firstWorkspaceId = workspaces?.[0]?.id
 
     return (
-        <div className="flex min-h-screen w-full">
-            <DashboardSidebar workspaceId={firstWorkspaceId} />
-            <div className="flex-1 flex flex-col">
-                <main className="flex-1 overflow-auto">{children}</main>
-            </div>
-        </div>
+        <SidebarProvider>
+            <AppSidebar workspaces={workspaces as Workspace[]} user={user as UserDetails} />
+            <SidebarInset>
+                <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+                    <div className="flex items-center gap-2 px-4">
+                        <SidebarTrigger className="-ml-1" />
+                        <Separator orientation="vertical" className="mr-2 h-4" />
+                        <DynamicBreadcrumb />
+                    </div>
+                </header>
+                <div className="flex-1 overflow-auto p-4">{children}</div>
+            </SidebarInset>
+        </SidebarProvider>
     )
 }
