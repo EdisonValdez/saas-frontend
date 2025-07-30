@@ -206,7 +206,7 @@ export function EmailAgentCreateModal({ workspaceId }: EmailAgentCreateModalProp
                                     />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">No client selected</SelectItem>
+                                    <SelectItem value="none">No client selected</SelectItem>
                                     {clients.map((client) => (
                                         <SelectItem key={client.id} value={client.id}>
                                             {client.name}
