@@ -63,7 +63,7 @@ export default async function IndexPage() {
                         <Link href="/about" className="block">
                             <Button variant="ghost" className="w-full h-12 text-base text-gray-600 hover:text-gray-800">
                                 <Home className="w-5 h-5 mr-2" />
-                                Learn More About Our Platform
+                                View Full Landing Page
                                 <ArrowRight className="w-4 h-4 ml-2" />
                             </Button>
                         </Link>
