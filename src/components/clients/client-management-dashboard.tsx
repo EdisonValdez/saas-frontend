@@ -1,12 +1,12 @@
 'use client'
 
 import React, { useState, useEffect, useMemo } from 'react'
-import { 
-    Search, 
-    Plus, 
-    Filter, 
-    Users, 
-    Building, 
+import {
+    Search,
+    Plus,
+    Filter,
+    Users,
+    Building,
     User,
     ArrowUpDown,
     MoreHorizontal,
@@ -25,7 +25,7 @@ import {
     Loader2,
     AlertCircle,
     CheckCircle2,
-    Zap
+    Zap,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -80,23 +80,23 @@ interface ClientManagementDashboardProps {
 const getSubscriptionLimits = (workspace: Workspace): SubscriptionLimits => {
     // In real implementation, this would come from the workspace.subscription
     const planType = workspace.subscription?.status === 'active' ? 'professional' : 'starter'
-    
+
     const limits = {
         starter: {
             maxClients: 25,
             aiCredits: 1000,
-            features: ['Basic Client Management', 'Document Upload', 'Email Support']
+            features: ['Basic Client Management', 'Document Upload', 'Email Support'],
         },
         professional: {
             maxClients: 100,
             aiCredits: 5000,
-            features: ['Advanced Client Management', 'Tax Assistant', 'Email Agent', 'Priority Support']
+            features: ['Advanced Client Management', 'Tax Assistant', 'Email Agent', 'Priority Support'],
         },
         enterprise: {
             maxClients: 500,
             aiCredits: 25000,
-            features: ['Unlimited Features', 'Dedicated Support', 'Custom Integrations']
-        }
+            features: ['Unlimited Features', 'Dedicated Support', 'Custom Integrations'],
+        },
     }
 
     return {
@@ -104,7 +104,7 @@ const getSubscriptionLimits = (workspace: Workspace): SubscriptionLimits => {
         currentClients: Math.floor(Math.random() * limits[planType].maxClients * 0.8), // Mock current usage
         usedCredits: Math.floor(Math.random() * limits[planType].aiCredits * 0.6), // Mock credit usage
         planName: planType.charAt(0).toUpperCase() + planType.slice(1),
-        planType
+        planType,
     }
 }
 
@@ -112,18 +112,35 @@ const getSubscriptionLimits = (workspace: Workspace): SubscriptionLimits => {
 const generateMockClients = (workspaceId: string, count: number): Client[] => {
     const entityTypes = ['individual', 'corporation', 'partnership', 'llc', 'nonprofit', 'trust'] as const
     const statuses = ['active', 'archived'] as const
-    
+
     const clientNames = [
-        'Johnson & Associates', 'Smith Corp', 'Miller LLC', 'Davis Partnership',
-        'Wilson Trust', 'Brown Enterprises', 'Taylor & Co', 'Anderson Inc',
-        'Thomas Holdings', 'Jackson Group', 'White Industries', 'Harris Consulting',
-        'Martin Services', 'Thompson LLC', 'Garcia & Partners', 'Rodriguez Corp',
-        'Lewis Ventures', 'Lee Enterprises', 'Walker & Associates', 'Hall Industries'
+        'Johnson & Associates',
+        'Smith Corp',
+        'Miller LLC',
+        'Davis Partnership',
+        'Wilson Trust',
+        'Brown Enterprises',
+        'Taylor & Co',
+        'Anderson Inc',
+        'Thomas Holdings',
+        'Jackson Group',
+        'White Industries',
+        'Harris Consulting',
+        'Martin Services',
+        'Thompson LLC',
+        'Garcia & Partners',
+        'Rodriguez Corp',
+        'Lewis Ventures',
+        'Lee Enterprises',
+        'Walker & Associates',
+        'Hall Industries',
     ]
 
     return Array.from({ length: count }, (_, i) => ({
         id: `client-${i + 1}`,
-        name: clientNames[i % clientNames.length] + (i >= clientNames.length ? ` ${Math.floor(i / clientNames.length) + 1}` : ''),
+        name:
+            clientNames[i % clientNames.length] +
+            (i >= clientNames.length ? ` ${Math.floor(i / clientNames.length) + 1}` : ''),
         status: statuses[Math.random() > 0.8 ? 1 : 0],
         entity_type: entityTypes[Math.floor(Math.random() * entityTypes.length)],
         document_count: Math.floor(Math.random() * 50),
@@ -136,8 +153,8 @@ const generateMockClients = (workspaceId: string, count: number): Client[] => {
             created_date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
             last_updated: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
             last_activity: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
-            notes: Math.random() > 0.5 ? 'Important client with complex tax requirements.' : undefined
-        }
+            notes: Math.random() > 0.5 ? 'Important client with complex tax requirements.' : undefined,
+        },
     }))
 }
 
@@ -147,7 +164,7 @@ const ENTITY_TYPE_LABELS = {
     partnership: 'Partnership',
     llc: 'LLC',
     nonprofit: 'Nonprofit',
-    trust: 'Trust'
+    trust: 'Trust',
 }
 
 const ENTITY_TYPE_ICONS = {
@@ -156,7 +173,7 @@ const ENTITY_TYPE_ICONS = {
     partnership: Users,
     llc: Building,
     nonprofit: Building,
-    trust: Building
+    trust: Building,
 }
 
 export function ClientManagementDashboard({ workspace }: ClientManagementDashboardProps) {
@@ -186,11 +203,12 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
 
     // Filter and sort clients
     const filteredAndSortedClients = useMemo(() => {
-        let filtered = clients.filter(client => {
-            const matchesSearch = client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                client.metadata.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                client.metadata.tax_id?.includes(searchTerm)
-            
+        let filtered = clients.filter((client) => {
+            const matchesSearch =
+                client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                client.metadata.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                client.metadata.tax_id?.includes(searchTerm)
+
             const matchesStatus = statusFilter === 'all' || client.status === statusFilter
             const matchesEntity = entityFilter === 'all' || client.entity_type === entityFilter
 
@@ -248,7 +266,7 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
         })
     }
 
@@ -256,7 +274,7 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
         const date = new Date(dateString)
         const now = new Date()
         const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
-        
+
         if (diffInHours < 24) {
             return `${diffInHours}h ago`
         } else if (diffInHours < 168) {
@@ -268,7 +286,7 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
 
     const ClientCard = ({ client }: { client: Client }) => {
         const EntityIcon = ENTITY_TYPE_ICONS[client.entity_type]
-        
+
         return (
             <Card className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
@@ -284,9 +302,7 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                                 </p>
                             </div>
                         </div>
-                        <Badge variant={client.status === 'active' ? 'default' : 'secondary'}>
-                            {client.status}
-                        </Badge>
+                        <Badge variant={client.status === 'active' ? 'default' : 'secondary'}>{client.status}</Badge>
                     </div>
                 </CardHeader>
                 <CardContent className="pt-0">
@@ -313,11 +329,7 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                         </div>
                     </div>
                     <div className="flex gap-2 mt-4">
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => setSelectedClient(client)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => setSelectedClient(client)}>
                             <Eye className="h-4 w-4 mr-1" />
                             View
                         </Button>
@@ -411,7 +423,8 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">
-                            {subscriptionLimits.usedCredits.toLocaleString()} / {subscriptionLimits.aiCredits.toLocaleString()}
+                            {subscriptionLimits.usedCredits.toLocaleString()} /{' '}
+                            {subscriptionLimits.aiCredits.toLocaleString()}
                         </div>
                         <Progress value={creditUsagePercentage} className="mt-2" />
                         <p className="text-xs text-muted-foreground mt-1">
@@ -439,8 +452,8 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                         <Alert>
                             <AlertTriangle className="h-4 w-4" />
                             <AlertDescription>
-                                You're approaching your client limit ({clientUsagePercentage}% used). 
-                                Consider upgrading your plan soon.
+                                You're approaching your client limit ({clientUsagePercentage}% used). Consider upgrading
+                                your plan soon.
                             </AlertDescription>
                         </Alert>
                     )}
@@ -448,8 +461,8 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                         <Alert>
                             <AlertTriangle className="h-4 w-4" />
                             <AlertDescription>
-                                You're running low on AI credits ({creditUsagePercentage}% used). 
-                                Credits reset monthly or upgrade for more.
+                                You're running low on AI credits ({creditUsagePercentage}% used). Credits reset monthly
+                                or upgrade for more.
                             </AlertDescription>
                         </Alert>
                     )}
@@ -505,7 +518,7 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                             <SelectItem value="cards">Cards</SelectItem>
                         </SelectContent>
                     </Select>
-                    <Button 
+                    <Button
                         onClick={() => setShowAddDialog(true)}
                         disabled={isAtClientLimit}
                         className="whitespace-nowrap"
@@ -545,10 +558,7 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead 
-                                    className="cursor-pointer"
-                                    onClick={() => handleSort('name')}
-                                >
+                                <TableHead className="cursor-pointer" onClick={() => handleSort('name')}>
                                     <div className="flex items-center gap-2">
                                         Client
                                         <ArrowUpDown className="h-4 w-4" />
@@ -558,19 +568,13 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                                 <TableHead>Status</TableHead>
                                 <TableHead>Contact</TableHead>
                                 <TableHead>Documents</TableHead>
-                                <TableHead 
-                                    className="cursor-pointer"
-                                    onClick={() => handleSort('created_date')}
-                                >
+                                <TableHead className="cursor-pointer" onClick={() => handleSort('created_date')}>
                                     <div className="flex items-center gap-2">
                                         Created
                                         <ArrowUpDown className="h-4 w-4" />
                                     </div>
                                 </TableHead>
-                                <TableHead 
-                                    className="cursor-pointer"
-                                    onClick={() => handleSort('last_activity')}
-                                >
+                                <TableHead className="cursor-pointer" onClick={() => handleSort('last_activity')}>
                                     <div className="flex items-center gap-2">
                                         Last Activity
                                         <ArrowUpDown className="h-4 w-4" />
@@ -600,9 +604,7 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <Badge variant="outline">
-                                                {ENTITY_TYPE_LABELS[client.entity_type]}
-                                            </Badge>
+                                            <Badge variant="outline">{ENTITY_TYPE_LABELS[client.entity_type]}</Badge>
                                         </TableCell>
                                         <TableCell>
                                             <Badge variant={client.status === 'active' ? 'default' : 'secondary'}>
@@ -633,7 +635,9 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                                         </TableCell>
                                         <TableCell>{formatDate(client.metadata.created_date)}</TableCell>
                                         <TableCell>
-                                            {getRelativeTime(client.metadata.last_activity || client.metadata.last_updated)}
+                                            {getRelativeTime(
+                                                client.metadata.last_activity || client.metadata.last_updated
+                                            )}
                                         </TableCell>
                                         <TableCell className="text-right">
                                             <DropdownMenu>
@@ -693,7 +697,7 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                             <DialogTitle className="flex items-center gap-3">
                                 <div className="p-2 bg-blue-50 rounded-lg">
                                     {React.createElement(ENTITY_TYPE_ICONS[selectedClient.entity_type], {
-                                        className: "h-5 w-5 text-blue-600"
+                                        className: 'h-5 w-5 text-blue-600',
                                     })}
                                 </div>
                                 {selectedClient.name}
@@ -782,7 +786,10 @@ export function ClientManagementDashboard({ workspace }: ClientManagementDashboa
                                 <div>
                                     <Label className="text-sm font-medium">Last Activity</Label>
                                     <p className="text-muted-foreground mt-1">
-                                        {getRelativeTime(selectedClient.metadata.last_activity || selectedClient.metadata.last_updated)}
+                                        {getRelativeTime(
+                                            selectedClient.metadata.last_activity ||
+                                                selectedClient.metadata.last_updated
+                                        )}
                                     </p>
                                 </div>
                             </div>

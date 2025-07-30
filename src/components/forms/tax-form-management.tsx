@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { useParams } from 'next/navigation'
-import { 
+import {
     FileText,
     Calculator,
     Search,
@@ -25,7 +25,7 @@ import {
     BookOpen,
     Zap,
     Save,
-    PrinterIcon as Print
+    PrinterIcon as Print,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -113,7 +113,7 @@ const FORM_TEMPLATES: FormTemplate[] = [
                     { id: 'last_name', name: 'lastName', label: 'Last Name', type: 'text', required: true },
                     { id: 'ssn', name: 'ssn', label: 'Social Security Number', type: 'text', required: true },
                     { id: 'dob', name: 'dateOfBirth', label: 'Date of Birth', type: 'date', required: true },
-                ]
+                ],
             },
             {
                 id: 'income',
@@ -123,10 +123,16 @@ const FORM_TEMPLATES: FormTemplate[] = [
                 fields: [
                     { id: 'wages', name: 'wages', label: 'Wages, salaries, tips', type: 'currency', required: false },
                     { id: 'interest', name: 'interest', label: 'Taxable interest', type: 'currency', required: false },
-                    { id: 'dividends', name: 'dividends', label: 'Ordinary dividends', type: 'currency', required: false },
-                ]
-            }
-        ]
+                    {
+                        id: 'dividends',
+                        name: 'dividends',
+                        label: 'Ordinary dividends',
+                        type: 'currency',
+                        required: false,
+                    },
+                ],
+            },
+        ],
     },
     {
         id: '1120',
@@ -145,11 +151,17 @@ const FORM_TEMPLATES: FormTemplate[] = [
                 description: 'Basic corporation details',
                 required: true,
                 fields: [
-                    { id: 'corp_name', name: 'corporationName', label: 'Corporation Name', type: 'text', required: true },
+                    {
+                        id: 'corp_name',
+                        name: 'corporationName',
+                        label: 'Corporation Name',
+                        type: 'text',
+                        required: true,
+                    },
                     { id: 'ein', name: 'ein', label: 'Employer Identification Number', type: 'text', required: true },
-                ]
-            }
-        ]
+                ],
+            },
+        ],
     },
     {
         id: '1065',
@@ -161,8 +173,8 @@ const FORM_TEMPLATES: FormTemplate[] = [
         complexity: 'complex',
         estimated_time: '6-12 hours',
         required_documents: ['Partnership agreement', 'K-1s', 'Financial statements'],
-        sections: []
-    }
+        sections: [],
+    },
 ]
 
 const STATUS_COLORS = {
@@ -170,7 +182,7 @@ const STATUS_COLORS = {
     in_progress: 'bg-blue-100 text-blue-800',
     review: 'bg-yellow-100 text-yellow-800',
     completed: 'bg-green-100 text-green-800',
-    filed: 'bg-purple-100 text-purple-800'
+    filed: 'bg-purple-100 text-purple-800',
 }
 
 const STATUS_ICONS = {
@@ -178,13 +190,13 @@ const STATUS_ICONS = {
     in_progress: Clock,
     review: Eye,
     completed: CheckCircle2,
-    filed: Send
+    filed: Send,
 }
 
 const COMPLEXITY_COLORS = {
     simple: 'bg-green-100 text-green-800',
     standard: 'bg-blue-100 text-blue-800',
-    complex: 'bg-red-100 text-red-800'
+    complex: 'bg-red-100 text-red-800',
 }
 
 export function TaxFormManagement() {
@@ -221,7 +233,7 @@ export function TaxFormManagement() {
             last_updated: '2024-01-20T14:30:00Z',
             due_date: '2024-04-15T23:59:59Z',
             completion_percentage: 65,
-            estimated_refund: 2500
+            estimated_refund: 2500,
         },
         {
             id: 'form-2',
@@ -236,16 +248,17 @@ export function TaxFormManagement() {
             last_updated: '2024-01-25T16:45:00Z',
             due_date: '2024-03-15T23:59:59Z',
             completion_percentage: 90,
-            amount_owed: 15000
-        }
+            amount_owed: 15000,
+        },
     ]
 
     // Filter forms
-    const filteredForms = mockForms.filter(form => {
-        const matchesSearch = form.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            form.client_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            form.form_number.toLowerCase().includes(searchTerm.toLowerCase())
-        
+    const filteredForms = mockForms.filter((form) => {
+        const matchesSearch =
+            form.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            form.client_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            form.form_number.toLowerCase().includes(searchTerm.toLowerCase())
+
         const matchesStatus = statusFilter === 'all' || form.status === statusFilter
         const matchesCategory = categoryFilter === 'all' || form.category === categoryFilter
 
@@ -256,7 +269,7 @@ export function TaxFormManagement() {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
         })
     }
 
@@ -271,7 +284,7 @@ export function TaxFormManagement() {
     const FormCard = ({ form }: { form: TaxForm }) => {
         const StatusIcon = STATUS_ICONS[form.status]
         const daysUntilDue = form.due_date ? getDaysUntilDue(form.due_date) : null
-        
+
         return (
             <Card className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
@@ -305,7 +318,9 @@ export function TaxFormManagement() {
                     {form.due_date && (
                         <div className="flex items-center gap-2 text-sm">
                             <Calendar className="h-4 w-4 text-muted-foreground" />
-                            <span className={daysUntilDue && daysUntilDue < 30 ? 'text-red-600' : 'text-muted-foreground'}>
+                            <span
+                                className={daysUntilDue && daysUntilDue < 30 ? 'text-red-600' : 'text-muted-foreground'}
+                            >
                                 Due {formatDate(form.due_date)}
                                 {daysUntilDue && (
                                     <span className="ml-1">
@@ -331,16 +346,12 @@ export function TaxFormManagement() {
                     )}
 
                     <div className="flex gap-2 pt-2">
-                        <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => setSelectedForm(form)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => setSelectedForm(form)}>
                             <Eye className="h-4 w-4 mr-1" />
                             View
                         </Button>
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => {
                                 setSelectedForm(form)
@@ -379,7 +390,10 @@ export function TaxFormManagement() {
 
     const TemplateCard = ({ template }: { template: FormTemplate }) => {
         return (
-            <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => setSelectedTemplate(template)}>
+            <Card
+                className="hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => setSelectedTemplate(template)}
+            >
                 <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -393,14 +407,12 @@ export function TaxFormManagement() {
                                 </p>
                             </div>
                         </div>
-                        <Badge className={COMPLEXITY_COLORS[template.complexity]}>
-                            {template.complexity}
-                        </Badge>
+                        <Badge className={COMPLEXITY_COLORS[template.complexity]}>{template.complexity}</Badge>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
                     <p className="text-sm text-muted-foreground">{template.description}</p>
-                    
+
                     <div className="flex items-center gap-2 text-sm">
                         <Clock className="h-4 w-4 text-muted-foreground" />
                         <span>{template.estimated_time}</span>
@@ -411,11 +423,14 @@ export function TaxFormManagement() {
                         <span>{template.sections.length} sections</span>
                     </div>
 
-                    <Button className="w-full" onClick={(e) => {
-                        e.stopPropagation()
-                        setSelectedTemplate(template)
-                        setShowCreateDialog(true)
-                    }}>
+                    <Button
+                        className="w-full"
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedTemplate(template)
+                            setShowCreateDialog(true)
+                        }}
+                    >
                         <Plus className="h-4 w-4 mr-2" />
                         Start New Form
                     </Button>
@@ -429,9 +444,7 @@ export function TaxFormManagement() {
             {/* Header */}
             <div>
                 <h1 className="text-3xl font-bold text-gray-900">Tax Form Management</h1>
-                <p className="text-gray-600 mt-1">
-                    Create, manage, and file tax forms with intelligent automation
-                </p>
+                <p className="text-gray-600 mt-1">Create, manage, and file tax forms with intelligent automation</p>
             </div>
 
             {/* Main Tabs */}
@@ -572,10 +585,12 @@ export function TaxFormManagement() {
                             <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
                                 Cancel
                             </Button>
-                            <Button onClick={() => {
-                                setShowCreateDialog(false)
-                                setShowFormBuilder(true)
-                            }}>
+                            <Button
+                                onClick={() => {
+                                    setShowCreateDialog(false)
+                                    setShowFormBuilder(true)
+                                }}
+                            >
                                 <Plus className="h-4 w-4 mr-2" />
                                 Create Form
                             </Button>
@@ -625,16 +640,20 @@ export function TaxFormManagement() {
                                                     <div key={field.id}>
                                                         <Label htmlFor={field.id}>
                                                             {field.label}
-                                                            {field.required && <span className="text-red-500 ml-1">*</span>}
+                                                            {field.required && (
+                                                                <span className="text-red-500 ml-1">*</span>
+                                                            )}
                                                         </Label>
                                                         {field.type === 'text' && (
                                                             <Input
                                                                 id={field.id}
                                                                 value={formData[field.name] || ''}
-                                                                onChange={(e) => setFormData({
-                                                                    ...formData,
-                                                                    [field.name]: e.target.value
-                                                                })}
+                                                                onChange={(e) =>
+                                                                    setFormData({
+                                                                        ...formData,
+                                                                        [field.name]: e.target.value,
+                                                                    })
+                                                                }
                                                             />
                                                         )}
                                                         {field.type === 'number' && (
@@ -642,10 +661,12 @@ export function TaxFormManagement() {
                                                                 id={field.id}
                                                                 type="number"
                                                                 value={formData[field.name] || ''}
-                                                                onChange={(e) => setFormData({
-                                                                    ...formData,
-                                                                    [field.name]: e.target.value
-                                                                })}
+                                                                onChange={(e) =>
+                                                                    setFormData({
+                                                                        ...formData,
+                                                                        [field.name]: e.target.value,
+                                                                    })
+                                                                }
                                                             />
                                                         )}
                                                         {field.type === 'currency' && (
@@ -657,10 +678,12 @@ export function TaxFormManagement() {
                                                                     step="0.01"
                                                                     className="pl-10"
                                                                     value={formData[field.name] || ''}
-                                                                    onChange={(e) => setFormData({
-                                                                        ...formData,
-                                                                        [field.name]: e.target.value
-                                                                    })}
+                                                                    onChange={(e) =>
+                                                                        setFormData({
+                                                                            ...formData,
+                                                                            [field.name]: e.target.value,
+                                                                        })
+                                                                    }
                                                                 />
                                                             </div>
                                                         )}
@@ -669,19 +692,23 @@ export function TaxFormManagement() {
                                                                 id={field.id}
                                                                 type="date"
                                                                 value={formData[field.name] || ''}
-                                                                onChange={(e) => setFormData({
-                                                                    ...formData,
-                                                                    [field.name]: e.target.value
-                                                                })}
+                                                                onChange={(e) =>
+                                                                    setFormData({
+                                                                        ...formData,
+                                                                        [field.name]: e.target.value,
+                                                                    })
+                                                                }
                                                             />
                                                         )}
                                                         {field.type === 'select' && field.options && (
                                                             <Select
                                                                 value={formData[field.name] || ''}
-                                                                onValueChange={(value) => setFormData({
-                                                                    ...formData,
-                                                                    [field.name]: value
-                                                                })}
+                                                                onValueChange={(value) =>
+                                                                    setFormData({
+                                                                        ...formData,
+                                                                        [field.name]: value,
+                                                                    })
+                                                                }
                                                             >
                                                                 <SelectTrigger>
                                                                     <SelectValue placeholder="Select..." />
@@ -698,7 +725,8 @@ export function TaxFormManagement() {
                                                     </div>
                                                 ))}
                                             </div>
-                                            {section !== selectedTemplate.sections[selectedTemplate.sections.length - 1] && (
+                                            {section !==
+                                                selectedTemplate.sections[selectedTemplate.sections.length - 1] && (
                                                 <Separator />
                                             )}
                                         </div>

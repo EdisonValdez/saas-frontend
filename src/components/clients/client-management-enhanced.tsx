@@ -2,12 +2,12 @@
 
 import React, { useState, useMemo } from 'react'
 import { useParams } from 'next/navigation'
-import { 
-    Search, 
-    Plus, 
-    Filter, 
-    Users, 
-    Building, 
+import {
+    Search,
+    Plus,
+    Filter,
+    Users,
+    Building,
     User,
     ArrowUpDown,
     MoreHorizontal,
@@ -27,7 +27,7 @@ import {
     AlertCircle,
     CheckCircle2,
     Zap,
-    RefreshCw
+    RefreshCw,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -42,13 +42,13 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { 
-    useWorkspaceClients, 
-    useCreateClient, 
-    useUpdateClient, 
+import {
+    useWorkspaceClients,
+    useCreateClient,
+    useUpdateClient,
     useDeleteClient,
     useCreditUsage,
-    useWorkspaceSubscription
+    useWorkspaceSubscription,
 } from '@/lib/hooks/api-hooks'
 import { ClientData } from '@/lib/api-client'
 
@@ -58,7 +58,7 @@ const ENTITY_TYPE_LABELS = {
     partnership: 'Partnership',
     llc: 'LLC',
     nonprofit: 'Nonprofit',
-    trust: 'Trust'
+    trust: 'Trust',
 }
 
 const ENTITY_TYPE_ICONS = {
@@ -67,7 +67,7 @@ const ENTITY_TYPE_ICONS = {
     partnership: Users,
     llc: Building,
     nonprofit: Building,
-    trust: Building
+    trust: Building,
 }
 
 interface ClientFormData {
@@ -100,11 +100,16 @@ export function ClientManagementEnhanced() {
         phone: '',
         address: '',
         tax_id: '',
-        notes: ''
+        notes: '',
     })
 
     // API hooks
-    const { data: clientsData, isLoading: clientsLoading, error: clientsError, refetch: refetchClients } = useWorkspaceClients(workspaceId)
+    const {
+        data: clientsData,
+        isLoading: clientsLoading,
+        error: clientsError,
+        refetch: refetchClients,
+    } = useWorkspaceClients(workspaceId)
     const { data: creditUsage, isLoading: creditLoading } = useCreditUsage(workspaceId)
     const { data: subscription, isLoading: subscriptionLoading } = useWorkspaceSubscription(workspaceId)
     const createClientMutation = useCreateClient(workspaceId)
@@ -125,7 +130,7 @@ export function ClientManagementEnhanced() {
                 usedCredits: creditUsage?.used || 0,
                 features: ['Basic Client Management'],
                 planName: 'Starter',
-                planType: 'starter' as const
+                planType: 'starter' as const,
             }
         }
         return subscription
@@ -133,11 +138,12 @@ export function ClientManagementEnhanced() {
 
     // Filter and sort clients
     const filteredAndSortedClients = useMemo(() => {
-        let filtered = clients.filter(client => {
-            const matchesSearch = client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                client.metadata.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                client.metadata.tax_id?.includes(searchTerm)
-            
+        let filtered = clients.filter((client) => {
+            const matchesSearch =
+                client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                client.metadata.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                client.metadata.tax_id?.includes(searchTerm)
+
             const matchesStatus = statusFilter === 'all' || client.status === statusFilter
             const matchesEntity = entityFilter === 'all' || client.entity_type === entityFilter
 
@@ -207,7 +213,7 @@ export function ClientManagementEnhanced() {
                 notes: formData.notes || undefined,
                 created_date: new Date().toISOString(),
                 last_updated: new Date().toISOString(),
-            }
+            },
         }
 
         const result = await createClientMutation.mutateAsync(clientData)
@@ -220,7 +226,7 @@ export function ClientManagementEnhanced() {
                 phone: '',
                 address: '',
                 tax_id: '',
-                notes: ''
+                notes: '',
             })
         }
     }
@@ -239,7 +245,7 @@ export function ClientManagementEnhanced() {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
         })
     }
 
@@ -247,7 +253,7 @@ export function ClientManagementEnhanced() {
         const date = new Date(dateString)
         const now = new Date()
         const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
-        
+
         if (diffInHours < 24) {
             return `${diffInHours}h ago`
         } else if (diffInHours < 168) {
@@ -259,7 +265,7 @@ export function ClientManagementEnhanced() {
 
     const ClientCard = ({ client }: { client: ClientData }) => {
         const EntityIcon = ENTITY_TYPE_ICONS[client.entity_type]
-        
+
         return (
             <Card className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
@@ -275,9 +281,7 @@ export function ClientManagementEnhanced() {
                                 </p>
                             </div>
                         </div>
-                        <Badge variant={client.status === 'active' ? 'default' : 'secondary'}>
-                            {client.status}
-                        </Badge>
+                        <Badge variant={client.status === 'active' ? 'default' : 'secondary'}>{client.status}</Badge>
                     </div>
                 </CardHeader>
                 <CardContent className="pt-0">
@@ -304,11 +308,7 @@ export function ClientManagementEnhanced() {
                         </div>
                     </div>
                     <div className="flex gap-2 mt-4">
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => setSelectedClient(client)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => setSelectedClient(client)}>
                             <Eye className="h-4 w-4 mr-1" />
                             View
                         </Button>
@@ -324,9 +324,11 @@ export function ClientManagementEnhanced() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem
-                                    onClick={() => handleUpdateClient(client.id, { 
-                                        status: client.status === 'active' ? 'archived' : 'active' 
-                                    })}
+                                    onClick={() =>
+                                        handleUpdateClient(client.id, {
+                                            status: client.status === 'active' ? 'archived' : 'active',
+                                        })
+                                    }
                                 >
                                     {client.status === 'active' ? (
                                         <>
@@ -344,7 +346,7 @@ export function ClientManagementEnhanced() {
                                     <FileText className="h-4 w-4 mr-2" />
                                     View Documents
                                 </DropdownMenuItem>
-                                <DropdownMenuItem 
+                                <DropdownMenuItem
                                     className="text-red-600"
                                     onClick={() => handleDeleteClient(client.id)}
                                 >
@@ -375,12 +377,7 @@ export function ClientManagementEnhanced() {
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
                         Failed to load clients. Please try again.
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="ml-2"
-                            onClick={() => refetchClients()}
-                        >
+                        <Button variant="outline" size="sm" className="ml-2" onClick={() => refetchClients()}>
                             <RefreshCw className="h-4 w-4 mr-1" />
                             Retry
                         </Button>
@@ -444,7 +441,8 @@ export function ClientManagementEnhanced() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">
-                            {subscriptionLimits.usedCredits.toLocaleString()} / {subscriptionLimits.aiCredits.toLocaleString()}
+                            {subscriptionLimits.usedCredits.toLocaleString()} /{' '}
+                            {subscriptionLimits.aiCredits.toLocaleString()}
                         </div>
                         <Progress value={creditUsagePercentage} className="mt-2" />
                         <p className="text-xs text-muted-foreground mt-1">
@@ -472,8 +470,8 @@ export function ClientManagementEnhanced() {
                         <Alert>
                             <AlertTriangle className="h-4 w-4" />
                             <AlertDescription>
-                                You're approaching your client limit ({clientUsagePercentage}% used). 
-                                Consider upgrading your plan soon.
+                                You're approaching your client limit ({clientUsagePercentage}% used). Consider upgrading
+                                your plan soon.
                             </AlertDescription>
                         </Alert>
                     )}
@@ -481,8 +479,8 @@ export function ClientManagementEnhanced() {
                         <Alert>
                             <AlertTriangle className="h-4 w-4" />
                             <AlertDescription>
-                                You're running low on AI credits ({creditUsagePercentage}% used). 
-                                Credits reset monthly or upgrade for more.
+                                You're running low on AI credits ({creditUsagePercentage}% used). Credits reset monthly
+                                or upgrade for more.
                             </AlertDescription>
                         </Alert>
                     )}
@@ -538,7 +536,7 @@ export function ClientManagementEnhanced() {
                             <SelectItem value="cards">Cards</SelectItem>
                         </SelectContent>
                     </Select>
-                    <Button 
+                    <Button
                         onClick={() => setShowAddDialog(true)}
                         disabled={isAtClientLimit || createClientMutation.isPending}
                         className="whitespace-nowrap"
@@ -578,10 +576,7 @@ export function ClientManagementEnhanced() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead 
-                                    className="cursor-pointer"
-                                    onClick={() => handleSort('name')}
-                                >
+                                <TableHead className="cursor-pointer" onClick={() => handleSort('name')}>
                                     <div className="flex items-center gap-2">
                                         Client
                                         <ArrowUpDown className="h-4 w-4" />
@@ -591,19 +586,13 @@ export function ClientManagementEnhanced() {
                                 <TableHead>Status</TableHead>
                                 <TableHead>Contact</TableHead>
                                 <TableHead>Documents</TableHead>
-                                <TableHead 
-                                    className="cursor-pointer"
-                                    onClick={() => handleSort('created_date')}
-                                >
+                                <TableHead className="cursor-pointer" onClick={() => handleSort('created_date')}>
                                     <div className="flex items-center gap-2">
                                         Created
                                         <ArrowUpDown className="h-4 w-4" />
                                     </div>
                                 </TableHead>
-                                <TableHead 
-                                    className="cursor-pointer"
-                                    onClick={() => handleSort('last_activity')}
-                                >
+                                <TableHead className="cursor-pointer" onClick={() => handleSort('last_activity')}>
                                     <div className="flex items-center gap-2">
                                         Last Activity
                                         <ArrowUpDown className="h-4 w-4" />
@@ -633,9 +622,7 @@ export function ClientManagementEnhanced() {
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <Badge variant="outline">
-                                                {ENTITY_TYPE_LABELS[client.entity_type]}
-                                            </Badge>
+                                            <Badge variant="outline">{ENTITY_TYPE_LABELS[client.entity_type]}</Badge>
                                         </TableCell>
                                         <TableCell>
                                             <Badge variant={client.status === 'active' ? 'default' : 'secondary'}>
@@ -666,7 +653,9 @@ export function ClientManagementEnhanced() {
                                         </TableCell>
                                         <TableCell>{formatDate(client.metadata.created_date)}</TableCell>
                                         <TableCell>
-                                            {getRelativeTime(client.metadata.last_activity || client.metadata.last_updated)}
+                                            {getRelativeTime(
+                                                client.metadata.last_activity || client.metadata.last_updated
+                                            )}
                                         </TableCell>
                                         <TableCell className="text-right">
                                             <DropdownMenu>
@@ -689,9 +678,12 @@ export function ClientManagementEnhanced() {
                                                         View Documents
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
-                                                        onClick={() => handleUpdateClient(client.id, { 
-                                                            status: client.status === 'active' ? 'archived' : 'active' 
-                                                        })}
+                                                        onClick={() =>
+                                                            handleUpdateClient(client.id, {
+                                                                status:
+                                                                    client.status === 'active' ? 'archived' : 'active',
+                                                            })
+                                                        }
                                                     >
                                                         {client.status === 'active' ? (
                                                             <>
@@ -747,8 +739,8 @@ export function ClientManagementEnhanced() {
                         </div>
                         <div>
                             <Label htmlFor="entity_type">Entity Type</Label>
-                            <Select 
-                                value={formData.entity_type} 
+                            <Select
+                                value={formData.entity_type}
                                 onValueChange={(value: any) => setFormData({ ...formData, entity_type: value })}
                             >
                                 <SelectTrigger>
@@ -807,7 +799,7 @@ export function ClientManagementEnhanced() {
                         <Button variant="outline" onClick={() => setShowAddDialog(false)}>
                             Cancel
                         </Button>
-                        <Button 
+                        <Button
                             onClick={handleCreateClient}
                             disabled={!formData.name.trim() || createClientMutation.isPending}
                         >
@@ -830,7 +822,7 @@ export function ClientManagementEnhanced() {
                             <DialogTitle className="flex items-center gap-3">
                                 <div className="p-2 bg-blue-50 rounded-lg">
                                     {React.createElement(ENTITY_TYPE_ICONS[selectedClient.entity_type], {
-                                        className: "h-5 w-5 text-blue-600"
+                                        className: 'h-5 w-5 text-blue-600',
                                     })}
                                 </div>
                                 {selectedClient.name}
@@ -919,7 +911,10 @@ export function ClientManagementEnhanced() {
                                 <div>
                                     <Label className="text-sm font-medium">Last Activity</Label>
                                     <p className="text-muted-foreground mt-1">
-                                        {getRelativeTime(selectedClient.metadata.last_activity || selectedClient.metadata.last_updated)}
+                                        {getRelativeTime(
+                                            selectedClient.metadata.last_activity ||
+                                                selectedClient.metadata.last_updated
+                                        )}
                                     </p>
                                 </div>
                             </div>

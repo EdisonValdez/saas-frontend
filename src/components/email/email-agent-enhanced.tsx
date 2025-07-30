@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useParams } from 'next/navigation'
-import { 
+import {
     Mail,
     Send,
     Save,
@@ -23,7 +23,7 @@ import {
     Loader2,
     AlertCircle,
     CheckCircle2,
-    Bot
+    Bot,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -38,13 +38,13 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { 
+import {
     useEmailAgentSessions,
     useCreateEmailAgentSession,
     useInvokeAgent,
     useCreditUsage,
     useWorkspaceClients,
-    useClientDocuments
+    useClientDocuments,
 } from '@/lib/hooks/api-hooks'
 import { toast } from 'sonner'
 
@@ -85,7 +85,7 @@ const EMAIL_TEMPLATES: EmailTemplate[] = [
         id: 'welcome_client',
         name: 'Welcome New Client',
         category: 'client_communication',
-        subject: 'Welcome to [FIRM_NAME] - Let\'s Get Started!',
+        subject: "Welcome to [FIRM_NAME] - Let's Get Started!",
         body: `Dear [CLIENT_NAME],
 
 Welcome to [FIRM_NAME]! We're excited to work with you on your tax needs for [TAX_YEAR].
@@ -105,7 +105,7 @@ Best regards,
 [YOUR_NAME]
 [FIRM_NAME]`,
         variables: ['CLIENT_NAME', 'FIRM_NAME', 'TAX_YEAR', 'YOUR_NAME'],
-        description: 'Welcome message for new clients with document checklist'
+        description: 'Welcome message for new clients with document checklist',
     },
     {
         id: 'document_request',
@@ -133,7 +133,7 @@ Thank you for your prompt attention to this matter.
 Best regards,
 [YOUR_NAME]`,
         variables: ['CLIENT_NAME', 'TAX_YEAR', 'MISSING_DOCUMENTS', 'DUE_DATE', 'YOUR_NAME'],
-        description: 'Follow-up email for missing documents'
+        description: 'Follow-up email for missing documents',
     },
     {
         id: 'deadline_reminder',
@@ -157,8 +157,16 @@ Feel free to contact me with any questions.
 
 Best regards,
 [YOUR_NAME]`,
-        variables: ['CLIENT_NAME', 'TAX_YEAR', 'DEADLINE_DATE', 'COMPLETION_PERCENTAGE', 'TAX_AMOUNT', 'ACTION_ITEMS', 'YOUR_NAME'],
-        description: 'Reminder for upcoming tax deadlines'
+        variables: [
+            'CLIENT_NAME',
+            'TAX_YEAR',
+            'DEADLINE_DATE',
+            'COMPLETION_PERCENTAGE',
+            'TAX_AMOUNT',
+            'ACTION_ITEMS',
+            'YOUR_NAME',
+        ],
+        description: 'Reminder for upcoming tax deadlines',
     },
     {
         id: 'tax_advice',
@@ -182,8 +190,8 @@ Would you like to schedule a consultation to review these opportunities?
 Best regards,
 [YOUR_NAME]`,
         variables: ['CLIENT_NAME', 'TAX_YEAR', 'RECOMMENDATIONS', 'SAVINGS_OPPORTUNITIES', 'YOUR_NAME'],
-        description: 'Proactive tax planning advice for clients'
-    }
+        description: 'Proactive tax planning advice for clients',
+    },
 ]
 
 const AI_SUGGESTIONS = [
@@ -194,7 +202,7 @@ const AI_SUGGESTIONS = [
     'Add a call-to-action',
     'Include deadline information',
     'Add tax law references',
-    'Make it more personalized'
+    'Make it more personalized',
 ]
 
 export function EmailAgentEnhanced() {
@@ -234,7 +242,7 @@ export function EmailAgentEnhanced() {
             template_used: 'welcome_client',
             status: 'sent',
             created_date: '2024-01-15T10:00:00Z',
-            sent_date: '2024-01-15T10:30:00Z'
+            sent_date: '2024-01-15T10:30:00Z',
         },
         {
             id: 'email-2',
@@ -243,35 +251,35 @@ export function EmailAgentEnhanced() {
             client_name: 'Smith Corporation',
             template_used: 'document_request',
             status: 'draft',
-            created_date: '2024-01-20T14:30:00Z'
-        }
+            created_date: '2024-01-20T14:30:00Z',
+        },
     ]
 
     const handleTemplateSelect = (template: EmailTemplate) => {
         setSelectedTemplate(template)
-        setEmailDraft(prev => ({
+        setEmailDraft((prev) => ({
             ...prev,
             subject: template.subject,
             body: template.body,
-            template_id: template.id
+            template_id: template.id,
         }))
         setShowTemplateDialog(false)
     }
 
     const handleAddRecipient = () => {
         if (newRecipient.trim() && !emailDraft.to.includes(newRecipient)) {
-            setEmailDraft(prev => ({
+            setEmailDraft((prev) => ({
                 ...prev,
-                to: [...prev.to, newRecipient.trim()]
+                to: [...prev.to, newRecipient.trim()],
             }))
             setNewRecipient('')
         }
     }
 
     const handleRemoveRecipient = (email: string) => {
-        setEmailDraft(prev => ({
+        setEmailDraft((prev) => ({
             ...prev,
-            to: prev.to.filter(e => e !== email)
+            to: prev.to.filter((e) => e !== email),
         }))
     }
 
@@ -289,14 +297,14 @@ export function EmailAgentEnhanced() {
                 context: {
                     task: 'email_enhancement',
                     client_id: selectedClient,
-                    workspace_id: workspaceId
-                }
+                    workspace_id: workspaceId,
+                },
             })
 
             if (response.success && response.data) {
-                setEmailDraft(prev => ({
+                setEmailDraft((prev) => ({
                     ...prev,
-                    body: response.data.response
+                    body: response.data.response,
                 }))
                 toast.success('Email content enhanced with AI')
             }
@@ -316,7 +324,7 @@ export function EmailAgentEnhanced() {
         try {
             // In real implementation, this would call the email sending API
             toast.success('Email sent successfully!')
-            
+
             // Reset form
             setEmailDraft({
                 to: [],
@@ -344,12 +352,15 @@ export function EmailAgentEnhanced() {
             month: 'short',
             day: 'numeric',
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
         })
     }
 
     const TemplateCard = ({ template }: { template: EmailTemplate }) => (
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleTemplateSelect(template)}>
+        <Card
+            className="cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => handleTemplateSelect(template)}
+        >
             <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                     <div>
@@ -390,7 +401,11 @@ export function EmailAgentEnhanced() {
             <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-sm">{session.name}</h4>
-                    <Badge variant={session.status === 'sent' ? 'default' : session.status === 'draft' ? 'secondary' : 'outline'}>
+                    <Badge
+                        variant={
+                            session.status === 'sent' ? 'default' : session.status === 'draft' ? 'secondary' : 'outline'
+                        }
+                    >
                         {session.status}
                     </Badge>
                 </div>
@@ -434,9 +449,7 @@ export function EmailAgentEnhanced() {
             {/* Header */}
             <div>
                 <h1 className="text-3xl font-bold text-gray-900">Email Agent</h1>
-                <p className="text-gray-600 mt-1">
-                    Create professional emails with AI assistance and templates
-                </p>
+                <p className="text-gray-600 mt-1">Create professional emails with AI assistance and templates</p>
             </div>
 
             {/* Credit Usage */}
@@ -453,8 +466,8 @@ export function EmailAgentEnhanced() {
                             </div>
                         </div>
                         <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                                className="bg-purple-600 h-2 rounded-full" 
+                            <div
+                                className="bg-purple-600 h-2 rounded-full"
                                 style={{ width: `${(creditUsage.used / creditUsage.limit) * 100}%` }}
                             />
                         </div>
@@ -479,11 +492,19 @@ export function EmailAgentEnhanced() {
                                     <div className="flex items-center justify-between">
                                         <CardTitle>Compose Email</CardTitle>
                                         <div className="flex gap-2">
-                                            <Button variant="outline" size="sm" onClick={() => setShowTemplateDialog(true)}>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => setShowTemplateDialog(true)}
+                                            >
                                                 <FileText className="h-4 w-4 mr-1" />
                                                 Templates
                                             </Button>
-                                            <Button variant="outline" size="sm" onClick={() => setShowAISuggestions(!showAISuggestions)}>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => setShowAISuggestions(!showAISuggestions)}
+                                            >
                                                 <Bot className="h-4 w-4 mr-1" />
                                                 AI Assist
                                             </Button>
@@ -516,7 +537,11 @@ export function EmailAgentEnhanced() {
                                             {emailDraft.to.length > 0 && (
                                                 <div className="flex flex-wrap gap-2">
                                                     {emailDraft.to.map((email) => (
-                                                        <Badge key={email} variant="secondary" className="flex items-center gap-1">
+                                                        <Badge
+                                                            key={email}
+                                                            variant="secondary"
+                                                            className="flex items-center gap-1"
+                                                        >
                                                             {email}
                                                             <Button
                                                                 variant="ghost"
@@ -555,7 +580,9 @@ export function EmailAgentEnhanced() {
                                         <Input
                                             id="subject"
                                             value={emailDraft.subject}
-                                            onChange={(e) => setEmailDraft(prev => ({ ...prev, subject: e.target.value }))}
+                                            onChange={(e) =>
+                                                setEmailDraft((prev) => ({ ...prev, subject: e.target.value }))
+                                            }
                                             placeholder="Email subject"
                                         />
                                     </div>
@@ -566,7 +593,9 @@ export function EmailAgentEnhanced() {
                                         <Textarea
                                             id="body"
                                             value={emailDraft.body}
-                                            onChange={(e) => setEmailDraft(prev => ({ ...prev, body: e.target.value }))}
+                                            onChange={(e) =>
+                                                setEmailDraft((prev) => ({ ...prev, body: e.target.value }))
+                                            }
                                             placeholder="Type your message here..."
                                             rows={12}
                                             className="resize-none"
@@ -641,7 +670,9 @@ export function EmailAgentEnhanced() {
                                     <CardContent>
                                         <div className="space-y-2">
                                             <p className="text-sm font-medium">{selectedTemplate.name}</p>
-                                            <p className="text-xs text-muted-foreground">{selectedTemplate.description}</p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {selectedTemplate.description}
+                                            </p>
                                             <div className="flex flex-wrap gap-1">
                                                 {selectedTemplate.variables.map((variable) => (
                                                     <Badge key={variable} variant="secondary" className="text-xs">

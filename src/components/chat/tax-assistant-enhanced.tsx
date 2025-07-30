@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import { 
+import {
     Send,
     Bot,
     User,
@@ -22,7 +22,7 @@ import {
     CheckCircle2,
     Plus,
     X,
-    Loader2
+    Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -35,13 +35,13 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Textarea } from '@/components/ui/textarea'
-import { 
+import {
     useTaxAssistantSessions,
     useCreateTaxAssistantSession,
     useInvokeAgent,
     useCreditUsage,
     useWorkspaceClients,
-    useClientDocuments
+    useClientDocuments,
 } from '@/lib/hooks/api-hooks'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
@@ -77,8 +77,8 @@ const QUICK_PROMPTS = [
             'Calculate estimated quarterly taxes for this client',
             'What are the current tax brackets for 2024?',
             'Help me calculate depreciation for business equipment',
-            'Estimate tax liability for capital gains'
-        ]
+            'Estimate tax liability for capital gains',
+        ],
     },
     {
         category: 'Deductions',
@@ -86,8 +86,8 @@ const QUICK_PROMPTS = [
             'What business expenses are deductible?',
             'Calculate home office deduction',
             'Review meal and entertainment deductions',
-            'List available tax credits for this client'
-        ]
+            'List available tax credits for this client',
+        ],
     },
     {
         category: 'Form Help',
@@ -95,9 +95,9 @@ const QUICK_PROMPTS = [
             'Help me complete Schedule C',
             'Explain Form 1120 requirements',
             'Walk through Form 1065 partnership return',
-            'What forms does this client need?'
-        ]
-    }
+            'What forms does this client need?',
+        ],
+    },
 ]
 
 export function TaxAssistantEnhanced() {
@@ -133,7 +133,7 @@ export function TaxAssistantEnhanced() {
                     content: `Hello! I'm your Tax Assistant. I'm here to help you with tax calculations, form completion, deduction analysis, and general tax questions${selectedClient ? ' for your selected client' : ''}. How can I assist you today?`,
                     role: 'assistant',
                     timestamp: new Date().toISOString(),
-                }
+                },
             ])
         }
     }, [activeSession, selectedClient])
@@ -153,7 +153,7 @@ export function TaxAssistantEnhanced() {
             timestamp: new Date().toISOString(),
         }
 
-        setMessages(prev => [...prev, userMessage])
+        setMessages((prev) => [...prev, userMessage])
         setInputMessage('')
         setIsTyping(true)
         setShowQuickPrompts(false)
@@ -165,12 +165,12 @@ export function TaxAssistantEnhanced() {
                 client_id: selectedClient || null,
                 attached_documents: attachedDocuments,
                 workspace_id: workspaceId,
-                conversation_history: messages.slice(-5) // Last 5 messages for context
+                conversation_history: messages.slice(-5), // Last 5 messages for context
             }
 
             const response = await invokeAgentMutation.mutateAsync({
                 prompt: inputMessage,
-                context
+                context,
             })
 
             if (response.success && response.data) {
@@ -183,10 +183,10 @@ export function TaxAssistantEnhanced() {
                         credits_used: response.data.credits_used,
                         response_time: 1200, // Mock response time
                         documents_referenced: attachedDocuments,
-                    }
+                    },
                 }
 
-                setMessages(prev => [...prev, assistantMessage])
+                setMessages((prev) => [...prev, assistantMessage])
             }
         } catch (error) {
             console.error('Failed to send message:', error)
@@ -203,7 +203,7 @@ export function TaxAssistantEnhanced() {
             const sessionData = {
                 name: sessionName,
                 client_id: selectedClient || null,
-                workspace_id: workspaceId
+                workspace_id: workspaceId,
             }
 
             const result = await createSessionMutation.mutateAsync(sessionData)
@@ -231,7 +231,7 @@ export function TaxAssistantEnhanced() {
     const formatTimestamp = (timestamp: string) => {
         return new Date(timestamp).toLocaleTimeString('en-US', {
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
         })
     }
 
@@ -245,7 +245,7 @@ export function TaxAssistantEnhanced() {
             created_date: '2024-01-15T10:00:00Z',
             last_activity: '2024-01-20T14:30:00Z',
             message_count: 12,
-            status: 'active'
+            status: 'active',
         },
         {
             id: 'session-2',
@@ -255,8 +255,8 @@ export function TaxAssistantEnhanced() {
             created_date: '2024-01-10T09:00:00Z',
             last_activity: '2024-01-18T16:45:00Z',
             message_count: 8,
-            status: 'active'
-        }
+            status: 'active',
+        },
     ]
 
     return (
@@ -294,11 +294,13 @@ export function TaxAssistantEnhanced() {
                         <div className="mt-4 p-3 bg-white rounded-lg">
                             <div className="flex justify-between text-sm mb-1">
                                 <span>AI Credits</span>
-                                <span>{creditUsage.used} / {creditUsage.limit}</span>
+                                <span>
+                                    {creditUsage.used} / {creditUsage.limit}
+                                </span>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
-                                <div 
-                                    className="bg-blue-600 h-2 rounded-full" 
+                                <div
+                                    className="bg-blue-600 h-2 rounded-full"
                                     style={{ width: `${(creditUsage.used / creditUsage.limit) * 100}%` }}
                                 />
                             </div>
@@ -310,7 +312,7 @@ export function TaxAssistantEnhanced() {
                 <ScrollArea className="flex-1 p-4">
                     <div className="space-y-2">
                         {mockSessions.map((session) => (
-                            <Card 
+                            <Card
                                 key={session.id}
                                 className={`cursor-pointer transition-colors ${
                                     activeSession?.id === session.id ? 'bg-blue-50 border-blue-200' : 'hover:bg-gray-50'
@@ -331,7 +333,7 @@ export function TaxAssistantEnhanced() {
                                                 <span>{session.message_count} messages</span>
                                             </div>
                                         </div>
-                                        <Badge 
+                                        <Badge
                                             variant={session.status === 'active' ? 'default' : 'secondary'}
                                             className="text-xs"
                                         >
@@ -390,7 +392,7 @@ export function TaxAssistantEnhanced() {
                                                 <Bot className="h-4 w-4 text-blue-600" />
                                             </div>
                                         )}
-                                        
+
                                         <div
                                             className={`max-w-2xl rounded-lg p-4 ${
                                                 message.role === 'user'
@@ -405,10 +407,12 @@ export function TaxAssistantEnhanced() {
                                                     <p>{message.content}</p>
                                                 )}
                                             </div>
-                                            
-                                            <div className={`flex items-center justify-between mt-3 pt-2 border-t ${
-                                                message.role === 'user' ? 'border-blue-500' : 'border-gray-200'
-                                            }`}>
+
+                                            <div
+                                                className={`flex items-center justify-between mt-3 pt-2 border-t ${
+                                                    message.role === 'user' ? 'border-blue-500' : 'border-gray-200'
+                                                }`}
+                                            >
                                                 <div className="flex items-center gap-2 text-xs opacity-70">
                                                     <Clock className="h-3 w-3" />
                                                     <span>{formatTimestamp(message.timestamp)}</span>
@@ -420,7 +424,7 @@ export function TaxAssistantEnhanced() {
                                                         </>
                                                     )}
                                                 </div>
-                                                
+
                                                 <div className="flex items-center gap-1">
                                                     <Button
                                                         variant="ghost"
@@ -468,8 +472,14 @@ export function TaxAssistantEnhanced() {
                                         <div className="bg-gray-100 rounded-lg p-4 mr-12">
                                             <div className="flex items-center gap-1">
                                                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                                                <div
+                                                    className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                                    style={{ animationDelay: '0.1s' }}
+                                                />
+                                                <div
+                                                    className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                                    style={{ animationDelay: '0.2s' }}
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -523,7 +533,11 @@ export function TaxAssistantEnhanced() {
                                                     variant="ghost"
                                                     size="sm"
                                                     className="h-4 w-4 p-0 ml-1"
-                                                    onClick={() => setAttachedDocuments(prev => prev.filter(id => id !== docId))}
+                                                    onClick={() =>
+                                                        setAttachedDocuments((prev) =>
+                                                            prev.filter((id) => id !== docId)
+                                                        )
+                                                    }
                                                 >
                                                     <X className="h-3 w-3" />
                                                 </Button>
@@ -531,7 +545,7 @@ export function TaxAssistantEnhanced() {
                                         ))}
                                     </div>
                                 )}
-                                
+
                                 <div className="flex gap-2">
                                     <div className="flex-1 relative">
                                         <Textarea
@@ -556,7 +570,7 @@ export function TaxAssistantEnhanced() {
                                             <Paperclip className="h-4 w-4" />
                                         </Button>
                                     </div>
-                                    <Button 
+                                    <Button
                                         onClick={handleSendMessage}
                                         disabled={!inputMessage.trim() || invokeAgentMutation.isPending}
                                     >
@@ -624,7 +638,7 @@ export function TaxAssistantEnhanced() {
                         <Button variant="outline" onClick={() => setShowNewSessionDialog(false)}>
                             Cancel
                         </Button>
-                        <Button 
+                        <Button
                             onClick={handleCreateSession}
                             disabled={!sessionName.trim() || createSessionMutation.isPending}
                         >

@@ -23,10 +23,9 @@ export function useClient(workspaceId: string, clientId: string) {
 
 export function useCreateClient(workspaceId: string) {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
-        mutationFn: (clientData: Partial<ClientData>) => 
-            apiClient.createClient(workspaceId, clientData),
+        mutationFn: (clientData: Partial<ClientData>) => apiClient.createClient(workspaceId, clientData),
         onSuccess: (response) => {
             if (response.success) {
                 queryClient.invalidateQueries({ queryKey: queryKeys.clients(workspaceId) })
@@ -43,9 +42,9 @@ export function useCreateClient(workspaceId: string) {
 
 export function useUpdateClient(workspaceId: string) {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
-        mutationFn: ({ clientId, updates }: { clientId: string, updates: Partial<ClientData> }) =>
+        mutationFn: ({ clientId, updates }: { clientId: string; updates: Partial<ClientData> }) =>
             apiClient.updateClient(workspaceId, clientId, updates),
         onSuccess: (response, { clientId }) => {
             if (response.success) {
@@ -64,7 +63,7 @@ export function useUpdateClient(workspaceId: string) {
 
 export function useDeleteClient(workspaceId: string) {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
         mutationFn: (clientId: string) => apiClient.deleteClient(workspaceId, clientId),
         onSuccess: (response) => {
@@ -111,9 +110,9 @@ export function useExtractedData(clientId: string, documentId: string) {
 
 export function useUploadDocument(clientId: string) {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
-        mutationFn: ({ file, metadata }: { file: File, metadata?: any }) =>
+        mutationFn: ({ file, metadata }: { file: File; metadata?: any }) =>
             apiClient.uploadDocument(clientId, file, metadata),
         onSuccess: (response) => {
             if (response.success) {
@@ -152,9 +151,9 @@ export function useWorkspaceSubscription(workspaceId: string) {
 // Agent Interaction Hooks
 export function useInvokeAgent(workspaceId: string) {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
-        mutationFn: ({ prompt, context }: { prompt: string, context?: any }) =>
+        mutationFn: ({ prompt, context }: { prompt: string; context?: any }) =>
             apiClient.invokeAgent(prompt, workspaceId, context),
         onSuccess: (response) => {
             if (response.success) {
@@ -182,9 +181,9 @@ export function useWorkspaceChats(workspaceId: string) {
 
 export function useSendChatMessage(workspaceId: string) {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
-        mutationFn: ({ chatId, message }: { chatId: string, message: string }) =>
+        mutationFn: ({ chatId, message }: { chatId: string; message: string }) =>
             apiClient.sendChatMessage(workspaceId, chatId, message),
         onSuccess: (response) => {
             if (response.success) {
@@ -212,7 +211,7 @@ export function useEmailAgentSessions(workspaceId: string) {
 
 export function useCreateEmailAgentSession(workspaceId: string) {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
         mutationFn: (data: any) => apiClient.createEmailAgentSession(workspaceId, data),
         onSuccess: (response) => {
@@ -241,7 +240,7 @@ export function useTaxAssistantSessions(workspaceId: string) {
 
 export function useCreateTaxAssistantSession(workspaceId: string) {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
         mutationFn: (data: any) => apiClient.createTaxAssistantSession(workspaceId, data),
         onSuccess: (response) => {
@@ -287,7 +286,7 @@ export function useOnboardingStatus(sessionId: string) {
 
 export function useConfirmColumnMapping() {
     return useMutation({
-        mutationFn: ({ sessionId, mapping }: { sessionId: string, mapping: any }) =>
+        mutationFn: ({ sessionId, mapping }: { sessionId: string; mapping: any }) =>
             apiClient.confirmColumnMapping(sessionId, mapping),
         onSuccess: (response) => {
             if (response.success) {

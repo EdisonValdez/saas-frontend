@@ -78,13 +78,10 @@ class ApiClient {
         return headers
     }
 
-    private async request<T>(
-        endpoint: string,
-        options: RequestInit = {}
-    ): Promise<ApiResponse<T>> {
+    private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
         try {
             const headers = await this.getAuthHeaders()
-            
+
             const response = await fetch(`${this.baseUrl}${endpoint}`, {
                 ...options,
                 headers: {
@@ -111,7 +108,7 @@ class ApiClient {
     }
 
     // Client Management APIs
-    async getWorkspaceClients(workspaceId: string): Promise<ApiResponse<{ clients: ClientData[], total: number }>> {
+    async getWorkspaceClients(workspaceId: string): Promise<ApiResponse<{ clients: ClientData[]; total: number }>> {
         return this.request(`/workspaces/${workspaceId}/clients/`)
     }
 
@@ -126,7 +123,11 @@ class ApiClient {
         return this.request(`/workspaces/${workspaceId}/clients/${clientId}/`)
     }
 
-    async updateClient(workspaceId: string, clientId: string, updates: Partial<ClientData>): Promise<ApiResponse<ClientData>> {
+    async updateClient(
+        workspaceId: string,
+        clientId: string,
+        updates: Partial<ClientData>
+    ): Promise<ApiResponse<ClientData>> {
         return this.request(`/workspaces/${workspaceId}/clients/${clientId}/`, {
             method: 'PATCH',
             body: JSON.stringify(updates),
@@ -170,7 +171,11 @@ class ApiClient {
     }
 
     // Tax Assistant & Agent APIs
-    async invokeAgent(prompt: string, workspaceId: string, context?: any): Promise<ApiResponse<{ response: string, credits_used: number }>> {
+    async invokeAgent(
+        prompt: string,
+        workspaceId: string,
+        context?: any
+    ): Promise<ApiResponse<{ response: string; credits_used: number }>> {
         return this.request('/agents/invoke/', {
             method: 'POST',
             body: JSON.stringify({
@@ -181,7 +186,7 @@ class ApiClient {
         })
     }
 
-    async getCreditUsage(workspaceId: string): Promise<ApiResponse<{ used: number, limit: number }>> {
+    async getCreditUsage(workspaceId: string): Promise<ApiResponse<{ used: number; limit: number }>> {
         return this.request(`/workspaces/${workspaceId}/credit-usage/`)
     }
 
@@ -229,7 +234,7 @@ class ApiClient {
         })
     }
 
-    async getOnboardingStatus(sessionId: string): Promise<ApiResponse<{ status: string, progress: number }>> {
+    async getOnboardingStatus(sessionId: string): Promise<ApiResponse<{ status: string; progress: number }>> {
         return this.request(`/clients/onboarding/status/${sessionId}/`)
     }
 
@@ -268,6 +273,6 @@ export const handleApiError = (error: string | undefined, fallback = 'An error o
 }
 
 // Credit check utility
-export const canPerformAction = (creditUsage: { used: number, limit: number }, requiredCredits: number = 1) => {
-    return (creditUsage.used + requiredCredits) <= creditUsage.limit
+export const canPerformAction = (creditUsage: { used: number; limit: number }, requiredCredits: number = 1) => {
+    return creditUsage.used + requiredCredits <= creditUsage.limit
 }

@@ -4,7 +4,20 @@ import * as React from 'react'
 
 import { useParams, usePathname } from 'next/navigation'
 
-import { Frame, PieChart, Settings, MessageSquare, Languages, Building2, CreditCard, Presentation, Mail, Users, FileText, Calculator } from 'lucide-react'
+import {
+    Frame,
+    PieChart,
+    Settings,
+    MessageSquare,
+    Languages,
+    Building2,
+    CreditCard,
+    Presentation,
+    Mail,
+    Users,
+    FileText,
+    Calculator,
+} from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main'
 import { NavUser } from '@/components/nav-user'

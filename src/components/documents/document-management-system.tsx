@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import { useDropzone } from 'react-dropzone'
-import { 
+import {
     Upload,
     FileText,
     Image,
@@ -22,7 +22,7 @@ import {
     MoreHorizontal,
     Zap,
     FileCheck,
-    AlertTriangle
+    AlertTriangle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -37,12 +37,12 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { 
-    useClientDocuments, 
-    useUploadDocument, 
+import {
+    useClientDocuments,
+    useUploadDocument,
     useDocument,
     useExtractedData,
-    useWorkspaceClients
+    useWorkspaceClients,
 } from '@/lib/hooks/api-hooks'
 import { DocumentData } from '@/lib/api-client'
 
@@ -54,26 +54,26 @@ interface DocumentManagementSystemProps {
 const FILE_TYPE_ICONS = {
     pdf: FileText,
     image: Image,
-    default: File
+    default: File,
 }
 
 const STATUS_COLORS = {
     uploaded: 'bg-blue-100 text-blue-800',
     processing: 'bg-yellow-100 text-yellow-800',
     completed: 'bg-green-100 text-green-800',
-    error: 'bg-red-100 text-red-800'
+    error: 'bg-red-100 text-red-800',
 }
 
 const STATUS_ICONS = {
     uploaded: Clock,
     processing: Loader2,
     completed: CheckCircle2,
-    error: AlertCircle
+    error: AlertCircle,
 }
 
-export function DocumentManagementSystem({ 
-    clientId: initialClientId, 
-    showClientSelector = false 
+export function DocumentManagementSystem({
+    clientId: initialClientId,
+    showClientSelector = false,
 }: DocumentManagementSystemProps) {
     const params = useParams<{ workspaceId: string }>()
     const workspaceId = params.workspaceId
@@ -89,7 +89,11 @@ export function DocumentManagementSystem({
 
     // API hooks
     const { data: clientsData } = useWorkspaceClients(workspaceId)
-    const { data: documentsData, isLoading: documentsLoading, refetch: refetchDocuments } = useClientDocuments(selectedClientId)
+    const {
+        data: documentsData,
+        isLoading: documentsLoading,
+        refetch: refetchDocuments,
+    } = useClientDocuments(selectedClientId)
     const { data: selectedDocumentData } = useDocument(selectedClientId, selectedDocument?.id || '')
     const { data: extractedData } = useExtractedData(selectedClientId, selectedDocument?.id || '')
     const uploadDocumentMutation = useUploadDocument(selectedClientId)
@@ -107,14 +111,14 @@ export function DocumentManagementSystem({
         onDrop,
         accept: {
             'application/pdf': ['.pdf'],
-            'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+            'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff'],
         },
         maxSize: 50 * 1024 * 1024, // 50MB
-        disabled: !selectedClientId
+        disabled: !selectedClientId,
     })
 
     // Filter documents
-    const filteredDocuments = documents.filter(doc => {
+    const filteredDocuments = documents.filter((doc) => {
         const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase())
         const matchesStatus = statusFilter === 'all' || doc.status === statusFilter
         const matchesType = typeFilter === 'all' || getDocumentType(doc.type) === typeFilter
@@ -147,7 +151,7 @@ export function DocumentManagementSystem({
             month: 'short',
             day: 'numeric',
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
         })
     }
 
@@ -160,8 +164,8 @@ export function DocumentManagementSystem({
                     file,
                     metadata: {
                         uploaded_by: 'current_user',
-                        original_name: file.name
-                    }
+                        original_name: file.name,
+                    },
                 })
             } catch (error) {
                 console.error('Upload failed:', error)
@@ -176,7 +180,7 @@ export function DocumentManagementSystem({
     const DocumentCard = ({ document }: { document: DocumentData }) => {
         const Icon = getFileIcon(document.type)
         const StatusIcon = STATUS_ICONS[document.status]
-        
+
         return (
             <Card className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
@@ -194,7 +198,9 @@ export function DocumentManagementSystem({
                         </div>
                         <div className="flex items-center gap-2">
                             <Badge className={STATUS_COLORS[document.status]}>
-                                <StatusIcon className={`h-3 w-3 mr-1 ${document.status === 'processing' ? 'animate-spin' : ''}`} />
+                                <StatusIcon
+                                    className={`h-3 w-3 mr-1 ${document.status === 'processing' ? 'animate-spin' : ''}`}
+                                />
                                 {document.status}
                             </Badge>
                         </div>
@@ -210,13 +216,9 @@ export function DocumentManagementSystem({
                             <Progress value={document.ocr_confidence * 100} className="h-2" />
                         </div>
                     )}
-                    
+
                     <div className="flex gap-2">
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => setSelectedDocument(document)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => setSelectedDocument(document)}>
                             <Eye className="h-4 w-4 mr-1" />
                             View
                         </Button>
@@ -260,9 +262,7 @@ export function DocumentManagementSystem({
             {/* Header */}
             <div>
                 <h1 className="text-3xl font-bold text-gray-900">Document Management</h1>
-                <p className="text-gray-600 mt-1">
-                    Upload, process, and manage client documents with AI-powered OCR
-                </p>
+                <p className="text-gray-600 mt-1">Upload, process, and manage client documents with AI-powered OCR</p>
             </div>
 
             {/* Client Selector */}
@@ -306,8 +306,8 @@ export function DocumentManagementSystem({
                             <div
                                 {...getRootProps()}
                                 className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                                    isDragActive 
-                                        ? 'border-blue-500 bg-blue-50' 
+                                    isDragActive
+                                        ? 'border-blue-500 bg-blue-50'
                                         : 'border-gray-300 hover:border-gray-400'
                                 } ${!selectedClientId ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                             >
@@ -316,12 +316,8 @@ export function DocumentManagementSystem({
                                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                                     {isDragActive ? 'Drop files here' : 'Upload Documents'}
                                 </h3>
-                                <p className="text-gray-600 mb-4">
-                                    Drag and drop files here, or click to select files
-                                </p>
-                                <p className="text-sm text-gray-500">
-                                    Supports PDF and image files up to 50MB
-                                </p>
+                                <p className="text-gray-600 mb-4">Drag and drop files here, or click to select files</p>
+                                <p className="text-sm text-gray-500">Supports PDF and image files up to 50MB</p>
                                 {!selectedClientId && showClientSelector && (
                                     <Alert className="mt-4">
                                         <AlertTriangle className="h-4 w-4" />
@@ -372,10 +368,7 @@ export function DocumentManagementSystem({
                                 </Select>
                             </div>
                         </div>
-                        <Button 
-                            onClick={() => refetchDocuments()}
-                            variant="outline"
-                        >
+                        <Button onClick={() => refetchDocuments()} variant="outline">
                             <RefreshCw className="h-4 w-4 mr-2" />
                             Refresh
                         </Button>
@@ -425,17 +418,15 @@ export function DocumentManagementSystem({
                                     <FileText className="h-4 w-4 text-blue-600" />
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-medium truncate">{file.name}</p>
-                                        <p className="text-xs text-muted-foreground">
-                                            {formatFileSize(file.size)}
-                                        </p>
+                                        <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
                                     </div>
                                 </div>
                             ))}
                         </ScrollArea>
                     </div>
                     <DialogFooter>
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             onClick={() => {
                                 setShowUploadDialog(false)
                                 setUploadFiles([])
@@ -443,10 +434,7 @@ export function DocumentManagementSystem({
                         >
                             Cancel
                         </Button>
-                        <Button 
-                            onClick={handleUpload}
-                            disabled={uploadDocumentMutation.isPending}
-                        >
+                        <Button onClick={handleUpload} disabled={uploadDocumentMutation.isPending}>
                             {uploadDocumentMutation.isPending ? (
                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                             ) : (
@@ -465,7 +453,7 @@ export function DocumentManagementSystem({
                         <DialogHeader>
                             <DialogTitle className="flex items-center gap-3">
                                 {React.createElement(getFileIcon(selectedDocument.type), {
-                                    className: "h-5 w-5 text-blue-600"
+                                    className: 'h-5 w-5 text-blue-600',
                                 })}
                                 {selectedDocument.name}
                             </DialogTitle>
@@ -515,9 +503,7 @@ export function DocumentManagementSystem({
                                     <Label className="text-sm font-medium">Document Preview</Label>
                                     <div className="mt-2 bg-gray-50 rounded-lg p-8 text-center">
                                         <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                                        <p className="text-sm text-muted-foreground">
-                                            Preview not available
-                                        </p>
+                                        <p className="text-sm text-muted-foreground">Preview not available</p>
                                         <p className="text-xs text-muted-foreground mt-1">
                                             Use the download button to view the full document
                                         </p>

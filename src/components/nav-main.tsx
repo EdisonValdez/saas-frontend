@@ -39,7 +39,7 @@ export function NavMain({
             <SidebarMenu>
                 {items.map((item) => {
                     const isCurrentPath = pathname === item.url || pathname.startsWith(item.url + '/')
-                    const hasActiveSubItem = item.items?.some(subItem => pathname === subItem.url)
+                    const hasActiveSubItem = item.items?.some((subItem) => pathname === subItem.url)
                     const shouldBeOpen = item.isActive || isCurrentPath || hasActiveSubItem
 
                     return (
