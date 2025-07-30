@@ -114,10 +114,18 @@ export function TaxAgentChat() {
     const [dragActive, setDragActive] = useState(false)
     const [requestCount, setRequestCount] = useState(0)
     const [lastRequestTime, setLastRequestTime] = useState(0)
-    
+
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLTextAreaElement>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
+
+    // Initialize accessibility features
+    const { announce, manageFocus } = useAccessibility({
+        announceMessage: (message) => {
+            // Custom announcement handling if needed
+            console.log('Accessibility announcement:', message)
+        }
+    })
 
     // Scroll to bottom when new messages arrive
     const scrollToBottom = useCallback(() => {
