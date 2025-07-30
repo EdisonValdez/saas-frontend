@@ -94,6 +94,11 @@ export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
                 icon: Frame,
             },
             {
+                name: 'Tax Assistant Chat',
+                url: '/dashboard/chat-agent',
+                icon: MessageSquare,
+            },
+            {
                 name: 'Workspaces',
                 url: '/dashboard/workspaces',
                 icon: Building2,
