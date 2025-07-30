@@ -59,6 +59,11 @@ export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
                         icon: FileText,
                     },
                     {
+                        title: 'Tax Forms',
+                        url: `/dashboard/workspaces/${currentWorkspaceId}/forms`,
+                        icon: Calculator,
+                    },
+                    {
                         title: 'Tax Assistant',
                         url: `/dashboard/workspaces/${currentWorkspaceId}/chat-agent`,
                         icon: MessageSquare,
