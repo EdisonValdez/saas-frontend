@@ -45,6 +45,30 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
             ],
         },
         {
+            title: 'Tax Assistant',
+            description: 'AI-powered tax consultation and advice sessions',
+            icon: <Bot className="w-6 h-6" />,
+            href: `/dashboard/workspaces/${workspace.id}/tax-assistant`,
+            color: 'bg-emerald-50 text-emerald-600 border-emerald-200',
+            category: 'AI Tools',
+            actions: [
+                { label: 'New Tax Session', href: `/dashboard/workspaces/${workspace.id}/tax-assistant` },
+                { label: 'View All Sessions', href: `/dashboard/workspaces/${workspace.id}/tax-assistant` },
+            ],
+        },
+        {
+            title: 'Email Agent',
+            description: 'Professional email composition with AI assistance',
+            icon: <ExternalLink className="w-6 h-6" />,
+            href: `/dashboard/workspaces/${workspace.id}/email-agent`,
+            color: 'bg-violet-50 text-violet-600 border-violet-200',
+            category: 'AI Tools',
+            actions: [
+                { label: 'New Email Session', href: `/dashboard/workspaces/${workspace.id}/email-agent` },
+                { label: 'View All Sessions', href: `/dashboard/workspaces/${workspace.id}/email-agent` },
+            ],
+        },
+        {
             title: 'Team Management',
             description: 'Manage team members, roles, and permissions',
             icon: <Users className="w-6 h-6" />,
