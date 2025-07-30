@@ -155,37 +155,37 @@ export default function FormSelectionDashboard() {
     }
 
     // Category filter
-    if (filters.category) {
+    if (filters.category && !filters.category.startsWith('all_')) {
       filtered = filtered.filter(form => form.category === filters.category)
     }
 
     // Entity type filter
-    if (filters.entityType) {
+    if (filters.entityType && !filters.entityType.startsWith('all_')) {
       filtered = filtered.filter(form => form.entityTypes.includes(filters.entityType))
     }
 
     // Jurisdiction filter
-    if (filters.jurisdiction) {
+    if (filters.jurisdiction && !filters.jurisdiction.startsWith('all_')) {
       filtered = filtered.filter(form => form.jurisdiction === filters.jurisdiction)
     }
 
     // Year filter
-    if (filters.year) {
+    if (filters.year && !filters.year.startsWith('all_')) {
       filtered = filtered.filter(form => form.year.toString() === filters.year)
     }
 
     // Complexity filter
-    if (filters.complexity) {
+    if (filters.complexity && !filters.complexity.startsWith('all_')) {
       filtered = filtered.filter(form => form.complexity === filters.complexity)
     }
 
     // Status filter
-    if (filters.status) {
+    if (filters.status && !filters.status.startsWith('all_')) {
       filtered = filtered.filter(form => form.status === filters.status)
     }
 
     // Completion status filter
-    if (filters.completionStatus) {
+    if (filters.completionStatus && !filters.completionStatus.startsWith('all_')) {
       filtered = filtered.filter(form => form.completionStatus === filters.completionStatus)
     }
 
