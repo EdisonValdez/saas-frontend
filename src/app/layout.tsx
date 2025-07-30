@@ -15,6 +15,11 @@ import { fontSans } from '@/lib/fonts'
 import { Toaster } from '@/components/ui/toaster'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
+import { PromptaxNavbar } from '@/components/promptax-navbar'
+import { NextAuthSesionProvider } from '@/components/auth/session-provider'
+
+// Authentication
+import { auth } from '@/lib/auth'
 
 export const viewport: Viewport = {
     themeColor: [
@@ -37,7 +42,9 @@ export const metadata: Metadata = {
     },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+    const session = await auth()
+
     return (
         <html lang="en" suppressHydrationWarning>
             <head />
@@ -46,9 +53,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 suppressHydrationWarning
             >
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                    {children}
-                    <Toaster />
-                    <TailwindIndicator />
+                    <NextAuthSesionProvider session={session}>
+                        <PromptaxNavbar />
+                        <main className="pt-16">{children}</main>
+                        <Toaster />
+                        <TailwindIndicator />
+                    </NextAuthSesionProvider>
                 </ThemeProvider>
             </body>
         </html>
