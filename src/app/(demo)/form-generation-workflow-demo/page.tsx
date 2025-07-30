@@ -1,3 +1,5 @@
+'use client'
+
 import FormGenerationWorkflow from '@/components/forms/form-generation-workflow'
 
 export default function FormGenerationWorkflowDemo() {
