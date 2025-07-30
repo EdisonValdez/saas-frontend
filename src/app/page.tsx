@@ -23,8 +23,8 @@ export default async function IndexPage() {
             <div className="w-full max-w-md space-y-6">
                 {/* Logo/Title */}
                 <div className="text-center">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">TaxFlow Pro</h1>
-                    <p className="text-gray-600">Professional Tax Workflow Platform</p>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Promptax</h1>
+                    <p className="text-gray-600">AI-Powered Tax Workflow Platform</p>
                 </div>
 
                 {/* Auth Options Card */}
@@ -72,7 +72,7 @@ export default async function IndexPage() {
 
                 {/* Footer */}
                 <div className="text-center text-sm text-gray-500">
-                    <p>© 2024 TaxFlow Pro. All rights reserved.</p>
+                    <p>© 2024 Promptax. All rights reserved.</p>
                 </div>
             </div>
         </div>
