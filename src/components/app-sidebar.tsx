@@ -94,12 +94,22 @@ export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
                 icon: Frame,
             },
             {
+                name: 'Tax Assistant Chat',
+                url: '/dashboard/chat-agent',
+                icon: MessageSquare,
+            },
+            {
+                name: 'Email Agent',
+                url: '/dashboard/email-agent',
+                icon: MessageSquare,
+            },
+            {
                 name: 'Workspaces',
                 url: '/dashboard/workspaces',
                 icon: Building2,
             },
             {
-                name: 'Setttings',
+                name: 'Settings',
                 url: '/dashboard/settings',
                 icon: Settings,
             },
