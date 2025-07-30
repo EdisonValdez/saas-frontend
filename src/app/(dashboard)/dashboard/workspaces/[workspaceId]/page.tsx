@@ -30,5 +30,9 @@ export default async function WorkspaceDetailPage(props: { params: Promise<{ wor
         redirect('/')
     }
 
-    return <div className="flex flex-1 flex-col gap-4 p-4 pt-0"></div>
+    return (
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+            <WorkspaceDashboard workspace={workspace} />
+        </div>
+    )
 }
