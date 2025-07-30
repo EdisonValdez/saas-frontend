@@ -1,8 +1,8 @@
-# 🚀 Next Js 13 Boilerplate
+# 🚀 Next.js 14 Boilerplate
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-Nextjs 14 boilerplate with App Router support, Tailwind CSS, and Typescript.
+Next.js 14 boilerplate with App Router support, Tailwind CSS, and TypeScript.
 
 ## 🧰 Features
 
@@ -14,7 +14,7 @@ Nextjs 14 boilerplate with App Router support, Tailwind CSS, and Typescript.
 
 -   Type checking with [TypeScript](https://www.typescriptlang.org)
 
--   Strict Mode for TypeScript and React 18
+-   Strict Mode for TypeScript and React 19
 
 -   Unit Testing with [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
@@ -36,7 +36,7 @@ Follow these instructions to get your project up and running.
 
 -   Node.js
 
--   yarn
+-   Yarn
 
 ### Installation
 
@@ -56,7 +56,7 @@ yarn
 3. Start the development server:
 
 ```bash
-yarn run dev
+yarn dev
 ```
 
 ### Running Tests
@@ -64,22 +64,28 @@ yarn run dev
 To run the Jest unit tests:
 
 ```bash
-yarn run test
+yarn test
 ```
 
 To run the Cypress end-to-end tests:
 
 ```bash
-yarn run cypress
+yarn e2e
+```
+
+For headless E2E testing:
+
+```bash
+yarn e2e:headless
 ```
 
 ## 🤝 Contributing
 
-Contributions are welcome! If you find a bug or have a suggestion for improvement, please open an issue. I value your feedback and are open to any ideas for making this project better, appreciate your support in making this project better for everyone!
+Contributions are welcome! If you find a bug or have a suggestion for improvement, please open an issue. I value your feedback and am open to any ideas for making this project better. I appreciate your support in making this project better for everyone!
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the See [LICENSE](LICENSE) for more information.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) for more information.
 
 ## 👨‍💻 Author
 

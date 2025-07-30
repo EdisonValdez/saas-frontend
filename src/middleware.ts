@@ -1,4 +1,4 @@
-import { auth } from './lib/auth'
+import { NextRequest, NextResponse } from 'next/server'
 
 export const BASE_PATH = '/api/auth'
 
@@ -13,11 +13,9 @@ export const config = {
     ],
 }
 
-export default auth((req) => {
+// Temporary middleware to fix compatibility issues
+export default function middleware(req: NextRequest) {
     console.log('Middleware', req.url)
-    // const reqUrl = new URL(req.url)
-    // if (!req.auth && reqUrl.pathname !== '/') {
-    //     const url = req.url.replace(req.nextUrl.pathname, '/login')
-    //     return Response.redirect(url)
-    // }
-})
+    // Auth temporarily disabled for demo purposes
+    return NextResponse.next()
+}
