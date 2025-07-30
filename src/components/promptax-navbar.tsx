@@ -15,12 +15,23 @@ export const PromptaxNavbar: React.FC = () => {
     const [isOpen, setOpen] = useState(false)
     const { theme, setTheme } = useTheme()
 
-    const navigationItems = [
+    // Navigation items based on authentication status
+    const marketingNavigationItems = [
         { title: 'Platform', href: '/platform' },
         { title: 'Docs', href: '/docs' },
         { title: 'Demo', href: '/demo' },
         { title: 'Pricing', href: '/pricing' },
     ]
+
+    const authenticatedNavigationItems = [
+        { title: 'Dashboard', href: '/dashboard' },
+        { title: 'Workspaces', href: '/dashboard/workspaces' },
+        { title: 'Demos', href: '/dashboard/demos' },
+        { title: 'Settings', href: '/dashboard/settings' },
+        { title: 'Billing', href: '/dashboard/billing' },
+    ]
+
+    const navigationItems = status === 'authenticated' ? authenticatedNavigationItems : marketingNavigationItems
 
     return (
         <header className="w-full z-40 fixed top-0 left-0 bg-white/95 backdrop-blur-sm border-b border-gray-200">
