@@ -29,15 +29,16 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { 
-    ResponsiveContainer, 
-    BarChart, 
-    Bar, 
-    XAxis, 
-    YAxis, 
-    CartesianGrid, 
-    Tooltip, 
-    PieChart as RechartsPieChart, 
+import {
+    ResponsiveContainer,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    PieChart as RechartsPieChart,
+    Pie,
     Cell,
     LineChart,
     Line,
