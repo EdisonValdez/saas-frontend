@@ -1,15 +1,15 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { 
-    Plus, 
-    Upload, 
-    FileText, 
-    Users, 
-    Clock, 
-    CheckCircle2, 
-    AlertTriangle, 
-    TrendingUp, 
+import {
+    Plus,
+    Upload,
+    FileText,
+    Users,
+    Clock,
+    CheckCircle2,
+    AlertTriangle,
+    TrendingUp,
     TrendingDown,
     Eye,
     MoreHorizontal,
@@ -19,7 +19,7 @@ import {
     Activity,
     BarChart3,
     PieChart,
-    Calendar
+    Calendar,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -43,7 +43,7 @@ import {
     LineChart,
     Line,
     Area,
-    AreaChart
+    AreaChart,
 } from 'recharts'
 
 // TypeScript interfaces
@@ -121,7 +121,7 @@ const CHART_COLORS = {
     warning: '#F59E0B',
     error: '#EF4444',
     info: '#8B5CF6',
-    gray: '#6B7280'
+    gray: '#6B7280',
 }
 
 const PIE_COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#6B7280']
@@ -132,7 +132,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     onAddClient,
     onProcessForms,
     onViewActivity,
-    onError
+    onError,
 }) => {
     // State management
     const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
@@ -152,7 +152,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             const [metricsRes, activityRes, alertsRes] = await Promise.all([
                 fetch(`/api/dashboard/metrics/?workspace=${workspaceId}`),
                 fetch(`/api/dashboard/recent-activity/?workspace=${workspaceId}`),
-                fetch(`/api/dashboard/alerts/?workspace=${workspaceId}`)
+                fetch(`/api/dashboard/alerts/?workspace=${workspaceId}`),
             ])
 
             if (!metricsRes.ok || !activityRes.ok || !alertsRes.ok) {
@@ -162,7 +162,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             const [metricsData, activityData, alertsData] = await Promise.all([
                 metricsRes.json(),
                 activityRes.json(),
-                alertsRes.json()
+                alertsRes.json(),
             ])
 
             setMetrics(metricsData.metrics)
@@ -170,7 +170,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             setAlerts(alertsData.alerts)
             setChartData(metricsData.charts)
             setLastRefresh(new Date())
-
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Failed to load dashboard data'
             setError(errorMessage)
@@ -183,10 +182,13 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     // Auto-refresh every 5 minutes
     useEffect(() => {
         fetchDashboardData()
-        
-        const interval = setInterval(() => {
-            fetchDashboardData()
-        }, 5 * 60 * 1000) // 5 minutes
+
+        const interval = setInterval(
+            () => {
+                fetchDashboardData()
+            },
+            5 * 60 * 1000
+        ) // 5 minutes
 
         return () => clearInterval(interval)
     }, [fetchDashboardData])
@@ -197,19 +199,19 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             return {
                 icon: <TrendingUp className="w-4 h-4 text-green-600" />,
                 color: 'text-green-600',
-                text: `+${trend}%`
+                text: `+${trend}%`,
             }
         } else if (trend < 0) {
             return {
                 icon: <TrendingDown className="w-4 h-4 text-red-600" />,
                 color: 'text-red-600',
-                text: `${trend}%`
+                text: `${trend}%`,
             }
         } else {
             return {
                 icon: <div className="w-4 h-4" />,
                 color: 'text-gray-500',
-                text: '0%'
+                text: '0%',
             }
         }
     }
@@ -235,7 +237,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     // Get alert styling
     const getAlertStyling = (type: DashboardAlert['type'], priority: DashboardAlert['priority']) => {
         const baseClasses = 'border-l-4 bg-opacity-10'
-        
+
         if (type === 'error') {
             return `${baseClasses} border-red-500 bg-red-50`
         } else if (type === 'warning') {
@@ -279,12 +281,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
                         {error}
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={fetchDashboardData}
-                            className="ml-4"
-                        >
+                        <Button variant="outline" size="sm" onClick={fetchDashboardData} className="ml-4">
                             <RefreshCw className="w-4 h-4 mr-2" />
                             Retry
                         </Button>
@@ -300,20 +297,11 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-                    <p className="text-gray-600 mt-1">
-                        Tax form management system overview
-                    </p>
+                    <p className="text-gray-600 mt-1">Tax form management system overview</p>
                 </div>
                 <div className="flex items-center space-x-3">
-                    <div className="text-sm text-gray-500">
-                        Last updated: {lastRefresh.toLocaleTimeString()}
-                    </div>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={fetchDashboardData}
-                        disabled={isLoading}
-                    >
+                    <div className="text-sm text-gray-500">Last updated: {lastRefresh.toLocaleTimeString()}</div>
+                    <Button variant="outline" size="sm" onClick={fetchDashboardData} disabled={isLoading}>
                         <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                         Refresh
                     </Button>
@@ -338,29 +326,17 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <Button
-                            onClick={onUploadDocument}
-                            className="h-auto p-4 flex-col space-y-2"
-                            variant="outline"
-                        >
+                        <Button onClick={onUploadDocument} className="h-auto p-4 flex-col space-y-2" variant="outline">
                             <Upload className="w-6 h-6" />
                             <span>Upload Document</span>
                             <span className="text-xs text-gray-500">Add new tax forms</span>
                         </Button>
-                        <Button
-                            onClick={onAddClient}
-                            className="h-auto p-4 flex-col space-y-2"
-                            variant="outline"
-                        >
+                        <Button onClick={onAddClient} className="h-auto p-4 flex-col space-y-2" variant="outline">
                             <Users className="w-6 h-6" />
                             <span>Add Client</span>
                             <span className="text-xs text-gray-500">Create new client profile</span>
                         </Button>
-                        <Button
-                            onClick={onProcessForms}
-                            className="h-auto p-4 flex-col space-y-2"
-                            variant="outline"
-                        >
+                        <Button onClick={onProcessForms} className="h-auto p-4 flex-col space-y-2" variant="outline">
                             <FileText className="w-6 h-6" />
                             <span>Process Forms</span>
                             <span className="text-xs text-gray-500">Run batch processing</span>
@@ -377,7 +353,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="text-sm text-gray-600">Total Documents</p>
-                                    <p className="text-3xl font-bold text-gray-900">{metrics.total_documents.toLocaleString()}</p>
+                                    <p className="text-3xl font-bold text-gray-900">
+                                        {metrics.total_documents.toLocaleString()}
+                                    </p>
                                     <div className="flex items-center mt-2">
                                         {getTrendDisplay(metrics.trends.documents).icon}
                                         <span className={`text-sm ${getTrendDisplay(metrics.trends.documents).color}`}>
@@ -398,7 +376,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="text-sm text-gray-600">Processed Forms</p>
-                                    <p className="text-3xl font-bold text-gray-900">{metrics.processed_forms.toLocaleString()}</p>
+                                    <p className="text-3xl font-bold text-gray-900">
+                                        {metrics.processed_forms.toLocaleString()}
+                                    </p>
                                     <div className="flex items-center mt-2">
                                         {getTrendDisplay(metrics.trends.processing).icon}
                                         <span className={`text-sm ${getTrendDisplay(metrics.trends.processing).color}`}>
@@ -419,7 +399,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="text-sm text-gray-600">Active Clients</p>
-                                    <p className="text-3xl font-bold text-gray-900">{metrics.active_clients.toLocaleString()}</p>
+                                    <p className="text-3xl font-bold text-gray-900">
+                                        {metrics.active_clients.toLocaleString()}
+                                    </p>
                                     <div className="flex items-center mt-2">
                                         {getTrendDisplay(metrics.trends.clients).icon}
                                         <span className={`text-sm ${getTrendDisplay(metrics.trends.clients).color}`}>
@@ -440,12 +422,12 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="text-sm text-gray-600">Pending Tasks</p>
-                                    <p className="text-3xl font-bold text-gray-900">{metrics.pending_tasks.toLocaleString()}</p>
+                                    <p className="text-3xl font-bold text-gray-900">
+                                        {metrics.pending_tasks.toLocaleString()}
+                                    </p>
                                     <div className="flex items-center mt-2">
                                         <Clock className="w-4 h-4 text-orange-500" />
-                                        <span className="text-sm text-orange-600 ml-1">
-                                            Requires attention
-                                        </span>
+                                        <span className="text-sm text-orange-600 ml-1">Requires attention</span>
                                     </div>
                                 </div>
                                 <div className="p-3 bg-orange-100 rounded-lg">
@@ -469,9 +451,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                                 </Badge>
                             </div>
                             <Progress value={metrics.processing_accuracy} className="h-2" />
-                            <p className="text-sm text-gray-600 mt-2">
-                                Above 95% is excellent
-                            </p>
+                            <p className="text-sm text-gray-600 mt-2">Above 95% is excellent</p>
                         </CardContent>
                     </Card>
 
@@ -479,16 +459,12 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                         <CardContent className="p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-lg font-semibold">Avg Processing Time</h3>
-                                <Badge variant="outline">
-                                    {metrics.avg_processing_time}min
-                                </Badge>
+                                <Badge variant="outline">{metrics.avg_processing_time}min</Badge>
                             </div>
                             <div className="text-2xl font-bold text-gray-900 mb-2">
                                 {metrics.avg_processing_time} minutes
                             </div>
-                            <p className="text-sm text-gray-600">
-                                Per document average
-                            </p>
+                            <p className="text-sm text-gray-600">Per document average</p>
                         </CardContent>
                     </Card>
 
@@ -558,7 +534,10 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                                             label={({ name, percentage }) => `${name} ${percentage}%`}
                                         >
                                             {chartData.processing_status.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                                                <Cell
+                                                    key={`cell-${index}`}
+                                                    fill={PIE_COLORS[index % PIE_COLORS.length]}
+                                                />
                                             ))}
                                         </Pie>
                                         <Tooltip />
@@ -581,19 +560,19 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                                         <XAxis dataKey="day" />
                                         <YAxis />
                                         <Tooltip />
-                                        <Area 
-                                            type="monotone" 
-                                            dataKey="documents" 
+                                        <Area
+                                            type="monotone"
+                                            dataKey="documents"
                                             stackId="1"
-                                            stroke={CHART_COLORS.primary} 
+                                            stroke={CHART_COLORS.primary}
                                             fill={CHART_COLORS.primary}
                                             fillOpacity={0.6}
                                         />
-                                        <Area 
-                                            type="monotone" 
-                                            dataKey="processed" 
+                                        <Area
+                                            type="monotone"
+                                            dataKey="processed"
                                             stackId="2"
-                                            stroke={CHART_COLORS.success} 
+                                            stroke={CHART_COLORS.success}
                                             fill={CHART_COLORS.success}
                                             fillOpacity={0.6}
                                         />
@@ -618,23 +597,20 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                         <ScrollArea className="h-80">
                             <div className="space-y-4">
                                 {recentActivity.length === 0 ? (
-                                    <div className="text-center py-8 text-gray-500">
-                                        No recent activity
-                                    </div>
+                                    <div className="text-center py-8 text-gray-500">No recent activity</div>
                                 ) : (
                                     recentActivity.map((activity) => (
-                                        <div key={activity.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
-                                             onClick={() => onViewActivity?.(activity)}>
-                                            <div className="flex-shrink-0 mt-1">
-                                                {getActivityIcon(activity.type)}
-                                            </div>
+                                        <div
+                                            key={activity.id}
+                                            className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer"
+                                            onClick={() => onViewActivity?.(activity)}
+                                        >
+                                            <div className="flex-shrink-0 mt-1">{getActivityIcon(activity.type)}</div>
                                             <div className="flex-1 min-w-0">
                                                 <p className="text-sm font-medium text-gray-900 truncate">
                                                     {activity.title}
                                                 </p>
-                                                <p className="text-sm text-gray-600 truncate">
-                                                    {activity.description}
-                                                </p>
+                                                <p className="text-sm text-gray-600 truncate">{activity.description}</p>
                                                 <div className="flex items-center mt-1 space-x-2">
                                                     {activity.client_name && (
                                                         <Badge variant="secondary" className="text-xs">
@@ -681,9 +657,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                                 <span>Alerts & Notifications</span>
                             </div>
                             {alerts.length > 0 && (
-                                <Badge variant="destructive">
-                                    {alerts.filter(a => a.action_required).length}
-                                </Badge>
+                                <Badge variant="destructive">{alerts.filter((a) => a.action_required).length}</Badge>
                             )}
                         </CardTitle>
                     </CardHeader>
@@ -697,7 +671,10 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                                     </div>
                                 ) : (
                                     alerts.map((alert) => (
-                                        <div key={alert.id} className={`p-4 rounded-lg ${getAlertStyling(alert.type, alert.priority)}`}>
+                                        <div
+                                            key={alert.id}
+                                            className={`p-4 rounded-lg ${getAlertStyling(alert.type, alert.priority)}`}
+                                        >
                                             <div className="flex items-start justify-between">
                                                 <div className="flex-1">
                                                     <div className="flex items-center space-x-2 mb-1">
@@ -709,16 +686,16 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
                                                                 {alert.count}
                                                             </Badge>
                                                         )}
-                                                        <Badge 
-                                                            variant={alert.priority === 'high' ? 'destructive' : 'secondary'}
+                                                        <Badge
+                                                            variant={
+                                                                alert.priority === 'high' ? 'destructive' : 'secondary'
+                                                            }
                                                             className="text-xs"
                                                         >
                                                             {alert.priority}
                                                         </Badge>
                                                     </div>
-                                                    <p className="text-sm text-gray-700 mb-2">
-                                                        {alert.description}
-                                                    </p>
+                                                    <p className="text-sm text-gray-700 mb-2">{alert.description}</p>
                                                     <div className="flex items-center justify-between">
                                                         <span className="text-xs text-gray-500">
                                                             {formatTimeAgo(alert.created_at)}
