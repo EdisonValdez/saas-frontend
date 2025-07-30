@@ -280,6 +280,11 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
                     </Button>
                 </div>
             </div>
+
+            {/* Demo Showcase */}
+            <div>
+                <DemoShowcase />
+            </div>
         </div>
     )
 }
