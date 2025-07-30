@@ -15,7 +15,7 @@ import { FeatureNavigation } from '@/components/dashboard/feature-navigation'
 
 export const metadata = {
     title: 'Dashboard',
-    description: 'Application dashboard',
+    description: 'PromptAx Dashboard - Your AI-powered tax workflow assistant. Manage documents, clients, and AI automation.',
 }
 
 export default async function DashboardPage() {
