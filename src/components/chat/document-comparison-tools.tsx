@@ -9,8 +9,8 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
-import { 
-  FileCompare, Highlight, Eye, Download, Zap, AlertTriangle,
+import {
+  Eye, Download, Zap, AlertTriangle,
   CheckCircle, XCircle, ArrowRight, RotateCcw, Search,
   Maximize2, Minimize2, Copy, Share, Bookmark, X
 } from 'lucide-react'
