@@ -435,7 +435,11 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
 
             <div className="flex-1 flex overflow-hidden">
                 {/* Left Panel - Email List */}
-                <div className="w-1/3 border-r bg-white flex flex-col">
+                <div
+                    className="w-1/3 border-r bg-white flex flex-col"
+                    role="region"
+                    aria-label="Email list"
+                >
                     {/* Folders Sidebar */}
                     <div className="border-b">
                         <ScrollArea className="h-48">
