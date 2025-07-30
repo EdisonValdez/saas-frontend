@@ -40,6 +40,7 @@ import {
 import { toast } from 'sonner'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { useAccessibility } from '@/hooks/use-accessibility'
 
 interface Message {
     id: string
