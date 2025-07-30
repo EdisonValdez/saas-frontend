@@ -93,7 +93,7 @@ export function EmailAgentCreateModal({ workspaceId }: EmailAgentCreateModalProp
 
             const payload = {
                 name: sessionName.trim(),
-                client_id: selectedClientId || null,
+                client_id: selectedClientId && selectedClientId !== 'none' ? selectedClientId : null,
                 client_name: selectedClient?.name || null,
                 email_subject: emailSubject.trim() || null,
                 email_type: emailType,

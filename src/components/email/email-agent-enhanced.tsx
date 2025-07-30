@@ -296,7 +296,7 @@ export function EmailAgentEnhanced() {
                 prompt,
                 context: {
                     task: 'email_enhancement',
-                    client_id: selectedClient,
+                    client_id: selectedClient && selectedClient !== 'none' ? selectedClient : null,
                     workspace_id: workspaceId,
                 },
             })
