@@ -279,7 +279,7 @@ export function TaxAssistantEnhanced() {
                                 <SelectValue placeholder="Select client (optional)" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="">No specific client</SelectItem>
+                                <SelectItem value="none">No specific client</SelectItem>
                                 {clients?.clients?.map((client) => (
                                     <SelectItem key={client.id} value={client.id}>
                                         {client.name}
@@ -624,7 +624,7 @@ export function TaxAssistantEnhanced() {
                                     <SelectValue placeholder="Select a client for context" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">General tax questions</SelectItem>
+                                    <SelectItem value="none">General tax questions</SelectItem>
                                     {clients?.clients?.map((client) => (
                                         <SelectItem key={client.id} value={client.id}>
                                             {client.name}
