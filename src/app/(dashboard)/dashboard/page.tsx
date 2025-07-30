@@ -15,7 +15,7 @@ import { SimplifiedFeatureNavigation } from '@/components/dashboard/simplified-f
 export const metadata = {
     title: 'Dashboard',
     description:
-        'PromptAx Dashboard - Your AI-powered tax workflow assistant. Manage documents, clients, and AI automation.',
+        'Promptax Dashboard - Your AI-powered tax workflow assistant. Manage documents, clients, and AI automation.',
 }
 
 export default async function DashboardPage() {
@@ -28,9 +28,8 @@ export default async function DashboardPage() {
         redirect(await signIn())
     }
 
-    if (!workspaces) {
-        redirect('/dashboard')
-    }
+    // Get the first workspace ID or use a default value
+    const defaultWorkspaceId = workspaces && workspaces.length > 0 ? workspaces[0].id : null
 
     return (
         <div className="flex flex-1 flex-col gap-8 p-6">
@@ -41,16 +40,24 @@ export default async function DashboardPage() {
             </div>
 
             {/* Simplified Feature Navigation */}
-            <SimplifiedFeatureNavigation workspaceId={workspaces?.[0]?.id} />
+            <SimplifiedFeatureNavigation workspaceId={defaultWorkspaceId} />
 
             {/* Workspace Management - Simplified */}
-            {workspaces && workspaces.length > 0 && (
+            {workspaces && workspaces.length > 0 ? (
                 <div>
                     <div className="mb-6">
                         <h2 className="text-xl font-semibold text-gray-900">Your Workspaces</h2>
                         <p className="text-gray-600 mt-1">Team collaboration spaces</p>
                     </div>
                     <WorkspaceListV2 workspaces={workspaces} />
+                </div>
+            ) : (
+                <div className="text-center py-12">
+                    <h2 className="text-xl font-semibold text-gray-900 mb-2">No Workspaces Found</h2>
+                    <p className="text-gray-600 mb-4">Create your first workspace to get started</p>
+                    <a href="/dashboard/workspaces" className="text-blue-600 hover:text-blue-800 underline">
+                        Create Workspace
+                    </a>
                 </div>
             )}
         </div>
