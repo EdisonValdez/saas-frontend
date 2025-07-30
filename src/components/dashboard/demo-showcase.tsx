@@ -2,10 +2,10 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { 
-    FileText, 
-    Users, 
-    Upload, 
+import {
+    FileText,
+    Users,
+    Upload,
     BarChart3,
     Bot,
     FormInput,
@@ -14,7 +14,7 @@ import {
     Workflow,
     UserPlus,
     Archive,
-    Play
+    Play,
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -28,7 +28,7 @@ export function DemoShowcase() {
             icon: <Upload className="w-5 h-5" />,
             href: '/document-upload-demo',
             color: 'bg-blue-50 text-blue-600',
-            category: 'Documents'
+            category: 'Documents',
         },
         {
             title: 'Document Management Demo',
@@ -36,7 +36,7 @@ export function DemoShowcase() {
             icon: <FileText className="w-5 h-5" />,
             href: '/document-management-demo',
             color: 'bg-blue-50 text-blue-600',
-            category: 'Documents'
+            category: 'Documents',
         },
         {
             title: 'Document Extraction Demo',
@@ -44,7 +44,7 @@ export function DemoShowcase() {
             icon: <FileSearch className="w-5 h-5" />,
             href: '/document-extraction-demo',
             color: 'bg-blue-50 text-blue-600',
-            category: 'Documents'
+            category: 'Documents',
         },
         {
             title: 'Extracted Data Review',
@@ -52,7 +52,7 @@ export function DemoShowcase() {
             icon: <Eye className="w-5 h-5" />,
             href: '/extracted-data-review-demo',
             color: 'bg-blue-50 text-blue-600',
-            category: 'Documents'
+            category: 'Documents',
         },
         {
             title: 'Client Management Demo',
@@ -60,7 +60,7 @@ export function DemoShowcase() {
             icon: <Users className="w-5 h-5" />,
             href: '/client-management-demo',
             color: 'bg-purple-50 text-purple-600',
-            category: 'Clients'
+            category: 'Clients',
         },
         {
             title: 'Client Onboarding Demo',
@@ -68,7 +68,7 @@ export function DemoShowcase() {
             icon: <UserPlus className="w-5 h-5" />,
             href: '/client-onboarding-demo',
             color: 'bg-purple-50 text-purple-600',
-            category: 'Clients'
+            category: 'Clients',
         },
         {
             title: 'Form Selection Demo',
@@ -76,7 +76,7 @@ export function DemoShowcase() {
             icon: <FormInput className="w-5 h-5" />,
             href: '/form-selection-demo',
             color: 'bg-orange-50 text-orange-600',
-            category: 'Forms'
+            category: 'Forms',
         },
         {
             title: 'Form Generation Demo',
@@ -84,7 +84,7 @@ export function DemoShowcase() {
             icon: <Workflow className="w-5 h-5" />,
             href: '/form-generation-workflow-demo',
             color: 'bg-orange-50 text-orange-600',
-            category: 'Forms'
+            category: 'Forms',
         },
         {
             title: 'Tax Assistant Chat',
@@ -92,7 +92,7 @@ export function DemoShowcase() {
             icon: <Bot className="w-5 h-5" />,
             href: '/tax-assistant-chat-demo',
             color: 'bg-green-50 text-green-600',
-            category: 'AI Tools'
+            category: 'AI Tools',
         },
         {
             title: 'Dashboard Analytics',
@@ -100,17 +100,20 @@ export function DemoShowcase() {
             icon: <BarChart3 className="w-5 h-5" />,
             href: '/dashboard-demo',
             color: 'bg-emerald-50 text-emerald-600',
-            category: 'Analytics'
-        }
+            category: 'Analytics',
+        },
     ]
 
-    const categorizedDemos = demoFeatures.reduce((acc, demo) => {
-        if (!acc[demo.category]) {
-            acc[demo.category] = []
-        }
-        acc[demo.category].push(demo)
-        return acc
-    }, {} as Record<string, typeof demoFeatures>)
+    const categorizedDemos = demoFeatures.reduce(
+        (acc, demo) => {
+            if (!acc[demo.category]) {
+                acc[demo.category] = []
+            }
+            acc[demo.category].push(demo)
+            return acc
+        },
+        {} as Record<string, typeof demoFeatures>
+    )
 
     return (
         <div className="space-y-8">
@@ -137,20 +140,16 @@ export function DemoShowcase() {
                                 {demos.length} demo{demos.length > 1 ? 's' : ''} available
                             </p>
                         </div>
-                        <Badge variant="outline">
-                            {demos.length}
-                        </Badge>
+                        <Badge variant="outline">{demos.length}</Badge>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {demos.map((demo) => (
                             <Card key={demo.title} className="hover:shadow-lg transition-shadow group">
                                 <CardHeader className="pb-3">
                                     <div className="flex items-start justify-between">
                                         <div className="flex items-center space-x-3">
-                                            <div className={`p-2 rounded-lg ${demo.color}`}>
-                                                {demo.icon}
-                                            </div>
+                                            <div className={`p-2 rounded-lg ${demo.color}`}>{demo.icon}</div>
                                             <div className="flex-1">
                                                 <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
                                                     {demo.title}
@@ -158,9 +157,7 @@ export function DemoShowcase() {
                                             </div>
                                         </div>
                                     </div>
-                                    <CardDescription className="text-sm mt-2">
-                                        {demo.description}
-                                    </CardDescription>
+                                    <CardDescription className="text-sm mt-2">{demo.description}</CardDescription>
                                 </CardHeader>
                                 <CardContent className="pt-0">
                                     <Button asChild className="w-full" variant="outline">
@@ -180,7 +177,8 @@ export function DemoShowcase() {
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-8 border border-blue-100 text-center">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Ready to Get Started?</h3>
                 <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                    These demos showcase the full capabilities of our platform. Create a workspace to start using these features with your real data.
+                    These demos showcase the full capabilities of our platform. Create a workspace to start using these
+                    features with your real data.
                 </p>
                 <div className="flex justify-center space-x-4">
                     <Button asChild>

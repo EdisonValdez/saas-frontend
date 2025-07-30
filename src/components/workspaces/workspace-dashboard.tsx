@@ -2,10 +2,10 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { 
-    MessageSquare, 
-    Users, 
-    Settings, 
+import {
+    MessageSquare,
+    Users,
+    Settings,
     Languages,
     FileText,
     Upload,
@@ -18,7 +18,7 @@ import {
     ExternalLink,
     Zap,
     Shield,
-    Share2
+    Share2,
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -41,8 +41,8 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
             category: 'Communication',
             actions: [
                 { label: 'Start New Chat', href: `/dashboard/workspaces/${workspace.id}/chat` },
-                { label: 'View Chat History', href: `/dashboard/workspaces/${workspace.id}/chat/history` }
-            ]
+                { label: 'View Chat History', href: `/dashboard/workspaces/${workspace.id}/chat/history` },
+            ],
         },
         {
             title: 'Team Management',
@@ -53,8 +53,8 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
             category: 'Team',
             actions: [
                 { label: 'View Teams', href: `/dashboard/workspaces/${workspace.id}/teams` },
-                { label: 'Invite Members', href: `/dashboard/workspaces/${workspace.id}/teams` }
-            ]
+                { label: 'Invite Members', href: `/dashboard/workspaces/${workspace.id}/teams` },
+            ],
         },
         {
             title: 'Document Translation',
@@ -63,9 +63,7 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
             href: `/dashboard/workspaces/${workspace.id}/translate`,
             color: 'bg-green-50 text-green-600 border-green-200',
             category: 'Tools',
-            actions: [
-                { label: 'Translate Document', href: `/dashboard/workspaces/${workspace.id}/translate` }
-            ]
+            actions: [{ label: 'Translate Document', href: `/dashboard/workspaces/${workspace.id}/translate` }],
         },
         {
             title: 'Workspace Settings',
@@ -76,9 +74,9 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
             category: 'Settings',
             actions: [
                 { label: 'General Settings', href: `/dashboard/workspaces/${workspace.id}/settings` },
-                { label: 'Workspace Details', href: `/dashboard/workspaces/${workspace.id}/details` }
-            ]
-        }
+                { label: 'Workspace Details', href: `/dashboard/workspaces/${workspace.id}/details` },
+            ],
+        },
     ]
 
     const globalFeatures = [
@@ -109,7 +107,7 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
             icon: <FileText className="w-5 h-5" />,
             href: '/form-generation-workflow-demo',
             color: 'text-orange-600',
-        }
+        },
     ]
 
     const quickActions = [
@@ -117,20 +115,20 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
             label: 'Share Workspace Link',
             icon: <Share2 className="w-4 h-4" />,
             href: `/chats/${workspace.id}/shared-link`,
-            description: 'Share this workspace with external users'
+            description: 'Share this workspace with external users',
         },
         {
             label: 'Archive Workspace',
             icon: <Archive className="w-4 h-4" />,
             href: `/dashboard/workspaces/${workspace.id}/settings`,
-            description: 'Archive this workspace'
+            description: 'Archive this workspace',
         },
         {
             label: 'View All Workspaces',
             icon: <ExternalLink className="w-4 h-4" />,
             href: '/dashboard/workspaces',
-            description: 'Return to workspace overview'
-        }
+            description: 'Return to workspace overview',
+        },
     ]
 
     return (
@@ -187,16 +185,17 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
                         {workspaceFeatures.length} Features
                     </Badge>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {workspaceFeatures.map((feature) => (
-                        <Card key={feature.title} className={`hover:shadow-lg transition-shadow border-2 ${feature.color}`}>
+                        <Card
+                            key={feature.title}
+                            className={`hover:shadow-lg transition-shadow border-2 ${feature.color}`}
+                        >
                             <CardHeader className="pb-3">
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-center space-x-3">
-                                        <div className={`p-2 rounded-lg ${feature.color}`}>
-                                            {feature.icon}
-                                        </div>
+                                        <div className={`p-2 rounded-lg ${feature.color}`}>{feature.icon}</div>
                                         <div>
                                             <CardTitle className="text-lg">{feature.title}</CardTitle>
                                             <CardDescription className="text-sm mt-1">
@@ -217,7 +216,7 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
                                             Open {feature.title}
                                         </Link>
                                     </Button>
-                                    
+
                                     {feature.actions && (
                                         <div className="space-y-2">
                                             <Separator />
@@ -226,10 +225,10 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
                                             </div>
                                             <div className="space-y-1">
                                                 {feature.actions.map((action) => (
-                                                    <Button 
-                                                        key={action.label} 
-                                                        asChild 
-                                                        variant="ghost" 
+                                                    <Button
+                                                        key={action.label}
+                                                        asChild
+                                                        variant="ghost"
                                                         size="sm"
                                                         className="w-full justify-start h-8 text-xs"
                                                     >
@@ -257,7 +256,7 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
                         <p className="text-gray-600 mt-1">Access core platform features and demos</p>
                     </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {globalFeatures.map((feature) => (
                         <Card key={feature.title} className="hover:shadow-md transition-shadow">
@@ -271,9 +270,7 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
                                         <p className="text-xs text-gray-500 mt-1">{feature.description}</p>
                                     </div>
                                     <Button asChild size="sm" variant="outline" className="w-full">
-                                        <Link href={feature.href}>
-                                            Access
-                                        </Link>
+                                        <Link href={feature.href}>Access</Link>
                                     </Button>
                                 </div>
                             </CardContent>
@@ -290,15 +287,10 @@ export function WorkspaceDashboard({ workspace }: WorkspaceDashboardProps) {
                         <p className="text-gray-600 text-sm">Common workspace management tasks</p>
                     </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {quickActions.map((action) => (
-                        <Button 
-                            key={action.label} 
-                            asChild 
-                            variant="outline" 
-                            className="justify-start h-auto p-4"
-                        >
+                        <Button key={action.label} asChild variant="outline" className="justify-start h-auto p-4">
                             <Link href={action.href}>
                                 <div className="flex items-start space-x-3">
                                     {action.icon}

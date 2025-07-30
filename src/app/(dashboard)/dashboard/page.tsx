@@ -52,9 +52,7 @@ export default async function DashboardPage() {
             <div className="mt-8">
                 <div className="border-b border-gray-200 pb-4 mb-6">
                     <h2 className="text-2xl font-bold text-gray-900">Your Workspaces</h2>
-                    <p className="text-gray-600 mt-1">
-                        Manage and access your workspaces for team collaboration
-                    </p>
+                    <p className="text-gray-600 mt-1">Manage and access your workspaces for team collaboration</p>
                 </div>
                 <WorkspaceListV2 workspaces={workspaces} />
             </div>

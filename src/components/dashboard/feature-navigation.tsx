@@ -2,12 +2,12 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { 
-    FileText, 
-    Users, 
-    MessageSquare, 
-    Upload, 
-    Settings, 
+import {
+    FileText,
+    Users,
+    MessageSquare,
+    Upload,
+    Settings,
     FolderOpen,
     CreditCard,
     PlusCircle,
@@ -20,7 +20,7 @@ import {
     Calendar,
     Archive,
     Eye,
-    Workflow
+    Workflow,
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -43,8 +43,8 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
                 { label: 'Upload Documents', href: '/document-upload-demo' },
                 { label: 'Manage Documents', href: '/document-management-demo' },
                 { label: 'Extract Data', href: '/document-extraction-demo' },
-                { label: 'Review Data', href: '/extracted-data-review-demo' }
-            ]
+                { label: 'Review Data', href: '/extracted-data-review-demo' },
+            ],
         },
         {
             title: 'Client Management',
@@ -55,8 +55,8 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
             actions: [
                 { label: 'Client Database', href: '/client-management-demo' },
                 { label: 'Client Onboarding', href: '/client-onboarding-demo' },
-                { label: 'Add New Client', href: '/client-management-demo' }
-            ]
+                { label: 'Add New Client', href: '/client-management-demo' },
+            ],
         },
         {
             title: 'AI Tax Assistant',
@@ -66,8 +66,13 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
             color: 'bg-green-50 text-green-600 border-green-200',
             actions: [
                 { label: 'Start Chat', href: '/tax-assistant-chat-demo' },
-                { label: 'Chat History', href: workspaceId ? `/dashboard/workspaces/${workspaceId}/chat/history` : '/tax-assistant-chat-demo' }
-            ]
+                {
+                    label: 'Chat History',
+                    href: workspaceId
+                        ? `/dashboard/workspaces/${workspaceId}/chat/history`
+                        : '/tax-assistant-chat-demo',
+                },
+            ],
         },
         {
             title: 'Forms & Workflows',
@@ -78,41 +83,43 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
             actions: [
                 { label: 'Form Selection', href: '/form-selection-demo' },
                 { label: 'Form Generation', href: '/form-generation-workflow-demo' },
-                { label: 'Process Forms', href: '/form-selection-demo' }
-            ]
-        }
+                { label: 'Process Forms', href: '/form-selection-demo' },
+            ],
+        },
     ]
 
-    const workspaceFeatures = workspaceId ? [
-        {
-            title: 'Workspace Chat',
-            description: 'Collaborate with your team using workspace-specific chat',
-            icon: <MessageSquare className="w-6 h-6" />,
-            href: `/dashboard/workspaces/${workspaceId}/chat`,
-            color: 'bg-indigo-50 text-indigo-600 border-indigo-200'
-        },
-        {
-            title: 'Team Management',
-            description: 'Manage team members, roles, and permissions',
-            icon: <UserPlus className="w-6 h-6" />,
-            href: `/dashboard/workspaces/${workspaceId}/teams`,
-            color: 'bg-pink-50 text-pink-600 border-pink-200'
-        },
-        {
-            title: 'Translation Tools',
-            description: 'Translate documents and forms for international clients',
-            icon: <Languages className="w-6 h-6" />,
-            href: `/dashboard/workspaces/${workspaceId}/translate`,
-            color: 'bg-cyan-50 text-cyan-600 border-cyan-200'
-        },
-        {
-            title: 'Workspace Settings',
-            description: 'Configure workspace preferences and integrations',
-            icon: <Settings className="w-6 h-6" />,
-            href: `/dashboard/workspaces/${workspaceId}/settings`,
-            color: 'bg-gray-50 text-gray-600 border-gray-200'
-        }
-    ] : []
+    const workspaceFeatures = workspaceId
+        ? [
+              {
+                  title: 'Workspace Chat',
+                  description: 'Collaborate with your team using workspace-specific chat',
+                  icon: <MessageSquare className="w-6 h-6" />,
+                  href: `/dashboard/workspaces/${workspaceId}/chat`,
+                  color: 'bg-indigo-50 text-indigo-600 border-indigo-200',
+              },
+              {
+                  title: 'Team Management',
+                  description: 'Manage team members, roles, and permissions',
+                  icon: <UserPlus className="w-6 h-6" />,
+                  href: `/dashboard/workspaces/${workspaceId}/teams`,
+                  color: 'bg-pink-50 text-pink-600 border-pink-200',
+              },
+              {
+                  title: 'Translation Tools',
+                  description: 'Translate documents and forms for international clients',
+                  icon: <Languages className="w-6 h-6" />,
+                  href: `/dashboard/workspaces/${workspaceId}/translate`,
+                  color: 'bg-cyan-50 text-cyan-600 border-cyan-200',
+              },
+              {
+                  title: 'Workspace Settings',
+                  description: 'Configure workspace preferences and integrations',
+                  icon: <Settings className="w-6 h-6" />,
+                  href: `/dashboard/workspaces/${workspaceId}/settings`,
+                  color: 'bg-gray-50 text-gray-600 border-gray-200',
+              },
+          ]
+        : []
 
     const managementFeatures = [
         {
@@ -120,22 +127,22 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
             description: 'View comprehensive analytics and performance metrics',
             icon: <BarChart3 className="w-6 h-6" />,
             href: '/dashboard-demo',
-            color: 'bg-emerald-50 text-emerald-600 border-emerald-200'
+            color: 'bg-emerald-50 text-emerald-600 border-emerald-200',
         },
         {
             title: 'Billing & Subscriptions',
             description: 'Manage your subscription, billing, and payment methods',
             icon: <CreditCard className="w-6 h-6" />,
             href: '/dashboard/billing',
-            color: 'bg-yellow-50 text-yellow-600 border-yellow-200'
+            color: 'bg-yellow-50 text-yellow-600 border-yellow-200',
         },
         {
             title: 'Account Settings',
             description: 'Update your profile, security, and notification preferences',
             icon: <Settings className="w-6 h-6" />,
             href: '/dashboard/settings',
-            color: 'bg-slate-50 text-slate-600 border-slate-200'
-        }
+            color: 'bg-slate-50 text-slate-600 border-slate-200',
+        },
     ]
 
     const renderFeatureCard = (feature: any, showActions = false) => (
@@ -143,14 +150,10 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
             <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-lg ${feature.color}`}>
-                            {feature.icon}
-                        </div>
+                        <div className={`p-2 rounded-lg ${feature.color}`}>{feature.icon}</div>
                         <div>
                             <CardTitle className="text-lg">{feature.title}</CardTitle>
-                            <CardDescription className="text-sm mt-1">
-                                {feature.description}
-                            </CardDescription>
+                            <CardDescription className="text-sm mt-1">{feature.description}</CardDescription>
                         </div>
                     </div>
                 </div>
@@ -163,7 +166,7 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
                             Open {feature.title}
                         </Link>
                     </Button>
-                    
+
                     {showActions && feature.actions && (
                         <div className="space-y-2">
                             <div className="text-xs font-medium text-gray-600 uppercase tracking-wide">
@@ -171,10 +174,10 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
                             </div>
                             <div className="grid grid-cols-1 gap-2">
                                 {feature.actions.map((action: any) => (
-                                    <Button 
-                                        key={action.label} 
-                                        asChild 
-                                        variant="ghost" 
+                                    <Button
+                                        key={action.label}
+                                        asChild
+                                        variant="ghost"
                                         size="sm"
                                         className="justify-start h-8 text-xs"
                                     >
@@ -206,7 +209,7 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
                     </Badge>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                    {coreFeatures.map(feature => renderFeatureCard(feature, true))}
+                    {coreFeatures.map((feature) => renderFeatureCard(feature, true))}
                 </div>
             </div>
 
@@ -223,7 +226,7 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
                         </Badge>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {workspaceFeatures.map(feature => renderFeatureCard(feature))}
+                        {workspaceFeatures.map((feature) => renderFeatureCard(feature))}
                     </div>
                 </div>
             )}
@@ -240,7 +243,7 @@ export function FeatureNavigation({ workspaceId }: FeatureNavigationProps) {
                     </Badge>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {managementFeatures.map(feature => renderFeatureCard(feature))}
+                    {managementFeatures.map((feature) => renderFeatureCard(feature))}
                 </div>
             </div>
 
