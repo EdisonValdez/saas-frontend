@@ -6,6 +6,7 @@ import { signIn } from '@/lib/auth'
 
 import { getCurrentUserServer } from '@/lib/session'
 import { getUserWorkspaces } from '@/lib/user-workspaces'
+import { WorkspaceDashboard } from '@/components/workspaces/workspace-dashboard'
 
 export const metadata: Metadata = {
     title: 'Workspace Home',
