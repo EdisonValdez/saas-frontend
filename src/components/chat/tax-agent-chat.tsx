@@ -408,8 +408,13 @@ export function TaxAgentChat() {
                 {/* Main Chat */}
                 <div className="flex-1 flex flex-col">
                     {/* Messages */}
-                    <ScrollArea className="flex-1 p-4">
-                        <div 
+                    <ScrollArea
+                        className="flex-1 p-4"
+                        role="log"
+                        aria-label="Chat messages"
+                        aria-live="polite"
+                    >
+                        <div
                             className={`space-y-4 ${dragActive ? 'opacity-50' : ''}`}
                             onDragEnter={handleDrag}
                             onDragLeave={handleDrag}
