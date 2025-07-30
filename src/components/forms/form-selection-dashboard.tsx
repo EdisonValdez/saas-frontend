@@ -631,8 +631,8 @@ export default function FormSelectionDashboard() {
             <Button
               variant="outline"
               onClick={() => setFilters({
-                search: '', category: '', entityType: '', jurisdiction: '',
-                year: '', complexity: '', status: '', completionStatus: ''
+                search: '', category: 'all_categories', entityType: 'all_entities', jurisdiction: 'all_jurisdictions',
+                year: 'all_years', complexity: 'all_levels', status: 'all_statuses', completionStatus: 'all_completion'
               })}
             >
               Clear All
