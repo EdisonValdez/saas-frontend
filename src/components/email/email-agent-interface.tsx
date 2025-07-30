@@ -554,9 +554,16 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                         compactView && "p-2"
                                     )}
                                     onClick={() => selectEmail(email)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault()
+                                            selectEmail(email)
+                                        }
+                                    }}
                                     role="button"
                                     tabIndex={0}
-                                    aria-label={`Email from ${email.fromName}: ${email.subject}`}
+                                    aria-label={`Email from ${email.fromName}: ${email.subject}. ${!email.isRead ? 'Unread. ' : ''}${email.hasAttachments ? 'Has attachments. ' : ''}Priority: ${email.priority}`}
+                                    aria-pressed={selectedEmail?.id === email.id}
                                 >
                                     <div className="flex items-start space-x-3">
                                         <Checkbox
