@@ -73,26 +73,17 @@ export const PromptaxNavbar: React.FC = () => {
                                     </Button>
                                 </Link>
                                 <Link href="/register">
-                                    <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-                                        Sign Up
-                                    </Button>
+                                    <Button className="bg-purple-600 hover:bg-purple-700 text-white">Sign Up</Button>
                                 </Link>
                             </>
                         ) : status === 'authenticated' ? (
                             <Link href="/dashboard">
-                                <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-                                    Dashboard
-                                </Button>
+                                <Button className="bg-purple-600 hover:bg-purple-700 text-white">Dashboard</Button>
                             </Link>
                         ) : null}
 
                         {/* Mobile menu button */}
-                        <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="lg:hidden" 
-                            onClick={() => setOpen(!isOpen)}
-                        >
+                        <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setOpen(!isOpen)}>
                             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                         </Button>
                     </div>

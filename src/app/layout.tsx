@@ -55,9 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                     <NextAuthSesionProvider session={session}>
                         <PromptaxNavbar />
-                        <main className="pt-16">
-                            {children}
-                        </main>
+                        <main className="pt-16">{children}</main>
                         <Toaster />
                         <TailwindIndicator />
                     </NextAuthSesionProvider>
