@@ -48,10 +48,7 @@ export default async function EmailAgentPage(props: { params: Promise<{ workspac
 
     return (
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <EmailAgentSessionsList 
-                workspaceId={params.workspaceId} 
-                emailAgentSessions={emailAgentSessions} 
-            />
+            <EmailAgentSessionsList workspaceId={params.workspaceId} emailAgentSessions={emailAgentSessions} />
         </div>
     )
 }

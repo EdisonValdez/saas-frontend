@@ -49,7 +49,9 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                 </TabsList>
                             )}
                             {!hasSessions && (
-                                <div className="text-lg font-medium text-muted-foreground">No tax assistant sessions found</div>
+                                <div className="text-lg font-medium text-muted-foreground">
+                                    No tax assistant sessions found
+                                </div>
                             )}
                             <div className="ml-auto flex items-center gap-2">
                                 <TaxAssistantCreateModal workspaceId={workspaceId} />
@@ -62,7 +64,9 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                     <Card x-chunk="tax-assistant-01">
                                         <CardHeader>
                                             <CardTitle>Your Tax Assistant Sessions</CardTitle>
-                                            <CardDescription>Manage your tax consultation sessions with AI assistance.</CardDescription>
+                                            <CardDescription>
+                                                Manage your tax consultation sessions with AI assistance.
+                                            </CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             <Table>
@@ -91,14 +95,22 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                                             </TableCell>
                                                             <TableCell>
                                                                 {session.client_name ? (
-                                                                    <Badge variant="secondary">{session.client_name}</Badge>
+                                                                    <Badge variant="secondary">
+                                                                        {session.client_name}
+                                                                    </Badge>
                                                                 ) : (
-                                                                    <span className="text-muted-foreground">No client</span>
+                                                                    <span className="text-muted-foreground">
+                                                                        No client
+                                                                    </span>
                                                                 )}
                                                             </TableCell>
                                                             <TableCell>
-                                                                <Badge 
-                                                                    variant={session.status === 'active' ? 'default' : 'outline'}
+                                                                <Badge
+                                                                    variant={
+                                                                        session.status === 'active'
+                                                                            ? 'default'
+                                                                            : 'outline'
+                                                                    }
                                                                 >
                                                                     {session.status}
                                                                 </Badge>
@@ -149,7 +161,9 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                     <Card x-chunk="tax-assistant-02">
                                         <CardHeader>
                                             <CardTitle>Active Tax Sessions</CardTitle>
-                                            <CardDescription>Currently active tax consultation sessions.</CardDescription>
+                                            <CardDescription>
+                                                Currently active tax consultation sessions.
+                                            </CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             <Table>
@@ -180,9 +194,13 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     {session.client_name ? (
-                                                                        <Badge variant="secondary">{session.client_name}</Badge>
+                                                                        <Badge variant="secondary">
+                                                                            {session.client_name}
+                                                                        </Badge>
                                                                     ) : (
-                                                                        <span className="text-muted-foreground">No client</span>
+                                                                        <span className="text-muted-foreground">
+                                                                            No client
+                                                                        </span>
                                                                     )}
                                                                 </TableCell>
                                                                 <TableCell>
@@ -200,11 +218,15 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                                                                 variant="ghost"
                                                                             >
                                                                                 <MoreHorizontal className="h-4 w-4" />
-                                                                                <span className="sr-only">Toggle menu</span>
+                                                                                <span className="sr-only">
+                                                                                    Toggle menu
+                                                                                </span>
                                                                             </Button>
                                                                         </DropdownMenuTrigger>
                                                                         <DropdownMenuContent align="end">
-                                                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                                            <DropdownMenuLabel>
+                                                                                Actions
+                                                                            </DropdownMenuLabel>
                                                                             <DropdownMenuItem>
                                                                                 <Link
                                                                                     href={`/dashboard/workspaces/${workspaceId}/tax-assistant/${session.id}/`}
@@ -232,7 +254,9 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                     <Card x-chunk="tax-assistant-03">
                                         <CardHeader>
                                             <CardTitle>Archived Tax Sessions</CardTitle>
-                                            <CardDescription>Previously archived tax consultation sessions.</CardDescription>
+                                            <CardDescription>
+                                                Previously archived tax consultation sessions.
+                                            </CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             <Table>
@@ -263,9 +287,13 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     {session.client_name ? (
-                                                                        <Badge variant="secondary">{session.client_name}</Badge>
+                                                                        <Badge variant="secondary">
+                                                                            {session.client_name}
+                                                                        </Badge>
                                                                     ) : (
-                                                                        <span className="text-muted-foreground">No client</span>
+                                                                        <span className="text-muted-foreground">
+                                                                            No client
+                                                                        </span>
                                                                     )}
                                                                 </TableCell>
                                                                 <TableCell>
@@ -283,11 +311,15 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                                                                 variant="ghost"
                                                                             >
                                                                                 <MoreHorizontal className="h-4 w-4" />
-                                                                                <span className="sr-only">Toggle menu</span>
+                                                                                <span className="sr-only">
+                                                                                    Toggle menu
+                                                                                </span>
                                                                             </Button>
                                                                         </DropdownMenuTrigger>
                                                                         <DropdownMenuContent align="end">
-                                                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                                            <DropdownMenuLabel>
+                                                                                Actions
+                                                                            </DropdownMenuLabel>
                                                                             <DropdownMenuItem>
                                                                                 <Link
                                                                                     href={`/dashboard/workspaces/${workspaceId}/tax-assistant/${session.id}/`}
@@ -307,7 +339,9 @@ export function TaxAssistantSessionsList({ workspaceId, taxAssistantSessions = [
                                             </Table>
                                         </CardContent>
                                         <CardFooter>
-                                            <div className="text-xs text-muted-foreground">Showing archived sessions</div>
+                                            <div className="text-xs text-muted-foreground">
+                                                Showing archived sessions
+                                            </div>
                                         </CardFooter>
                                     </Card>
                                 </TabsContent>

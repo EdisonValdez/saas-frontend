@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUserServer } from '@/lib/session'
 
-export async function POST(
-    request: NextRequest,
-    { params }: { params: { workspaceId: string; sessionId: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { workspaceId: string; sessionId: string } }) {
     try {
         const user = await getCurrentUserServer()
-        
+
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
@@ -16,10 +13,7 @@ export async function POST(
         const { prompt, clientId, agentType } = body
 
         if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
-            return NextResponse.json(
-                { error: 'Message content is required' },
-                { status: 400 }
-            )
+            return NextResponse.json({ error: 'Message content is required' }, { status: 400 })
         }
 
         // Mock AI response generation - in production, this would call your AI service
@@ -81,13 +75,10 @@ Could you provide more specific details about what aspect of taxes you'd like as
 
         return NextResponse.json({
             user_message: userMessage,
-            ai_message: aiMessage
+            ai_message: aiMessage,
         })
     } catch (error) {
         console.error('Error processing tax assistant message:', error)
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        )
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }

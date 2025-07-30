@@ -64,7 +64,9 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                 </TabsList>
                             )}
                             {!hasSessions && (
-                                <div className="text-lg font-medium text-muted-foreground">No email agent sessions found</div>
+                                <div className="text-lg font-medium text-muted-foreground">
+                                    No email agent sessions found
+                                </div>
                             )}
                             <div className="ml-auto flex items-center gap-2">
                                 <EmailAgentCreateModal workspaceId={workspaceId} />
@@ -77,7 +79,9 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                     <Card x-chunk="email-agent-01">
                                         <CardHeader>
                                             <CardTitle>Your Email Agent Sessions</CardTitle>
-                                            <CardDescription>Manage your email composition and response sessions with AI assistance.</CardDescription>
+                                            <CardDescription>
+                                                Manage your email composition and response sessions with AI assistance.
+                                            </CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             <Table>
@@ -107,19 +111,29 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                                             </TableCell>
                                                             <TableCell>
                                                                 {session.client_name ? (
-                                                                    <Badge variant="secondary">{session.client_name}</Badge>
+                                                                    <Badge variant="secondary">
+                                                                        {session.client_name}
+                                                                    </Badge>
                                                                 ) : (
-                                                                    <span className="text-muted-foreground">No client</span>
+                                                                    <span className="text-muted-foreground">
+                                                                        No client
+                                                                    </span>
                                                                 )}
                                                             </TableCell>
                                                             <TableCell>
-                                                                <Badge className={getEmailTypeColor(session.email_type)}>
+                                                                <Badge
+                                                                    className={getEmailTypeColor(session.email_type)}
+                                                                >
                                                                     {session.email_type}
                                                                 </Badge>
                                                             </TableCell>
                                                             <TableCell>
-                                                                <Badge 
-                                                                    variant={session.status === 'active' ? 'default' : 'outline'}
+                                                                <Badge
+                                                                    variant={
+                                                                        session.status === 'active'
+                                                                            ? 'default'
+                                                                            : 'outline'
+                                                                    }
                                                                 >
                                                                     {session.status}
                                                                 </Badge>
@@ -170,7 +184,9 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                     <Card x-chunk="email-agent-02">
                                         <CardHeader>
                                             <CardTitle>Active Email Sessions</CardTitle>
-                                            <CardDescription>Currently active email composition sessions.</CardDescription>
+                                            <CardDescription>
+                                                Currently active email composition sessions.
+                                            </CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             <Table>
@@ -202,13 +218,21 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     {session.client_name ? (
-                                                                        <Badge variant="secondary">{session.client_name}</Badge>
+                                                                        <Badge variant="secondary">
+                                                                            {session.client_name}
+                                                                        </Badge>
                                                                     ) : (
-                                                                        <span className="text-muted-foreground">No client</span>
+                                                                        <span className="text-muted-foreground">
+                                                                            No client
+                                                                        </span>
                                                                     )}
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <Badge className={getEmailTypeColor(session.email_type)}>
+                                                                    <Badge
+                                                                        className={getEmailTypeColor(
+                                                                            session.email_type
+                                                                        )}
+                                                                    >
                                                                         {session.email_type}
                                                                     </Badge>
                                                                 </TableCell>
@@ -227,11 +251,15 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                                                                 variant="ghost"
                                                                             >
                                                                                 <MoreHorizontal className="h-4 w-4" />
-                                                                                <span className="sr-only">Toggle menu</span>
+                                                                                <span className="sr-only">
+                                                                                    Toggle menu
+                                                                                </span>
                                                                             </Button>
                                                                         </DropdownMenuTrigger>
                                                                         <DropdownMenuContent align="end">
-                                                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                                            <DropdownMenuLabel>
+                                                                                Actions
+                                                                            </DropdownMenuLabel>
                                                                             <DropdownMenuItem>
                                                                                 <Link
                                                                                     href={`/dashboard/workspaces/${workspaceId}/email-agent/${session.id}/`}
@@ -259,7 +287,9 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                     <Card x-chunk="email-agent-03">
                                         <CardHeader>
                                             <CardTitle>Archived Email Sessions</CardTitle>
-                                            <CardDescription>Previously archived email composition sessions.</CardDescription>
+                                            <CardDescription>
+                                                Previously archived email composition sessions.
+                                            </CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             <Table>
@@ -291,13 +321,21 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     {session.client_name ? (
-                                                                        <Badge variant="secondary">{session.client_name}</Badge>
+                                                                        <Badge variant="secondary">
+                                                                            {session.client_name}
+                                                                        </Badge>
                                                                     ) : (
-                                                                        <span className="text-muted-foreground">No client</span>
+                                                                        <span className="text-muted-foreground">
+                                                                            No client
+                                                                        </span>
                                                                     )}
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <Badge className={getEmailTypeColor(session.email_type)}>
+                                                                    <Badge
+                                                                        className={getEmailTypeColor(
+                                                                            session.email_type
+                                                                        )}
+                                                                    >
                                                                         {session.email_type}
                                                                     </Badge>
                                                                 </TableCell>
@@ -316,11 +354,15 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                                                                 variant="ghost"
                                                                             >
                                                                                 <MoreHorizontal className="h-4 w-4" />
-                                                                                <span className="sr-only">Toggle menu</span>
+                                                                                <span className="sr-only">
+                                                                                    Toggle menu
+                                                                                </span>
                                                                             </Button>
                                                                         </DropdownMenuTrigger>
                                                                         <DropdownMenuContent align="end">
-                                                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                                            <DropdownMenuLabel>
+                                                                                Actions
+                                                                            </DropdownMenuLabel>
                                                                             <DropdownMenuItem>
                                                                                 <Link
                                                                                     href={`/dashboard/workspaces/${workspaceId}/email-agent/${session.id}/`}
@@ -340,7 +382,9 @@ export function EmailAgentSessionsList({ workspaceId, emailAgentSessions = [] }:
                                             </Table>
                                         </CardContent>
                                         <CardFooter>
-                                            <div className="text-xs text-muted-foreground">Showing archived sessions</div>
+                                            <div className="text-xs text-muted-foreground">
+                                                Showing archived sessions
+                                            </div>
                                         </CardFooter>
                                     </Card>
                                 </TabsContent>

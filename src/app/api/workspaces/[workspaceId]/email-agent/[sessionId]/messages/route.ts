@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUserServer } from '@/lib/session'
 
-export async function POST(
-    request: NextRequest,
-    { params }: { params: { workspaceId: string; sessionId: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { workspaceId: string; sessionId: string } }) {
     try {
         const user = await getCurrentUserServer()
-        
+
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
@@ -16,10 +13,7 @@ export async function POST(
         const { prompt, clientId, agentType } = body
 
         if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
-            return NextResponse.json(
-                { error: 'Message content is required' },
-                { status: 400 }
-            )
+            return NextResponse.json({ error: 'Message content is required' }, { status: 400 })
         }
 
         // Mock AI response generation - in production, this would call your AI service
@@ -57,10 +51,10 @@ Best regards,
 [Your Name]
 
 Would you like me to customize this template for your specific situation?`
-            
+
             emailMetadata = {
                 subject: 'Following Up on Our Previous Correspondence',
-                recipients: ['client@example.com']
+                recipients: ['client@example.com'],
             }
         } else if (lowerPrompt.includes('deadline') || lowerPrompt.includes('extension')) {
             aiResponseContent = `Here's a professional email addressing deadline concerns:
@@ -88,7 +82,7 @@ Best regards,
 
             emailMetadata = {
                 subject: 'Important Information About Tax Filing Deadlines',
-                recipients: ['client@example.com']
+                recipients: ['client@example.com'],
             }
         } else if (lowerPrompt.includes('welcome') || lowerPrompt.includes('new client')) {
             aiResponseContent = `Here's a warm welcome email for new clients:
@@ -120,7 +114,7 @@ Best regards,
 
             emailMetadata = {
                 subject: 'Welcome to [Company Name] - Your Tax Service Journey Begins',
-                recipients: ['newclient@example.com']
+                recipients: ['newclient@example.com'],
             }
         } else {
             aiResponseContent = `I understand you need help with: "${prompt}"
@@ -143,7 +137,7 @@ I'll then craft a professional email template tailored to your needs.`
 
             emailMetadata = {
                 subject: 'Email Composition Assistance',
-                recipients: []
+                recipients: [],
             }
         }
 
@@ -154,18 +148,15 @@ I'll then craft a professional email template tailored to your needs.`
             role: 'assistant',
             content: aiResponseContent,
             created_at: new Date(Date.now() + 1000).toISOString(),
-            email_metadata: emailMetadata
+            email_metadata: emailMetadata,
         }
 
         return NextResponse.json({
             user_message: userMessage,
-            ai_message: aiMessage
+            ai_message: aiMessage,
         })
     } catch (error) {
         console.error('Error processing email agent message:', error)
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        )
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }

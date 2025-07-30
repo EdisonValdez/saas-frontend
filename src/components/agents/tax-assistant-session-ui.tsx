@@ -35,7 +35,7 @@ export function TaxAssistantSessionUI({ taxAssistantSession }: TaxAssistantSessi
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault()
-        
+
         if (!inputValue.trim() || isLoading) return
 
         const userMessage = inputValue.trim()
@@ -153,7 +153,8 @@ export function TaxAssistantSessionUI({ taxAssistantSession }: TaxAssistantSessi
                                     Start Your Tax Consultation
                                 </h3>
                                 <p className="text-muted-foreground max-w-md mx-auto">
-                                    Ask questions about tax regulations, deductions, filing requirements, or get help with specific tax scenarios.
+                                    Ask questions about tax regulations, deductions, filing requirements, or get help
+                                    with specific tax scenarios.
                                     {taxAssistantSession.client_name && (
                                         <span className="block mt-2 font-medium">
                                             This session is linked to client: {taxAssistantSession.client_name}
@@ -167,9 +168,7 @@ export function TaxAssistantSessionUI({ taxAssistantSession }: TaxAssistantSessi
                                     key={message.id}
                                     className={`flex items-start space-x-3 p-4 rounded-lg border ${getRoleColor(message.role)}`}
                                 >
-                                    <div className="flex-shrink-0 mt-1">
-                                        {getRoleIcon(message.role)}
-                                    </div>
+                                    <div className="flex-shrink-0 mt-1">{getRoleIcon(message.role)}</div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center space-x-2 mb-2">
                                             <span className="font-semibold text-sm uppercase tracking-wide">
@@ -218,16 +217,14 @@ export function TaxAssistantSessionUI({ taxAssistantSession }: TaxAssistantSessi
                             />
                         </div>
                         <Button type="submit" disabled={isLoading || !inputValue.trim()}>
-                            {isLoading ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                <Send className="h-4 w-4" />
-                            )}
+                            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                         </Button>
                     </form>
                     <div className="flex items-center justify-between mt-3 text-xs text-muted-foreground">
                         <span>
-                            {taxAssistantSession.client_name ? `Context: ${taxAssistantSession.client_name}` : 'General tax consultation'}
+                            {taxAssistantSession.client_name
+                                ? `Context: ${taxAssistantSession.client_name}`
+                                : 'General tax consultation'}
                         </span>
                         <span>{messages.length} messages</span>
                     </div>

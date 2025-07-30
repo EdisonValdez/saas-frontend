@@ -37,10 +37,10 @@ async function getEmailAgentSession(workspaceId: string, sessionId: string): Pro
     }
 }
 
-export default async function EmailAgentSessionPage({ 
-    params 
-}: { 
-    params: { workspaceId: string; sessionId: string } 
+export default async function EmailAgentSessionPage({
+    params,
+}: {
+    params: { workspaceId: string; sessionId: string }
 }) {
     const user = await getCurrentUserServer()
 

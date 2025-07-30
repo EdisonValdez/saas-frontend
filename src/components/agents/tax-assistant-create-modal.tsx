@@ -67,7 +67,7 @@ export function TaxAssistantCreateModal({ workspaceId }: TaxAssistantCreateModal
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        
+
         if (!sessionName.trim()) {
             toast({
                 title: 'Session name required',
@@ -80,8 +80,8 @@ export function TaxAssistantCreateModal({ workspaceId }: TaxAssistantCreateModal
         setIsLoading(true)
 
         try {
-            const selectedClient = clients.find(c => c.id === selectedClientId)
-            
+            const selectedClient = clients.find((c) => c.id === selectedClientId)
+
             const payload = {
                 name: sessionName.trim(),
                 client_id: selectedClientId || null,
@@ -137,7 +137,8 @@ export function TaxAssistantCreateModal({ workspaceId }: TaxAssistantCreateModal
                         Create Tax Assistant Session
                     </DialogTitle>
                     <DialogDescription>
-                        Start a new tax consultation session with AI assistance. You can optionally link it to a specific client.
+                        Start a new tax consultation session with AI assistance. You can optionally link it to a
+                        specific client.
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
@@ -154,9 +155,15 @@ export function TaxAssistantCreateModal({ workspaceId }: TaxAssistantCreateModal
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="client">Client (Optional)</Label>
-                            <Select value={selectedClientId} onValueChange={setSelectedClientId} disabled={loadingClients}>
+                            <Select
+                                value={selectedClientId}
+                                onValueChange={setSelectedClientId}
+                                disabled={loadingClients}
+                            >
                                 <SelectTrigger>
-                                    <SelectValue placeholder={loadingClients ? "Loading clients..." : "Select a client"} />
+                                    <SelectValue
+                                        placeholder={loadingClients ? 'Loading clients...' : 'Select a client'}
+                                    />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="">No client selected</SelectItem>

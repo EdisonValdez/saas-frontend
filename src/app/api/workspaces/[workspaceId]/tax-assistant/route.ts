@@ -2,13 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCurrentUserServer } from '@/lib/session'
 import { siteConfig } from '@/config/site'
 
-export async function GET(
-    request: NextRequest,
-    { params }: { params: { workspaceId: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { workspaceId: string } }) {
     try {
         const user = await getCurrentUserServer()
-        
+
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
@@ -26,7 +23,7 @@ export async function GET(
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
                 total_messages: 5,
-                messages: []
+                messages: [],
             },
             {
                 id: 'tax-session-2',
@@ -39,27 +36,21 @@ export async function GET(
                 created_at: new Date(Date.now() - 86400000).toISOString(),
                 updated_at: new Date(Date.now() - 86400000).toISOString(),
                 total_messages: 12,
-                messages: []
-            }
+                messages: [],
+            },
         ]
 
         return NextResponse.json(mockSessions)
     } catch (error) {
         console.error('Error fetching tax assistant sessions:', error)
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        )
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }
 
-export async function POST(
-    request: NextRequest,
-    { params }: { params: { workspaceId: string } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { workspaceId: string } }) {
     try {
         const user = await getCurrentUserServer()
-        
+
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
@@ -68,10 +59,7 @@ export async function POST(
         const { name, client_id, client_name } = body
 
         if (!name || typeof name !== 'string' || name.trim().length === 0) {
-            return NextResponse.json(
-                { error: 'Session name is required' },
-                { status: 400 }
-            )
+            return NextResponse.json({ error: 'Session name is required' }, { status: 400 })
         }
 
         // Mock session creation - in production, this would create in your backend
@@ -86,15 +74,12 @@ export async function POST(
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
             total_messages: 0,
-            messages: []
+            messages: [],
         }
 
         return NextResponse.json(newSession, { status: 201 })
     } catch (error) {
         console.error('Error creating tax assistant session:', error)
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        )
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }

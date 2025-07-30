@@ -37,10 +37,10 @@ async function getTaxAssistantSession(workspaceId: string, sessionId: string): P
     }
 }
 
-export default async function TaxAssistantSessionPage({ 
-    params 
-}: { 
-    params: { workspaceId: string; sessionId: string } 
+export default async function TaxAssistantSessionPage({
+    params,
+}: {
+    params: { workspaceId: string; sessionId: string }
 }) {
     const user = await getCurrentUserServer()
 
