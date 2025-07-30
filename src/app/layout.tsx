@@ -42,7 +42,9 @@ export const metadata: Metadata = {
     },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+    const session = await auth()
+
     return (
         <html lang="en" suppressHydrationWarning>
             <head />
@@ -51,9 +53,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 suppressHydrationWarning
             >
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                    {children}
-                    <Toaster />
-                    <TailwindIndicator />
+                    <NextAuthSesionProvider session={session}>
+                        <PromptaxNavbar />
+                        <main className="pt-16">
+                            {children}
+                        </main>
+                        <Toaster />
+                        <TailwindIndicator />
+                    </NextAuthSesionProvider>
                 </ThemeProvider>
             </body>
         </html>
