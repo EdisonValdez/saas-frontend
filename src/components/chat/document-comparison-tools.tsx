@@ -369,7 +369,7 @@ export default function DocumentComparisonTools({
                   variant={isHighlightMode ? 'default' : 'outline'}
                   onClick={() => setIsHighlightMode(!isHighlightMode)}
                 >
-                  <Highlight className="w-4 h-4 mr-2" />
+                  <Search className="w-4 h-4 mr-2" />
                   Highlight Mode
                 </Button>
                 
