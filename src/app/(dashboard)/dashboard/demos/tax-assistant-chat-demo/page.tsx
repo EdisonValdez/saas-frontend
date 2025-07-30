@@ -4,8 +4,7 @@ import TaxAssistantChat from '@/components/chat/tax-assistant-chat'
 
 export default function TaxAssistantChatDemo() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto py-8">
+    <div className="space-y-6">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold mb-4">Tax Assistant Chat Interface</h1>
           <p className="text-lg text-gray-600 max-w-4xl mx-auto">
@@ -216,7 +215,6 @@ export default function TaxAssistantChatDemo() {
             </div>
           </div>
         </div>
-      </div>
     </div>
   )
 }
