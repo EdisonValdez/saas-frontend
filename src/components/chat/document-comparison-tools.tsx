@@ -351,7 +351,7 @@ export default function DocumentComparisonTools({
       <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
-            <FileCompare className="w-5 h-5" />
+            <Eye className="w-5 h-5" />
             <span>Document Comparison & Highlighting</span>
           </DialogTitle>
           <DialogDescription>
