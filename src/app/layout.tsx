@@ -15,6 +15,7 @@ import { fontSans } from '@/lib/fonts'
 import { Toaster } from '@/components/ui/toaster'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
+import { ReactQueryProvider } from '@/lib/react-query'
 import { PromptaxNavbar } from '@/components/promptax-navbar'
 import { NextAuthSesionProvider } from '@/components/auth/session-provider'
 
