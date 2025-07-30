@@ -99,7 +99,7 @@ export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
                 icon: Building2,
             },
             {
-                name: 'Setttings',
+                name: 'Settings',
                 url: '/dashboard/settings',
                 icon: Settings,
             },
