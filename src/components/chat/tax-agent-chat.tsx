@@ -186,6 +186,9 @@ export function TaxAgentChat() {
         setInputValue('')
         setIsLoading(true)
 
+        // Announce message sent
+        announce('Message sent to tax assistant')
+
         try {
             const request: AgentRequest = { prompt: content }
             const response = await fetch('/api/agents/invoke/', {
