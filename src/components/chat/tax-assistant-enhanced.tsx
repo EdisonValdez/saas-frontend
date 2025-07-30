@@ -162,7 +162,7 @@ export function TaxAssistantEnhanced() {
             // Prepare context for AI
             const context = {
                 session_id: activeSession.id,
-                client_id: selectedClient || null,
+                client_id: selectedClient && selectedClient !== 'none' ? selectedClient : null,
                 attached_documents: attachedDocuments,
                 workspace_id: workspaceId,
                 conversation_history: messages.slice(-5), // Last 5 messages for context
@@ -202,7 +202,7 @@ export function TaxAssistantEnhanced() {
         try {
             const sessionData = {
                 name: sessionName,
-                client_id: selectedClient || null,
+                client_id: selectedClient && selectedClient !== 'none' ? selectedClient : null,
                 workspace_id: workspaceId,
             }
 
