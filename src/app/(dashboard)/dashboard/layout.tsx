@@ -6,7 +6,10 @@ import { getCurrentUserServer } from '@/lib/session'
 import { getUserWorkspaces } from '@/lib/user-workspaces'
 import { UserDetails } from '@/types/auth'
 import { Workspace } from '@/types/workspaces'
-import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar'
+import { AppSidebar } from '@/components/app-sidebar'
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { Separator } from '@/components/ui/separator'
+import { DynamicBreadcrumb } from '@/components/dynamic-breadcrumb'
 
 export const metadata: Metadata = {
     title: 'Dashboard',
