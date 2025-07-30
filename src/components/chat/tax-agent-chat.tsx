@@ -356,7 +356,12 @@ export function TaxAgentChat() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto h-screen flex flex-col bg-background">
+        <div
+            className="max-w-4xl mx-auto h-screen flex flex-col bg-background"
+            role="main"
+            aria-label="Tax Assistant Chat Interface"
+            id="main-content"
+        >
             {/* Header */}
             <Card className="rounded-none border-b">
                 <CardHeader className="pb-3">
