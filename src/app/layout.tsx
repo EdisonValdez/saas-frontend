@@ -54,12 +54,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 suppressHydrationWarning
             >
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                    <NextAuthSesionProvider session={session}>
-                        {!session && <PromptaxNavbar />}
-                        <main className={session ? '' : 'pt-16'}>{children}</main>
-                        <Toaster />
-                        <TailwindIndicator />
-                    </NextAuthSesionProvider>
+                    <ReactQueryProvider>
+                        <NextAuthSesionProvider session={session}>
+                            {!session && <PromptaxNavbar />}
+                            <main className={session ? '' : 'pt-16'}>{children}</main>
+                            <Toaster />
+                            <TailwindIndicator />
+                        </NextAuthSesionProvider>
+                    </ReactQueryProvider>
                 </ThemeProvider>
             </body>
         </html>
