@@ -20,7 +20,7 @@ interface EmailMetadata {
 }
 
 interface ConversationMessage {
-    role: "user" | "assistant"
+    role: 'user' | 'assistant'
     content: string
     timestamp: string
 }
@@ -33,7 +33,7 @@ interface AgentRequest {
 }
 
 interface TriageDecision {
-    action: "auto_respond" | "needs_review" | "schedule_meeting" | "forward"
+    action: 'auto_respond' | 'needs_review' | 'schedule_meeting' | 'forward'
     confidence: number
     reasoning: string
 }
@@ -64,7 +64,7 @@ function checkRateLimit(userKey: string): boolean {
     if (!userLimit || now > userLimit.resetTime) {
         rateLimitStore.set(userKey, {
             count: 1,
-            resetTime: now + RATE_LIMIT_WINDOW
+            resetTime: now + RATE_LIMIT_WINDOW,
         })
         return true
     }
@@ -79,7 +79,7 @@ function checkRateLimit(userKey: string): boolean {
 
 function extractTaxInformation(content: string, subject: string): ExtractedData {
     const extractedData: ExtractedData = {}
-    
+
     // Extract tax form types
     const formPatterns = [
         { pattern: /\b1040\b/gi, type: '1040' },
@@ -99,8 +99,8 @@ function extractTaxInformation(content: string, subject: string): ExtractedData 
     }
 
     // Extract tax years
-    const yearMatch = content.match(/\b(20\d{2})\s*tax\s*(year|return)/i) || 
-                     subject.match(/\b(20\d{2})\s*tax\s*(year|return)/i)
+    const yearMatch =
+        content.match(/\b(20\d{2})\s*tax\s*(year|return)/i) || subject.match(/\b(20\d{2})\s*tax\s*(year|return)/i)
     if (yearMatch) {
         extractedData.taxYear = yearMatch[1]
     }
@@ -155,7 +155,7 @@ function extractTaxInformation(content: string, subject: string): ExtractedData 
 function analyzeEmailContent(emailContent: string, metadata: EmailMetadata): TriageDecision {
     const content = emailContent.toLowerCase()
     const subject = metadata.subject.toLowerCase()
-    
+
     // High priority patterns that need review
     const highPriorityPatterns = [
         /audit/i,
@@ -170,44 +170,29 @@ function analyzeEmailContent(emailContent: string, metadata: EmailMetadata): Tri
     ]
 
     // Meeting request patterns
-    const meetingPatterns = [
-        /schedule/i,
-        /appointment/i,
-        /meeting/i,
-        /call me/i,
-        /discuss/i,
-        /consultation/i,
-    ]
+    const meetingPatterns = [/schedule/i, /appointment/i, /meeting/i, /call me/i, /discuss/i, /consultation/i]
 
     // Auto-respond patterns (simple questions)
-    const autoRespondPatterns = [
-        /status/i,
-        /when.*ready/i,
-        /deadline.*form/i,
-        /how.*long/i,
-        /fee/i,
-        /cost/i,
-        /price/i,
-    ]
+    const autoRespondPatterns = [/status/i, /when.*ready/i, /deadline.*form/i, /how.*long/i, /fee/i, /cost/i, /price/i]
 
     let confidence = 0.7 // Base confidence
     let action: TriageDecision['action'] = 'needs_review'
     let reasoning = 'Email requires human review for proper assessment'
 
     // Check for high priority issues
-    if (highPriorityPatterns.some(pattern => pattern.test(content) || pattern.test(subject))) {
+    if (highPriorityPatterns.some((pattern) => pattern.test(content) || pattern.test(subject))) {
         action = 'needs_review'
         confidence = 0.95
         reasoning = 'Email contains urgent tax matters or IRS communications requiring immediate attention'
     }
     // Check for meeting requests
-    else if (meetingPatterns.some(pattern => pattern.test(content) || pattern.test(subject))) {
+    else if (meetingPatterns.some((pattern) => pattern.test(content) || pattern.test(subject))) {
         action = 'schedule_meeting'
         confidence = 0.85
         reasoning = 'Email appears to be requesting a meeting or consultation'
     }
     // Check for simple questions that can be auto-responded
-    else if (autoRespondPatterns.some(pattern => pattern.test(content) || pattern.test(subject))) {
+    else if (autoRespondPatterns.some((pattern) => pattern.test(content) || pattern.test(subject))) {
         action = 'auto_respond'
         confidence = 0.8
         reasoning = 'Email contains standard questions that can be answered with template responses'
@@ -223,13 +208,13 @@ function analyzeEmailContent(emailContent: string, metadata: EmailMetadata): Tri
 }
 
 function generateResponse(
-    emailContent: string, 
-    metadata: EmailMetadata, 
+    emailContent: string,
+    metadata: EmailMetadata,
     extractedData: ExtractedData,
     triage: TriageDecision
 ): string {
     const senderName = metadata.from.split('@')[0] || 'Client'
-    
+
     if (triage.action === 'auto_respond') {
         if (emailContent.toLowerCase().includes('status')) {
             return `Dear ${senderName},
@@ -245,7 +230,7 @@ If you have any urgent questions, please don't hesitate to call me directly.
 Best regards,
 Tax Professional`
         }
-        
+
         if (emailContent.toLowerCase().includes('deadline')) {
             return `Dear ${senderName},
 
@@ -279,7 +264,7 @@ Please let me know your availability for the following times:
 We can meet in person, via video call, or over the phone - whatever works best for you.
 
 In preparation for our meeting, please have the following documents ready:
-${extractedData.formType === '1040' ? '- W-2 forms from all employers\n- 1099 forms for any additional income\n- Receipts for deductible expenses' : '- All relevant tax documents\n- Previous year\'s tax return\n- Any correspondence from the IRS'}
+${extractedData.formType === '1040' ? '- W-2 forms from all employers\n- 1099 forms for any additional income\n- Receipts for deductible expenses' : "- All relevant tax documents\n- Previous year's tax return\n- Any correspondence from the IRS"}
 
 Looking forward to working with you.
 
@@ -292,9 +277,9 @@ Tax Professional`
 
 Thank you for your email regarding ${extractedData.formType ? `your ${extractedData.formType} form` : 'your tax matter'}.
 
-I've received your message and will review the details carefully. ${extractedData.amounts ? 'I note the financial figures you\'ve mentioned and ' : ''}I'll provide you with a comprehensive response within 24 hours.
+I've received your message and will review the details carefully. ${extractedData.amounts ? "I note the financial figures you've mentioned and " : ''}I'll provide you with a comprehensive response within 24 hours.
 
-${triage.reasoning.includes('urgent') ? 'Given the urgent nature of your inquiry, I\'ll prioritize this matter.' : ''}
+${triage.reasoning.includes('urgent') ? "Given the urgent nature of your inquiry, I'll prioritize this matter." : ''}
 
 If you have any additional documents to share, please feel free to attach them to a reply.
 
@@ -303,7 +288,7 @@ Tax Professional`
 }
 
 function generateSuggestedActions(
-    extractedData: ExtractedData, 
+    extractedData: ExtractedData,
     triage: TriageDecision,
     metadata: EmailMetadata
 ): SuggestedAction[] {
@@ -312,28 +297,28 @@ function generateSuggestedActions(
     // Always suggest categorizing the email
     actions.push({
         type: 'categorize',
-        description: `Move to ${extractedData.formType || 'General Tax'} folder`
+        description: `Move to ${extractedData.formType || 'General Tax'} folder`,
     })
 
     // Suggest actions based on extracted data
     if (extractedData.formType) {
         actions.push({
             type: 'link_document',
-            description: `Link to existing ${extractedData.formType} documents for this client`
+            description: `Link to existing ${extractedData.formType} documents for this client`,
         })
     }
 
     if (extractedData.dates) {
         actions.push({
             type: 'set_reminder',
-            description: 'Set calendar reminder for mentioned deadlines'
+            description: 'Set calendar reminder for mentioned deadlines',
         })
     }
 
     if (extractedData.amounts) {
         actions.push({
             type: 'update_client_record',
-            description: 'Update client record with mentioned financial figures'
+            description: 'Update client record with mentioned financial figures',
         })
     }
 
@@ -341,21 +326,21 @@ function generateSuggestedActions(
     if (triage.action === 'schedule_meeting') {
         actions.push({
             type: 'calendar_integration',
-            description: 'Open calendar to schedule appointment'
+            description: 'Open calendar to schedule appointment',
         })
     }
 
     if (triage.action === 'forward') {
         actions.push({
             type: 'find_specialist',
-            description: 'Find appropriate tax specialist for referral'
+            description: 'Find appropriate tax specialist for referral',
         })
     }
 
     if (metadata.attachments && metadata.attachments.length > 0) {
         actions.push({
             type: 'process_attachments',
-            description: 'Scan and categorize attached documents'
+            description: 'Scan and categorize attached documents',
         })
     }
 
@@ -367,24 +352,18 @@ export async function POST(request: Request) {
         // Check authentication
         const session = await getServerSession(authOptions)
         if (!session?.user?.email) {
-            return NextResponse.json(
-                { error: 'Authentication required' },
-                { status: 401 }
-            )
+            return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
         }
 
         // Rate limiting check
         const userKey = session.user.email
         if (!checkRateLimit(userKey)) {
-            return NextResponse.json(
-                { error: 'Rate limit exceeded. Maximum 50 requests per minute.' },
-                { status: 429 }
-            )
+            return NextResponse.json({ error: 'Rate limit exceeded. Maximum 50 requests per minute.' }, { status: 429 })
         }
 
         // Parse request body
         const body: AgentRequest = await request.json()
-        
+
         if (!body.emailContent || !body.emailMetadata) {
             return NextResponse.json(
                 { error: 'Invalid request. Email content and metadata are required.' },
@@ -393,7 +372,7 @@ export async function POST(request: Request) {
         }
 
         // Simulate processing delay for realistic experience
-        await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 2000))
+        await new Promise((resolve) => setTimeout(resolve, 1500 + Math.random() * 2000))
 
         // Extract tax-specific information
         const extractedData = extractTaxInformation(body.emailContent, body.emailMetadata.subject)
@@ -411,23 +390,16 @@ export async function POST(request: Request) {
             response,
             triage,
             extractedData,
-            suggestedActions
+            suggestedActions,
         }
 
         return NextResponse.json(agentResponse)
-
     } catch (error) {
         console.error('Email agent API error:', error)
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        )
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }
 
 export async function GET() {
-    return NextResponse.json(
-        { error: 'Method not allowed. Use POST to analyze emails.' },
-        { status: 405 }
-    )
+    return NextResponse.json({ error: 'Method not allowed. Use POST to analyze emails.' }, { status: 405 })
 }

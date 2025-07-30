@@ -2,14 +2,14 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
-import { 
-    Mail, 
-    Search, 
-    Filter, 
-    RefreshCw, 
-    Archive, 
-    Trash2, 
-    Star, 
+import {
+    Mail,
+    Search,
+    Filter,
+    RefreshCw,
+    Archive,
+    Trash2,
+    Star,
     MoreVertical,
     ChevronLeft,
     ChevronRight,
@@ -37,7 +37,7 @@ import {
     ThumbsDown,
     Edit,
     Play,
-    Pause
+    Pause,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -48,20 +48,14 @@ import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { 
-    DropdownMenu, 
-    DropdownMenuContent, 
-    DropdownMenuItem, 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuTrigger,
-    DropdownMenuSeparator
+    DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
-import { 
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue 
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Switch } from '@/components/ui/switch'
 import { Progress } from '@/components/ui/progress'
@@ -69,16 +63,16 @@ import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { useAccessibility } from '@/hooks/use-accessibility'
 
-import type { 
-    Email, 
-    EmailThread, 
-    EmailFolder, 
-    EmailFilter, 
-    EmailSort, 
+import type {
+    Email,
+    EmailThread,
+    EmailFolder,
+    EmailFilter,
+    EmailSort,
     EmailAnalysis,
     DraftEmail,
     EmailStats,
-    UserPreferences 
+    UserPreferences,
 } from '@/types/email'
 
 // Sample data for demonstration
@@ -99,7 +93,8 @@ const SAMPLE_EMAILS: Email[] = [
         fromName: 'John Smith',
         to: ['tax@yourfirm.com'],
         subject: 'Question about my 1040 form deadline',
-        content: 'Hi, I need to know when my 2023 tax return is due. I heard there might be an extension available. My AGI last year was $85,000. Please let me know the deadline and if I need to file an extension.',
+        content:
+            'Hi, I need to know when my 2023 tax return is due. I heard there might be an extension available. My AGI last year was $85,000. Please let me know the deadline and if I need to file an extension.',
         date: new Date('2024-03-15T10:30:00'),
         isRead: false,
         isStarred: false,
@@ -108,7 +103,7 @@ const SAMPLE_EMAILS: Email[] = [
         priority: 'normal',
         folder: 'inbox',
         labels: ['client', 'deadline'],
-        messageId: 'msg-1'
+        messageId: 'msg-1',
     },
     {
         id: '2',
@@ -116,18 +111,17 @@ const SAMPLE_EMAILS: Email[] = [
         fromName: 'Sarah Johnson',
         to: ['tax@yourfirm.com'],
         subject: 'URGENT: IRS Notice received for business return',
-        content: 'I received an IRS notice about my 2022 business tax return (Form 1120). They are saying there is a discrepancy of $15,000 in reported income. I need immediate assistance to respond to this notice. The response deadline is in 10 days.',
+        content:
+            'I received an IRS notice about my 2022 business tax return (Form 1120). They are saying there is a discrepancy of $15,000 in reported income. I need immediate assistance to respond to this notice. The response deadline is in 10 days.',
         date: new Date('2024-03-14T14:45:00'),
         isRead: false,
         isStarred: true,
         hasAttachments: true,
-        attachments: [
-            { id: 'att-1', filename: 'IRS_Notice.pdf', type: 'application/pdf', size: 245760 }
-        ],
+        attachments: [{ id: 'att-1', filename: 'IRS_Notice.pdf', type: 'application/pdf', size: 245760 }],
         priority: 'urgent',
         folder: 'inbox',
         labels: ['urgent', 'business', 'irs'],
-        messageId: 'msg-2'
+        messageId: 'msg-2',
     },
     {
         id: '3',
@@ -135,7 +129,8 @@ const SAMPLE_EMAILS: Email[] = [
         fromName: 'Mike Davis',
         to: ['tax@yourfirm.com'],
         subject: 'Schedule consultation for tax planning',
-        content: 'I would like to schedule a consultation to discuss tax planning strategies for 2024. I am particularly interested in maximizing my retirement contributions and understanding the new tax laws. When would be a good time to meet?',
+        content:
+            'I would like to schedule a consultation to discuss tax planning strategies for 2024. I am particularly interested in maximizing my retirement contributions and understanding the new tax laws. When would be a good time to meet?',
         date: new Date('2024-03-13T09:15:00'),
         isRead: true,
         isStarred: false,
@@ -144,7 +139,7 @@ const SAMPLE_EMAILS: Email[] = [
         priority: 'normal',
         folder: 'inbox',
         labels: ['consultation', 'planning'],
-        messageId: 'msg-3'
+        messageId: 'msg-3',
     },
 ]
 
@@ -154,7 +149,7 @@ interface EmailAgentInterfaceProps {
 
 export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
     const { data: session, status } = useSession()
-    
+
     // State management
     const [selectedFolder, setSelectedFolder] = useState<string>('inbox')
     const [selectedEmail, setSelectedEmail] = useState<Email | null>(null)
@@ -184,14 +179,19 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
 
     // Filter and sort emails
     useEffect(() => {
-        let filtered = emails.filter(email => {
+        let filtered = emails.filter((email) => {
             if (selectedFolder !== 'inbox' && email.folder !== selectedFolder) return false
-            if (searchQuery && !email.subject.toLowerCase().includes(searchQuery.toLowerCase()) && 
+            if (
+                searchQuery &&
+                !email.subject.toLowerCase().includes(searchQuery.toLowerCase()) &&
                 !email.content.toLowerCase().includes(searchQuery.toLowerCase()) &&
-                !email.fromName.toLowerCase().includes(searchQuery.toLowerCase())) return false
+                !email.fromName.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+                return false
             if (emailFilter.isRead !== undefined && email.isRead !== emailFilter.isRead) return false
             if (emailFilter.priority && email.priority !== emailFilter.priority) return false
-            if (emailFilter.hasAttachments !== undefined && email.hasAttachments !== emailFilter.hasAttachments) return false
+            if (emailFilter.hasAttachments !== undefined && email.hasAttachments !== emailFilter.hasAttachments)
+                return false
             return true
         })
 
@@ -217,110 +217,118 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
     }, [emails, selectedFolder, searchQuery, emailFilter, emailSort])
 
     // Analyze email with AI
-    const analyzeEmailWithAI = useCallback(async (email: Email) => {
-        if (!email) return
+    const analyzeEmailWithAI = useCallback(
+        async (email: Email) => {
+            if (!email) return
 
-        setAiAnalyzing(true)
-        setShowAiThinking(true)
-        announce('AI is analyzing the email', 'polite')
+            setAiAnalyzing(true)
+            setShowAiThinking(true)
+            announce('AI is analyzing the email', 'polite')
 
-        try {
-            const response = await fetch('/api/agents/email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    emailContent: email.content,
-                    emailMetadata: {
-                        from: email.from,
-                        subject: email.subject,
-                        date: email.date.toISOString(),
-                        attachments: email.attachments
-                    }
-                }),
-            })
+            try {
+                const response = await fetch('/api/agents/email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        emailContent: email.content,
+                        emailMetadata: {
+                            from: email.from,
+                            subject: email.subject,
+                            date: email.date.toISOString(),
+                            attachments: email.attachments,
+                        },
+                    }),
+                })
 
-            if (!response.ok) {
-                throw new Error('Failed to analyze email')
+                if (!response.ok) {
+                    throw new Error('Failed to analyze email')
+                }
+
+                const analysisData = await response.json()
+                setEmailAnalysis({
+                    triage: analysisData.triage,
+                    extractedData: analysisData.extractedData,
+                    suggestedActions: analysisData.suggestedActions,
+                })
+                setAiResponse(analysisData.response)
+
+                if (analysisData.triage.action === 'auto_respond' && analysisData.triage.confidence > 0.8) {
+                    setAwaitingApproval(true)
+                    announce('AI has generated a response and is awaiting approval', 'assertive')
+                }
+            } catch (error) {
+                console.error('Error analyzing email:', error)
+                toast.error('Failed to analyze email with AI')
+            } finally {
+                setAiAnalyzing(false)
+                setShowAiThinking(false)
             }
-
-            const analysisData = await response.json()
-            setEmailAnalysis({
-                triage: analysisData.triage,
-                extractedData: analysisData.extractedData,
-                suggestedActions: analysisData.suggestedActions
-            })
-            setAiResponse(analysisData.response)
-
-            if (analysisData.triage.action === 'auto_respond' && analysisData.triage.confidence > 0.8) {
-                setAwaitingApproval(true)
-                announce('AI has generated a response and is awaiting approval', 'assertive')
-            }
-
-        } catch (error) {
-            console.error('Error analyzing email:', error)
-            toast.error('Failed to analyze email with AI')
-        } finally {
-            setAiAnalyzing(false)
-            setShowAiThinking(false)
-        }
-    }, [announce])
+        },
+        [announce]
+    )
 
     // Select email and analyze
-    const selectEmail = useCallback((email: Email) => {
-        setSelectedEmail(email)
-        setEmailAnalysis(null)
-        setAiResponse('')
-        setAwaitingApproval(false)
-        
-        // Mark as read
-        if (!email.isRead) {
-            setEmails(prev => prev.map(e => 
-                e.id === email.id ? { ...e, isRead: true } : e
-            ))
-        }
+    const selectEmail = useCallback(
+        (email: Email) => {
+            setSelectedEmail(email)
+            setEmailAnalysis(null)
+            setAiResponse('')
+            setAwaitingApproval(false)
 
-        // Auto-analyze with AI
-        analyzeEmailWithAI(email)
-    }, [analyzeEmailWithAI])
+            // Mark as read
+            if (!email.isRead) {
+                setEmails((prev) => prev.map((e) => (e.id === email.id ? { ...e, isRead: true } : e)))
+            }
+
+            // Auto-analyze with AI
+            analyzeEmailWithAI(email)
+        },
+        [analyzeEmailWithAI]
+    )
 
     // Handle email actions
-    const handleEmailAction = useCallback((action: string, emailIds: string[] = []) => {
-        const ids = emailIds.length > 0 ? emailIds : Array.from(selectedEmails)
-        
-        switch (action) {
-            case 'archive':
-                setEmails(prev => prev.map(email => 
-                    ids.includes(email.id) ? { ...email, folder: 'archive' } : email
-                ))
-                announce(`${ids.length} email(s) archived`)
-                break
-            case 'delete':
-                setEmails(prev => prev.filter(email => !ids.includes(email.id)))
-                announce(`${ids.length} email(s) deleted`)
-                break
-            case 'mark_read':
-                setEmails(prev => prev.map(email => 
-                    ids.includes(email.id) ? { ...email, isRead: true } : email
-                ))
-                announce(`${ids.length} email(s) marked as read`)
-                break
-            case 'mark_unread':
-                setEmails(prev => prev.map(email => 
-                    ids.includes(email.id) ? { ...email, isRead: false } : email
-                ))
-                announce(`${ids.length} email(s) marked as unread`)
-                break
-            case 'star':
-                setEmails(prev => prev.map(email => 
-                    ids.includes(email.id) ? { ...email, isStarred: !email.isStarred } : email
-                ))
-                break
-        }
-        
-        setSelectedEmails(new Set())
-    }, [selectedEmails, announce])
+    const handleEmailAction = useCallback(
+        (action: string, emailIds: string[] = []) => {
+            const ids = emailIds.length > 0 ? emailIds : Array.from(selectedEmails)
+
+            switch (action) {
+                case 'archive':
+                    setEmails((prev) =>
+                        prev.map((email) => (ids.includes(email.id) ? { ...email, folder: 'archive' } : email))
+                    )
+                    announce(`${ids.length} email(s) archived`)
+                    break
+                case 'delete':
+                    setEmails((prev) => prev.filter((email) => !ids.includes(email.id)))
+                    announce(`${ids.length} email(s) deleted`)
+                    break
+                case 'mark_read':
+                    setEmails((prev) =>
+                        prev.map((email) => (ids.includes(email.id) ? { ...email, isRead: true } : email))
+                    )
+                    announce(`${ids.length} email(s) marked as read`)
+                    break
+                case 'mark_unread':
+                    setEmails((prev) =>
+                        prev.map((email) => (ids.includes(email.id) ? { ...email, isRead: false } : email))
+                    )
+                    announce(`${ids.length} email(s) marked as unread`)
+                    break
+                case 'star':
+                    setEmails((prev) =>
+                        prev.map((email) =>
+                            ids.includes(email.id) ? { ...email, isStarred: !email.isStarred } : email
+                        )
+                    )
+                    break
+            }
+
+            setSelectedEmails(new Set())
+        },
+        [selectedEmails, announce]
+    )
 
     // Send AI response
     const sendAiResponse = useCallback(() => {
@@ -351,22 +359,32 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
     // Get priority badge color
     const getPriorityColor = (priority: Email['priority']) => {
         switch (priority) {
-            case 'urgent': return 'bg-red-500'
-            case 'high': return 'bg-orange-500'
-            case 'normal': return 'bg-blue-500'
-            case 'low': return 'bg-gray-500'
-            default: return 'bg-gray-500'
+            case 'urgent':
+                return 'bg-red-500'
+            case 'high':
+                return 'bg-orange-500'
+            case 'normal':
+                return 'bg-blue-500'
+            case 'low':
+                return 'bg-gray-500'
+            default:
+                return 'bg-gray-500'
         }
     }
 
     // Get triage action color
     const getTriageColor = (action: string) => {
         switch (action) {
-            case 'auto_respond': return 'text-green-600 bg-green-50'
-            case 'needs_review': return 'text-yellow-600 bg-yellow-50'
-            case 'schedule_meeting': return 'text-blue-600 bg-blue-50'
-            case 'forward': return 'text-purple-600 bg-purple-50'
-            default: return 'text-gray-600 bg-gray-50'
+            case 'auto_respond':
+                return 'text-green-600 bg-green-50'
+            case 'needs_review':
+                return 'text-yellow-600 bg-yellow-50'
+            case 'schedule_meeting':
+                return 'text-blue-600 bg-blue-50'
+            case 'forward':
+                return 'text-purple-600 bg-purple-50'
+            default:
+                return 'text-gray-600 bg-gray-50'
         }
     }
 
@@ -385,9 +403,7 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                 <CardContent className="pt-6">
                     <Alert>
                         <AlertTriangle className="h-4 w-4" />
-                        <AlertDescription>
-                            Please sign in to access the Email Agent Interface.
-                        </AlertDescription>
+                        <AlertDescription>Please sign in to access the Email Agent Interface.</AlertDescription>
                     </Alert>
                 </CardContent>
             </Card>
@@ -396,7 +412,7 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
 
     return (
         <div
-            className={cn("h-screen flex flex-col bg-background", className)}
+            className={cn('h-screen flex flex-col bg-background', className)}
             role="main"
             aria-label="Email Agent Interface"
             id="main-content"
@@ -406,25 +422,19 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <h1 className="text-xl font-semibold">Email Agent</h1>
-                        <Badge variant="secondary">
-                            {filteredEmails.filter(e => !e.isRead).length} unread
-                        </Badge>
+                        <Badge variant="secondary">{filteredEmails.filter((e) => !e.isRead).length} unread</Badge>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setCompactView(!compactView)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => setCompactView(!compactView)}>
                             {compactView ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                         </Button>
-                        
+
                         <Button variant="outline" size="sm">
                             <RefreshCw className="h-4 w-4 mr-1" />
                             Refresh
                         </Button>
-                        
+
                         <Button variant="outline" size="sm">
                             <Settings className="h-4 w-4 mr-1" />
                             Settings
@@ -435,11 +445,7 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
 
             <div className="flex-1 flex overflow-hidden">
                 {/* Left Panel - Email List */}
-                <div
-                    className="w-1/3 border-r bg-white flex flex-col"
-                    role="region"
-                    aria-label="Email list"
-                >
+                <div className="w-1/3 border-r bg-white flex flex-col" role="region" aria-label="Email list">
                     {/* Folders Sidebar */}
                     <div className="border-b">
                         <ScrollArea className="h-48">
@@ -447,7 +453,7 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                 {SAMPLE_FOLDERS.map((folder) => (
                                     <Button
                                         key={folder.id}
-                                        variant={selectedFolder === folder.id ? "secondary" : "ghost"}
+                                        variant={selectedFolder === folder.id ? 'secondary' : 'ghost'}
                                         className="w-full justify-start h-8"
                                         onClick={() => setSelectedFolder(folder.id)}
                                     >
@@ -477,17 +483,13 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                 aria-label="Search emails"
                             />
                         </div>
-                        
+
                         <div className="flex items-center space-x-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setShowFilters(!showFilters)}
-                            >
+                            <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)}>
                                 <Filter className="h-4 w-4 mr-1" />
                                 Filters
                             </Button>
-                            
+
                             <Select
                                 value={`${emailSort.field}-${emailSort.direction}`}
                                 onValueChange={(value) => {
@@ -514,28 +516,32 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                     <Checkbox
                                         id="unread-only"
                                         checked={emailFilter.isRead === false}
-                                        onCheckedChange={(checked) => 
-                                            setEmailFilter(prev => ({ 
-                                                ...prev, 
-                                                isRead: checked ? false : undefined 
+                                        onCheckedChange={(checked) =>
+                                            setEmailFilter((prev) => ({
+                                                ...prev,
+                                                isRead: checked ? false : undefined,
                                             }))
                                         }
                                     />
-                                    <label htmlFor="unread-only" className="text-sm">Unread only</label>
+                                    <label htmlFor="unread-only" className="text-sm">
+                                        Unread only
+                                    </label>
                                 </div>
-                                
+
                                 <div className="flex items-center space-x-2">
                                     <Checkbox
                                         id="has-attachments"
                                         checked={emailFilter.hasAttachments === true}
-                                        onCheckedChange={(checked) => 
-                                            setEmailFilter(prev => ({ 
-                                                ...prev, 
-                                                hasAttachments: checked ? true : undefined 
+                                        onCheckedChange={(checked) =>
+                                            setEmailFilter((prev) => ({
+                                                ...prev,
+                                                hasAttachments: checked ? true : undefined,
                                             }))
                                         }
                                     />
-                                    <label htmlFor="has-attachments" className="text-sm">Has attachments</label>
+                                    <label htmlFor="has-attachments" className="text-sm">
+                                        Has attachments
+                                    </label>
                                 </div>
                             </div>
                         )}
@@ -548,10 +554,10 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                 <div
                                     key={email.id}
                                     className={cn(
-                                        "p-3 cursor-pointer hover:bg-gray-50 transition-colors",
-                                        selectedEmail?.id === email.id && "bg-blue-50 border-r-2 border-blue-500",
-                                        !email.isRead && "bg-blue-25 font-medium",
-                                        compactView && "p-2"
+                                        'p-3 cursor-pointer hover:bg-gray-50 transition-colors',
+                                        selectedEmail?.id === email.id && 'bg-blue-50 border-r-2 border-blue-500',
+                                        !email.isRead && 'bg-blue-25 font-medium',
+                                        compactView && 'p-2'
                                     )}
                                     onClick={() => selectEmail(email)}
                                     onKeyDown={(e) => {
@@ -579,54 +585,60 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                             }}
                                             onClick={(e) => e.stopPropagation()}
                                         />
-                                        
+
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between mb-1">
                                                 <div className="flex items-center space-x-2">
-                                                    <span className={cn(
-                                                        "text-sm truncate",
-                                                        !email.isRead && "font-semibold"
-                                                    )}>
+                                                    <span
+                                                        className={cn(
+                                                            'text-sm truncate',
+                                                            !email.isRead && 'font-semibold'
+                                                        )}
+                                                    >
                                                         {email.fromName}
                                                     </span>
                                                     {email.isStarred && (
                                                         <Star className="h-3 w-3 text-yellow-500 fill-current" />
                                                     )}
                                                 </div>
-                                                
+
                                                 <div className="flex items-center space-x-1">
-                                                    <div className={cn(
-                                                        "w-2 h-2 rounded-full",
-                                                        getPriorityColor(email.priority)
-                                                    )} />
+                                                    <div
+                                                        className={cn(
+                                                            'w-2 h-2 rounded-full',
+                                                            getPriorityColor(email.priority)
+                                                        )}
+                                                    />
                                                     <span className="text-xs text-muted-foreground">
                                                         {email.date.toLocaleDateString()}
                                                     </span>
                                                 </div>
                                             </div>
-                                            
-                                            <div className={cn(
-                                                "text-sm mb-1 truncate",
-                                                !email.isRead ? "font-medium" : "text-muted-foreground"
-                                            )}>
+
+                                            <div
+                                                className={cn(
+                                                    'text-sm mb-1 truncate',
+                                                    !email.isRead ? 'font-medium' : 'text-muted-foreground'
+                                                )}
+                                            >
                                                 {email.subject}
                                             </div>
-                                            
+
                                             {!compactView && (
                                                 <div className="text-xs text-muted-foreground truncate">
                                                     {email.content.substring(0, 100)}...
                                                 </div>
                                             )}
-                                            
+
                                             <div className="flex items-center justify-between mt-2">
                                                 <div className="flex space-x-1">
-                                                    {email.labels.map(label => (
+                                                    {email.labels.map((label) => (
                                                         <Badge key={label} variant="outline" className="text-xs">
                                                             {label}
                                                         </Badge>
                                                     ))}
                                                 </div>
-                                                
+
                                                 {email.hasAttachments && (
                                                     <Paperclip className="h-3 w-3 text-muted-foreground" />
                                                 )}
@@ -642,41 +654,23 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                     {selectedEmails.size > 0 && (
                         <div className="border-t p-3">
                             <div className="flex items-center space-x-2">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleEmailAction('archive')}
-                                >
+                                <Button variant="outline" size="sm" onClick={() => handleEmailAction('archive')}>
                                     <Archive className="h-4 w-4" />
                                 </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleEmailAction('delete')}
-                                >
+                                <Button variant="outline" size="sm" onClick={() => handleEmailAction('delete')}>
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => handleEmailAction('mark_read')}
-                                >
+                                <Button variant="outline" size="sm" onClick={() => handleEmailAction('mark_read')}>
                                     Mark Read
                                 </Button>
-                                <span className="text-sm text-muted-foreground">
-                                    {selectedEmails.size} selected
-                                </span>
+                                <span className="text-sm text-muted-foreground">{selectedEmails.size} selected</span>
                             </div>
                         </div>
                     )}
                 </div>
 
                 {/* Right Panel - Email Detail/Conversation */}
-                <div
-                    className="flex-1 flex flex-col bg-white"
-                    role="region"
-                    aria-label="Email detail and conversation"
-                >
+                <div className="flex-1 flex flex-col bg-white" role="region" aria-label="Email detail and conversation">
                     {selectedEmail ? (
                         <>
                             {/* Email Header */}
@@ -685,17 +679,19 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                     <div>
                                         <h2 className="text-lg font-semibold mb-1">{selectedEmail.subject}</h2>
                                         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                                            <span>From: {selectedEmail.fromName} &lt;{selectedEmail.from}&gt;</span>
+                                            <span>
+                                                From: {selectedEmail.fromName} &lt;{selectedEmail.from}&gt;
+                                            </span>
                                             <span>•</span>
                                             <span>{selectedEmail.date.toLocaleString()}</span>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="flex items-center space-x-2">
                                         <Badge className={getPriorityColor(selectedEmail.priority)}>
                                             {selectedEmail.priority}
                                         </Badge>
-                                        
+
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="outline" size="sm">
@@ -703,16 +699,22 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent>
-                                                <DropdownMenuItem onClick={() => handleEmailAction('archive', [selectedEmail.id])}>
+                                                <DropdownMenuItem
+                                                    onClick={() => handleEmailAction('archive', [selectedEmail.id])}
+                                                >
                                                     <Archive className="h-4 w-4 mr-2" />
                                                     Archive
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => handleEmailAction('star', [selectedEmail.id])}>
+                                                <DropdownMenuItem
+                                                    onClick={() => handleEmailAction('star', [selectedEmail.id])}
+                                                >
                                                     <Star className="h-4 w-4 mr-2" />
                                                     {selectedEmail.isStarred ? 'Unstar' : 'Star'}
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
-                                                <DropdownMenuItem onClick={() => handleEmailAction('delete', [selectedEmail.id])}>
+                                                <DropdownMenuItem
+                                                    onClick={() => handleEmailAction('delete', [selectedEmail.id])}
+                                                >
                                                     <Trash2 className="h-4 w-4 mr-2" />
                                                     Delete
                                                 </DropdownMenuItem>
@@ -744,11 +746,12 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                                             {emailAnalysis.triage.action.replace('_', ' ')}
                                                         </Badge>
                                                         <span className="ml-2 text-sm">
-                                                            Confidence: {Math.round(emailAnalysis.triage.confidence * 100)}%
+                                                            Confidence:{' '}
+                                                            {Math.round(emailAnalysis.triage.confidence * 100)}%
                                                         </span>
                                                     </div>
-                                                    <Progress 
-                                                        value={emailAnalysis.triage.confidence * 100} 
+                                                    <Progress
+                                                        value={emailAnalysis.triage.confidence * 100}
                                                         className="w-24 h-2"
                                                     />
                                                 </div>
@@ -767,7 +770,9 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                                         {emailAnalysis.extractedData.formType && (
                                                             <div className="flex items-center">
                                                                 <FileText className="h-4 w-4 mr-2 text-blue-500" />
-                                                                <span>Form: {emailAnalysis.extractedData.formType}</span>
+                                                                <span>
+                                                                    Form: {emailAnalysis.extractedData.formType}
+                                                                </span>
                                                             </div>
                                                         )}
                                                         {emailAnalysis.extractedData.taxYear && (
@@ -776,37 +781,49 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                                                 <span>Year: {emailAnalysis.extractedData.taxYear}</span>
                                                             </div>
                                                         )}
-                                                        {emailAnalysis.extractedData.amounts && Object.keys(emailAnalysis.extractedData.amounts).map(key => (
-                                                            <div key={key} className="flex items-center">
-                                                                <DollarSign className="h-4 w-4 mr-2 text-yellow-500" />
-                                                                <span>{key}: ${emailAnalysis.extractedData!.amounts![key].toLocaleString()}</span>
-                                                            </div>
-                                                        ))}
+                                                        {emailAnalysis.extractedData.amounts &&
+                                                            Object.keys(emailAnalysis.extractedData.amounts).map(
+                                                                (key) => (
+                                                                    <div key={key} className="flex items-center">
+                                                                        <DollarSign className="h-4 w-4 mr-2 text-yellow-500" />
+                                                                        <span>
+                                                                            {key}: $
+                                                                            {emailAnalysis.extractedData!.amounts![
+                                                                                key
+                                                                            ].toLocaleString()}
+                                                                        </span>
+                                                                    </div>
+                                                                )
+                                                            )}
                                                     </div>
                                                 </CardContent>
                                             </Card>
                                         )}
 
                                         {/* Suggested Actions */}
-                                        {emailAnalysis.suggestedActions && emailAnalysis.suggestedActions.length > 0 && (
-                                            <Card>
-                                                <CardHeader className="pb-2">
-                                                    <CardTitle className="text-sm">Suggested Actions</CardTitle>
-                                                </CardHeader>
-                                                <CardContent className="pt-0">
-                                                    <div className="space-y-2">
-                                                        {emailAnalysis.suggestedActions.map((action, index) => (
-                                                            <div key={index} className="flex items-center justify-between text-sm">
-                                                                <span>{action.description}</span>
-                                                                <Button variant="outline" size="sm">
-                                                                    Execute
-                                                                </Button>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </CardContent>
-                                            </Card>
-                                        )}
+                                        {emailAnalysis.suggestedActions &&
+                                            emailAnalysis.suggestedActions.length > 0 && (
+                                                <Card>
+                                                    <CardHeader className="pb-2">
+                                                        <CardTitle className="text-sm">Suggested Actions</CardTitle>
+                                                    </CardHeader>
+                                                    <CardContent className="pt-0">
+                                                        <div className="space-y-2">
+                                                            {emailAnalysis.suggestedActions.map((action, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    className="flex items-center justify-between text-sm"
+                                                                >
+                                                                    <span>{action.description}</span>
+                                                                    <Button variant="outline" size="sm">
+                                                                        Execute
+                                                                    </Button>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
+                                            )}
                                     </div>
                                 )}
                             </div>
@@ -817,12 +834,15 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                     <div className="whitespace-pre-wrap text-sm leading-relaxed">
                                         {selectedEmail.content}
                                     </div>
-                                    
+
                                     {selectedEmail.attachments.length > 0 && (
                                         <div className="mt-4 p-3 bg-gray-50 rounded">
                                             <h4 className="text-sm font-medium mb-2">Attachments</h4>
-                                            {selectedEmail.attachments.map(attachment => (
-                                                <div key={attachment.id} className="flex items-center space-x-2 text-sm">
+                                            {selectedEmail.attachments.map((attachment) => (
+                                                <div
+                                                    key={attachment.id}
+                                                    className="flex items-center space-x-2 text-sm"
+                                                >
                                                     <Paperclip className="h-4 w-4" />
                                                     <span>{attachment.filename}</span>
                                                     <span className="text-muted-foreground">
@@ -843,14 +863,10 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                             <Bot className="h-5 w-5 text-blue-600" />
                                             <span className="font-medium text-blue-900">AI Generated Response</span>
                                         </div>
-                                        
+
                                         {awaitingApproval && (
                                             <div className="flex items-center space-x-2">
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={rejectAiSuggestion}
-                                                >
+                                                <Button variant="outline" size="sm" onClick={rejectAiSuggestion}>
                                                     <ThumbsDown className="h-4 w-4 mr-1" />
                                                     Reject
                                                 </Button>
@@ -865,11 +881,9 @@ export function EmailAgentInterface({ className }: EmailAgentInterfaceProps) {
                                             </div>
                                         )}
                                     </div>
-                                    
+
                                     <div className="bg-white p-3 rounded border">
-                                        <div className="whitespace-pre-wrap text-sm">
-                                            {aiResponse}
-                                        </div>
+                                        <div className="whitespace-pre-wrap text-sm">{aiResponse}</div>
                                     </div>
                                 </div>
                             )}

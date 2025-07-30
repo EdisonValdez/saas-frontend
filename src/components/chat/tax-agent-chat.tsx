@@ -2,14 +2,14 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
-import { 
-    Send, 
-    Upload, 
-    FileText, 
-    Calendar, 
-    Search, 
-    Download, 
-    Trash2, 
+import {
+    Send,
+    Upload,
+    FileText,
+    Calendar,
+    Search,
+    Download,
+    Trash2,
     AlertTriangle,
     Clock,
     CheckCircle,
@@ -20,7 +20,7 @@ import {
     User,
     MoreVertical,
     Copy,
-    ExternalLink
+    ExternalLink,
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -31,12 +31,7 @@ import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { 
-    DropdownMenu, 
-    DropdownMenuContent, 
-    DropdownMenuItem, 
-    DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -98,12 +93,12 @@ const QUICK_ACTIONS = [
 ]
 
 const SUGGESTED_PROMPTS = [
-    "How do I classify my tax form?",
-    "What are the 2024 tax filing deadlines?",
-    "Help me understand Form 1040 line 12",
-    "How do I extract data from my W-2?",
-    "What business expenses can I deduct?",
-    "Explain the difference between Schedule A and standard deduction",
+    'How do I classify my tax form?',
+    'What are the 2024 tax filing deadlines?',
+    'Help me understand Form 1040 line 12',
+    'How do I extract data from my W-2?',
+    'What business expenses can I deduct?',
+    'Explain the difference between Schedule A and standard deduction',
 ]
 
 export function TaxAgentChat() {
@@ -124,7 +119,7 @@ export function TaxAgentChat() {
         announceMessage: (message) => {
             // Custom announcement handling if needed
             console.log('Accessibility announcement:', message)
-        }
+        },
     })
 
     // Scroll to bottom when new messages arrive
@@ -152,94 +147,101 @@ export function TaxAgentChat() {
             return false
         }
 
-        setRequestCount(prev => prev + 1)
+        setRequestCount((prev) => prev + 1)
         return true
     }, [requestCount, lastRequestTime])
 
     // Send message to agent
-    const sendMessage = useCallback(async (content: string, attachments?: File[]) => {
-        if (!content.trim() || isLoading) return
-        if (status !== 'authenticated') {
-            toast.error('Please sign in to use the tax assistant')
-            return
-        }
-        if (!checkRateLimit()) return
+    const sendMessage = useCallback(
+        async (content: string, attachments?: File[]) => {
+            if (!content.trim() || isLoading) return
+            if (status !== 'authenticated') {
+                toast.error('Please sign in to use the tax assistant')
+                return
+            }
+            if (!checkRateLimit()) return
 
-        const userMessage: Message = {
-            id: crypto.randomUUID(),
-            role: 'user',
-            content: content.trim(),
-            timestamp: new Date(),
-            status: 'sent',
-            attachments,
-        }
-
-        const agentMessage: Message = {
-            id: crypto.randomUUID(),
-            role: 'agent',
-            content: '',
-            timestamp: new Date(),
-            status: 'sending',
-        }
-
-        setMessages(prev => [...prev, userMessage, agentMessage])
-        setInputValue('')
-        setIsLoading(true)
-
-        // Announce message sent
-        announce('Message sent to tax assistant')
-
-        try {
-            const request: AgentRequest = { prompt: content }
-            const response = await fetch('/api/agents/invoke/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(request),
-            })
-
-            if (!response.ok) {
-                const errorData = await response.json()
-                throw new Error(errorData.error || 'Failed to get response from agent')
+            const userMessage: Message = {
+                id: crypto.randomUUID(),
+                role: 'user',
+                content: content.trim(),
+                timestamp: new Date(),
+                status: 'sent',
+                attachments,
             }
 
-            const data: AgentResponse = await response.json()
+            const agentMessage: Message = {
+                id: crypto.randomUUID(),
+                role: 'agent',
+                content: '',
+                timestamp: new Date(),
+                status: 'sending',
+            }
 
-            setMessages(prev => prev.map(msg =>
-                msg.id === agentMessage.id
-                    ? { ...msg, content: data.response, status: 'sent' }
-                    : msg
-            ))
+            setMessages((prev) => [...prev, userMessage, agentMessage])
+            setInputValue('')
+            setIsLoading(true)
 
-            // Announce response received
-            announce('Response received from tax assistant')
+            // Announce message sent
+            announce('Message sent to tax assistant')
 
-        } catch (error) {
-            console.error('Agent chat error:', error)
-            setMessages(prev => prev.map(msg => 
-                msg.id === agentMessage.id 
-                    ? { 
-                        ...msg, 
-                        content: 'Sorry, I encountered an error. Please try again.', 
-                        status: 'error' 
-                    }
-                    : msg
-            ))
-            toast.error(error instanceof Error ? error.message : 'Failed to send message')
-        } finally {
-            setIsLoading(false)
-        }
-    }, [isLoading, status, checkRateLimit])
+            try {
+                const request: AgentRequest = { prompt: content }
+                const response = await fetch('/api/agents/invoke/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(request),
+                })
+
+                if (!response.ok) {
+                    const errorData = await response.json()
+                    throw new Error(errorData.error || 'Failed to get response from agent')
+                }
+
+                const data: AgentResponse = await response.json()
+
+                setMessages((prev) =>
+                    prev.map((msg) =>
+                        msg.id === agentMessage.id ? { ...msg, content: data.response, status: 'sent' } : msg
+                    )
+                )
+
+                // Announce response received
+                announce('Response received from tax assistant')
+            } catch (error) {
+                console.error('Agent chat error:', error)
+                setMessages((prev) =>
+                    prev.map((msg) =>
+                        msg.id === agentMessage.id
+                            ? {
+                                  ...msg,
+                                  content: 'Sorry, I encountered an error. Please try again.',
+                                  status: 'error',
+                              }
+                            : msg
+                    )
+                )
+                toast.error(error instanceof Error ? error.message : 'Failed to send message')
+            } finally {
+                setIsLoading(false)
+            }
+        },
+        [isLoading, status, checkRateLimit]
+    )
 
     // Handle quick action
-    const handleQuickAction = useCallback((action: typeof QUICK_ACTIONS[0]) => {
-        if (action.id === 'upload-document') {
-            fileInputRef.current?.click()
-        } else {
-            sendMessage(action.prompt)
-        }
-    }, [sendMessage])
+    const handleQuickAction = useCallback(
+        (action: (typeof QUICK_ACTIONS)[0]) => {
+            if (action.id === 'upload-document') {
+                fileInputRef.current?.click()
+            } else {
+                sendMessage(action.prompt)
+            }
+        },
+        [sendMessage]
+    )
 
     // Handle suggested prompt
     const handleSuggestedPrompt = useCallback((prompt: string) => {
@@ -248,29 +250,35 @@ export function TaxAgentChat() {
     }, [])
 
     // Handle file upload
-    const handleFileUpload = useCallback((files: FileList | null) => {
-        if (!files || files.length === 0) return
+    const handleFileUpload = useCallback(
+        (files: FileList | null) => {
+            if (!files || files.length === 0) return
 
-        const validFiles = Array.from(files).filter(file => {
-            const isValidType = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'].includes(file.type)
-            const isValidSize = file.size <= 10 * 1024 * 1024 // 10MB limit
-            
-            if (!isValidType) {
-                toast.error(`File ${file.name} is not a supported type. Please upload PDF, JPEG, or PNG files.`)
-                return false
-            }
-            if (!isValidSize) {
-                toast.error(`File ${file.name} is too large. Maximum size is 10MB.`)
-                return false
-            }
-            return true
-        })
+            const validFiles = Array.from(files).filter((file) => {
+                const isValidType = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'].includes(file.type)
+                const isValidSize = file.size <= 10 * 1024 * 1024 // 10MB limit
 
-        if (validFiles.length > 0) {
-            const fileNames = validFiles.map(f => f.name).join(', ')
-            sendMessage(`I've uploaded the following file(s): ${fileNames}. Please analyze and help me with these tax documents.`, validFiles)
-        }
-    }, [sendMessage])
+                if (!isValidType) {
+                    toast.error(`File ${file.name} is not a supported type. Please upload PDF, JPEG, or PNG files.`)
+                    return false
+                }
+                if (!isValidSize) {
+                    toast.error(`File ${file.name} is too large. Maximum size is 10MB.`)
+                    return false
+                }
+                return true
+            })
+
+            if (validFiles.length > 0) {
+                const fileNames = validFiles.map((f) => f.name).join(', ')
+                sendMessage(
+                    `I've uploaded the following file(s): ${fileNames}. Please analyze and help me with these tax documents.`,
+                    validFiles
+                )
+            }
+        },
+        [sendMessage]
+    )
 
     // Drag and drop handlers
     const handleDrag = useCallback((e: React.DragEvent) => {
@@ -283,20 +291,26 @@ export function TaxAgentChat() {
         }
     }, [])
 
-    const handleDrop = useCallback((e: React.DragEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-        setDragActive(false)
-        handleFileUpload(e.dataTransfer.files)
-    }, [handleFileUpload])
+    const handleDrop = useCallback(
+        (e: React.DragEvent) => {
+            e.preventDefault()
+            e.stopPropagation()
+            setDragActive(false)
+            handleFileUpload(e.dataTransfer.files)
+        },
+        [handleFileUpload]
+    )
 
     // Keyboard shortcuts
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault()
-            sendMessage(inputValue)
-        }
-    }, [inputValue, sendMessage])
+    const handleKeyDown = useCallback(
+        (e: React.KeyboardEvent) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                sendMessage(inputValue)
+            }
+        },
+        [inputValue, sendMessage]
+    )
 
     // Clear conversation
     const clearConversation = useCallback(() => {
@@ -307,11 +321,13 @@ export function TaxAgentChat() {
 
     // Export conversation
     const exportConversation = useCallback(() => {
-        const conversationText = messages.map(msg => {
-            const timestamp = msg.timestamp.toLocaleString()
-            const role = msg.role === 'user' ? 'You' : 'Tax Assistant'
-            return `[${timestamp}] ${role}: ${msg.content}`
-        }).join('\n\n')
+        const conversationText = messages
+            .map((msg) => {
+                const timestamp = msg.timestamp.toLocaleString()
+                const role = msg.role === 'user' ? 'You' : 'Tax Assistant'
+                return `[${timestamp}] ${role}: ${msg.content}`
+            })
+            .join('\n\n')
 
         const blob = new Blob([conversationText], { type: 'text/plain' })
         const url = URL.createObjectURL(blob)
@@ -346,9 +362,7 @@ export function TaxAgentChat() {
                 <CardContent className="pt-6">
                     <Alert>
                         <AlertTriangle className="h-4 w-4" />
-                        <AlertDescription>
-                            Please sign in to access the Tax Assistant Chat.
-                        </AlertDescription>
+                        <AlertDescription>Please sign in to access the Tax Assistant Chat.</AlertDescription>
                     </Alert>
                 </CardContent>
             </Card>
@@ -408,12 +422,7 @@ export function TaxAgentChat() {
                 {/* Main Chat */}
                 <div className="flex-1 flex flex-col">
                     {/* Messages */}
-                    <ScrollArea
-                        className="flex-1 p-4"
-                        role="log"
-                        aria-label="Chat messages"
-                        aria-live="polite"
-                    >
+                    <ScrollArea className="flex-1 p-4" role="log" aria-label="Chat messages" aria-live="polite">
                         <div
                             className={`space-y-4 ${dragActive ? 'opacity-50' : ''}`}
                             onDragEnter={handleDrag}
@@ -426,10 +435,10 @@ export function TaxAgentChat() {
                                     <Bot className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
                                     <h3 className="text-xl font-semibold mb-2">Welcome to Tax Assistant Chat!</h3>
                                     <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                                        I'm here to help you with tax forms, document analysis, and filing guidance. 
-                                        Ask me anything or use the quick actions below.
+                                        I'm here to help you with tax forms, document analysis, and filing guidance. Ask
+                                        me anything or use the quick actions below.
                                     </p>
-                                    
+
                                     {/* Suggested Prompts */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
                                         {SUGGESTED_PROMPTS.slice(0, 4).map((prompt, index) => (
@@ -451,16 +460,20 @@ export function TaxAgentChat() {
                                     key={message.id}
                                     className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                                 >
-                                    <div className={`flex space-x-3 max-w-[80%] ${
-                                        message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                                    }`}>
+                                    <div
+                                        className={`flex space-x-3 max-w-[80%] ${
+                                            message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''
+                                        }`}
+                                    >
                                         {/* Avatar */}
                                         <div className="flex-shrink-0">
-                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                                message.role === 'user' 
-                                                    ? 'bg-blue-500 text-white' 
-                                                    : 'bg-gray-100 text-gray-600'
-                                            }`}>
+                                            <div
+                                                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                                    message.role === 'user'
+                                                        ? 'bg-blue-500 text-white'
+                                                        : 'bg-gray-100 text-gray-600'
+                                                }`}
+                                            >
                                                 {message.role === 'user' ? (
                                                     <User className="h-4 w-4" />
                                                 ) : (
@@ -470,17 +483,21 @@ export function TaxAgentChat() {
                                         </div>
 
                                         {/* Message */}
-                                        <div className={`flex flex-col space-y-1 ${
-                                            message.role === 'user' ? 'items-end' : 'items-start'
-                                        }`}>
-                                            <div className={`relative group px-4 py-3 rounded-lg ${
-                                                message.role === 'user'
-                                                    ? 'bg-blue-500 text-white'
-                                                    : 'bg-white border border-gray-200'
-                                            }`}>
+                                        <div
+                                            className={`flex flex-col space-y-1 ${
+                                                message.role === 'user' ? 'items-end' : 'items-start'
+                                            }`}
+                                        >
+                                            <div
+                                                className={`relative group px-4 py-3 rounded-lg ${
+                                                    message.role === 'user'
+                                                        ? 'bg-blue-500 text-white'
+                                                        : 'bg-white border border-gray-200'
+                                                }`}
+                                            >
                                                 {message.role === 'agent' ? (
                                                     <div className="prose prose-sm max-w-none">
-                                                        <ReactMarkdown 
+                                                        <ReactMarkdown
                                                             remarkPlugins={[remarkGfm]}
                                                             className="text-gray-700"
                                                             components={{

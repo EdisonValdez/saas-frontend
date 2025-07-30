@@ -13,73 +13,88 @@ export function useAccessibility({
     enableKeyboardNavigation = true,
     enableFocusManagement = true,
 }: UseAccessibilityProps = {}) {
-    
     // Screen reader announcements
-    const announce = useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
-        const announcer = document.createElement('div')
-        announcer.setAttribute('aria-live', priority)
-        announcer.setAttribute('aria-atomic', 'true')
-        announcer.className = 'sr-only'
-        announcer.textContent = message
-        
-        document.body.appendChild(announcer)
-        
-        // Remove after announcement
-        setTimeout(() => {
-            document.body.removeChild(announcer)
-        }, 1000)
-        
-        if (announceMessage) {
-            announceMessage(message)
-        }
-    }, [announceMessage])
+    const announce = useCallback(
+        (message: string, priority: 'polite' | 'assertive' = 'polite') => {
+            const announcer = document.createElement('div')
+            announcer.setAttribute('aria-live', priority)
+            announcer.setAttribute('aria-atomic', 'true')
+            announcer.className = 'sr-only'
+            announcer.textContent = message
+
+            document.body.appendChild(announcer)
+
+            // Remove after announcement
+            setTimeout(() => {
+                document.body.removeChild(announcer)
+            }, 1000)
+
+            if (announceMessage) {
+                announceMessage(message)
+            }
+        },
+        [announceMessage]
+    )
 
     // Keyboard navigation handler
-    const handleKeyboardNavigation = useCallback((event: KeyboardEvent) => {
-        // Allow custom keyboard shortcuts
-        if (event.altKey && event.key === 'c') {
-            // Alt+C to focus chat input
-            const chatInput = document.querySelector('textarea[aria-label="Chat message input"]') as HTMLElement
-            if (chatInput) {
-                chatInput.focus()
-                announce('Chat input focused')
+    const handleKeyboardNavigation = useCallback(
+        (event: KeyboardEvent) => {
+            // Allow custom keyboard shortcuts
+            if (event.altKey && event.key === 'c') {
+                // Alt+C to focus chat input
+                const chatInput = document.querySelector('textarea[aria-label="Chat message input"]') as HTMLElement
+                if (chatInput) {
+                    chatInput.focus()
+                    announce('Chat input focused')
+                }
             }
-        }
-        
-        if (event.altKey && event.key === 'u') {
-            // Alt+U to trigger file upload
-            const uploadButton = document.querySelector('button[aria-label="Upload file"]') as HTMLElement
-            if (uploadButton) {
-                uploadButton.click()
-                announce('File upload triggered')
+
+            if (event.altKey && event.key === 'u') {
+                // Alt+U to trigger file upload
+                const uploadButton = document.querySelector('button[aria-label="Upload file"]') as HTMLElement
+                if (uploadButton) {
+                    uploadButton.click()
+                    announce('File upload triggered')
+                }
             }
-        }
-        
-        if (event.altKey && event.key === 'x') {
-            // Alt+X to export chat
-            const exportButton = document.querySelector('button:has(svg + text():contains("Export"))') as HTMLElement
-            if (exportButton) {
-                exportButton.click()
-                announce('Export chat triggered')
+
+            if (event.altKey && event.key === 'x') {
+                // Alt+X to export chat
+                const exportButton = document.querySelector(
+                    'button:has(svg + text():contains("Export"))'
+                ) as HTMLElement
+                if (exportButton) {
+                    exportButton.click()
+                    announce('Export chat triggered')
+                }
             }
-        }
-    }, [announce])
+        },
+        [announce]
+    )
 
     // Focus management
-    const manageFocus = useCallback((target: HTMLElement | null, announceText?: string) => {
-        if (!target || !enableFocusManagement) return
-        
-        // Ensure element is focusable
-        if (!target.hasAttribute('tabindex') && target.tagName !== 'INPUT' && target.tagName !== 'BUTTON' && target.tagName !== 'TEXTAREA') {
-            target.setAttribute('tabindex', '-1')
-        }
-        
-        target.focus()
-        
-        if (announceText) {
-            announce(announceText)
-        }
-    }, [announce, enableFocusManagement])
+    const manageFocus = useCallback(
+        (target: HTMLElement | null, announceText?: string) => {
+            if (!target || !enableFocusManagement) return
+
+            // Ensure element is focusable
+            if (
+                !target.hasAttribute('tabindex') &&
+                target.tagName !== 'INPUT' &&
+                target.tagName !== 'BUTTON' &&
+                target.tagName !== 'TEXTAREA'
+            ) {
+                target.setAttribute('tabindex', '-1')
+            }
+
+            target.focus()
+
+            if (announceText) {
+                announce(announceText)
+            }
+        },
+        [announce, enableFocusManagement]
+    )
 
     // High contrast mode detection
     const detectHighContrast = useCallback(() => {
@@ -87,27 +102,27 @@ export function useAccessibility({
         testElement.style.color = 'rgb(31, 31, 31)'
         testElement.style.backgroundColor = 'rgb(31, 31, 31)'
         document.body.appendChild(testElement)
-        
+
         const computedStyle = window.getComputedStyle(testElement)
         const isHighContrast = computedStyle.color !== computedStyle.backgroundColor
-        
+
         document.body.removeChild(testElement)
-        
+
         if (isHighContrast) {
             document.body.classList.add('high-contrast')
         }
-        
+
         return isHighContrast
     }, [])
 
     // Reduced motion detection
     const detectReducedMotion = useCallback(() => {
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        
+
         if (prefersReducedMotion) {
             document.body.classList.add('reduced-motion')
         }
-        
+
         return prefersReducedMotion
     }, [])
 
@@ -117,20 +132,20 @@ export function useAccessibility({
         const getLuminance = (color: string): number => {
             const rgb = color.match(/\d+/g)
             if (!rgb) return 0
-            
-            const [r, g, b] = rgb.map(c => {
+
+            const [r, g, b] = rgb.map((c) => {
                 const srgb = parseInt(c) / 255
                 return srgb <= 0.03928 ? srgb / 12.92 : Math.pow((srgb + 0.055) / 1.055, 2.4)
             })
-            
+
             return 0.2126 * r + 0.7152 * g + 0.0722 * b
         }
-        
+
         const l1 = getLuminance(foreground)
         const l2 = getLuminance(background)
         const lighter = Math.max(l1, l2)
         const darker = Math.min(l1, l2)
-        
+
         return (lighter + 0.05) / (darker + 0.05)
     }, [])
 
@@ -139,11 +154,11 @@ export function useAccessibility({
         if (enableKeyboardNavigation) {
             document.addEventListener('keydown', handleKeyboardNavigation)
         }
-        
+
         // Detect user preferences
         detectHighContrast()
         detectReducedMotion()
-        
+
         // Add skip link if not present
         const skipLink = document.getElementById('skip-to-main')
         if (!skipLink) {
@@ -151,10 +166,11 @@ export function useAccessibility({
             skip.id = 'skip-to-main'
             skip.href = '#main-content'
             skip.textContent = 'Skip to main content'
-            skip.className = 'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded'
+            skip.className =
+                'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded'
             document.body.insertBefore(skip, document.body.firstChild)
         }
-        
+
         return () => {
             if (enableKeyboardNavigation) {
                 document.removeEventListener('keydown', handleKeyboardNavigation)

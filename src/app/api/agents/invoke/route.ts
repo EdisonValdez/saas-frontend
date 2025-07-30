@@ -76,7 +76,7 @@ I'll help you extract key information from your tax documents:
 
 > ⚠️ **Important**: These are federal deadlines. State deadlines may vary.`,
 
-    'default': `## Tax Assistant Ready to Help! 🎯
+    default: `## Tax Assistant Ready to Help! 🎯
 
 I'm your AI tax assistant, equipped with specialized knowledge to help you with:
 
@@ -90,7 +90,7 @@ I'm your AI tax assistant, equipped with specialized knowledge to help you with:
 ### How I Work:
 I use advanced document analysis and tax knowledge to provide accurate, helpful guidance. I can process various document formats and provide structured responses.
 
-**What would you like help with today?**`
+**What would you like help with today?**`,
 }
 
 function checkRateLimit(userKey: string): boolean {
@@ -101,7 +101,7 @@ function checkRateLimit(userKey: string): boolean {
         // Reset or create new limit window
         rateLimitStore.set(userKey, {
             count: 1,
-            resetTime: now + RATE_LIMIT_WINDOW
+            resetTime: now + RATE_LIMIT_WINDOW,
         })
         return true
     }
@@ -116,15 +116,15 @@ function checkRateLimit(userKey: string): boolean {
 
 function getAgentResponse(prompt: string): string {
     const lowercasePrompt = prompt.toLowerCase()
-    
+
     if (lowercasePrompt.includes('classify') || lowercasePrompt.includes('form type')) {
         return taxAgentResponses['form classification']
     }
-    
+
     if (lowercasePrompt.includes('extract') || lowercasePrompt.includes('data')) {
         return taxAgentResponses['extract data']
     }
-    
+
     if (lowercasePrompt.includes('deadline') || lowercasePrompt.includes('due date')) {
         return taxAgentResponses['filing deadline']
     }
@@ -186,62 +186,43 @@ export async function POST(request: Request) {
         // Check authentication
         const session = await getServerSession(authOptions)
         if (!session?.user?.email) {
-            return NextResponse.json(
-                { error: 'Authentication required' },
-                { status: 401 }
-            )
+            return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
         }
 
         // Rate limiting check
         const userKey = session.user.email
         if (!checkRateLimit(userKey)) {
-            return NextResponse.json(
-                { error: 'Rate limit exceeded. Maximum 30 requests per minute.' },
-                { status: 429 }
-            )
+            return NextResponse.json({ error: 'Rate limit exceeded. Maximum 30 requests per minute.' }, { status: 429 })
         }
 
         // Parse request body
         const body: AgentRequest = await request.json()
-        
+
         if (!body.prompt || typeof body.prompt !== 'string') {
-            return NextResponse.json(
-                { error: 'Invalid request. Prompt is required.' },
-                { status: 400 }
-            )
+            return NextResponse.json({ error: 'Invalid request. Prompt is required.' }, { status: 400 })
         }
 
         if (body.prompt.length > 5000) {
-            return NextResponse.json(
-                { error: 'Prompt too long. Maximum 5000 characters allowed.' },
-                { status: 400 }
-            )
+            return NextResponse.json({ error: 'Prompt too long. Maximum 5000 characters allowed.' }, { status: 400 })
         }
 
         // Simulate processing delay for realistic experience
-        await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000))
+        await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 2000))
 
         // Get agent response based on prompt
         const response = getAgentResponse(body.prompt)
 
         const agentResponse: AgentResponse = {
-            response
+            response,
         }
 
         return NextResponse.json(agentResponse)
-
     } catch (error) {
         console.error('Agent API error:', error)
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        )
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }
 
 export async function GET() {
-    return NextResponse.json(
-        { error: 'Method not allowed. Use POST to invoke agent.' },
-        { status: 405 }
-    )
+    return NextResponse.json({ error: 'Method not allowed. Use POST to invoke agent.' }, { status: 405 })
 }

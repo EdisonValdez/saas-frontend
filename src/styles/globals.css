@@ -153,10 +153,10 @@
 /* Ensure minimum touch targets */
 @media (hover: none) and (pointer: coarse) {
     button,
-    [role="button"],
-    input[type="button"],
-    input[type="submit"],
-    input[type="reset"] {
+    [role='button'],
+    input[type='button'],
+    input[type='submit'],
+    input[type='reset'] {
         min-height: 44px;
         min-width: 44px;
     }
