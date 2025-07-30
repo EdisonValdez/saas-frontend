@@ -22,7 +22,11 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 
 export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
     const params = useParams<{ workspaceId: string }>()
+    const pathname = usePathname()
     const currentWorkspaceId = params.workspaceId || workspaces?.[0]?.id || 'default'
+
+    // Check if we're currently in a workspace-specific page
+    const isInWorkspace = pathname.startsWith(`/dashboard/workspaces/${currentWorkspaceId}`)
 
     const data = {
         navMain: [
@@ -30,7 +34,7 @@ export function AppSidebar({ workspaces, user, ...props }: AppSidebarProps) {
                 title: 'Workspace',
                 url: `/dashboard/workspaces/${currentWorkspaceId}`,
                 icon: Building2,
-                isActive: true,
+                isActive: isInWorkspace,
                 items: [
                     {
                         title: 'Home',
