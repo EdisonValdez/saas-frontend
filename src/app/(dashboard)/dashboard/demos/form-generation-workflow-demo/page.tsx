@@ -4,8 +4,7 @@ import FormGenerationWorkflow from '@/components/forms/form-generation-workflow'
 
 export default function FormGenerationWorkflowDemo() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto py-8">
+    <div className="space-y-6">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold mb-4">Complete Tax Form Generation Workflow</h1>
           <p className="text-lg text-gray-600 max-w-4xl mx-auto">
@@ -145,7 +144,6 @@ export default function FormGenerationWorkflowDemo() {
             console.log('Generation completed:', results)
           }}
         />
-      </div>
     </div>
   )
 }
