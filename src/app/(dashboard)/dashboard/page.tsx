@@ -37,9 +37,7 @@ export default async function DashboardPage() {
             {/* Header */}
             <div className="border-b border-gray-200 pb-6">
                 <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-                <p className="text-gray-600 mt-2">
-                    Access your tax professional tools and manage your workspace
-                </p>
+                <p className="text-gray-600 mt-2">Access your tax professional tools and manage your workspace</p>
             </div>
 
             {/* Simplified Feature Navigation */}

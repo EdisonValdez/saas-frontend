@@ -2,16 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import {
-    FileText,
-    Users,
-    Bot,
-    FormInput,
-    BarChart3,
-    CreditCard,
-    Settings,
-    Eye,
-} from 'lucide-react'
+import { FileText, Users, Bot, FormInput, BarChart3, CreditCard, Settings, Eye } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -83,13 +74,18 @@ export function SimplifiedFeatureNavigation({ workspaceId }: SimplifiedFeatureNa
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {coreFeatures.map((feature) => (
-                        <Card key={feature.title} className={`hover:shadow-lg transition-shadow border-2 ${feature.color}`}>
+                        <Card
+                            key={feature.title}
+                            className={`hover:shadow-lg transition-shadow border-2 ${feature.color}`}
+                        >
                             <CardHeader className="pb-3">
                                 <div className="flex items-center space-x-3">
                                     <div className={`p-2 rounded-lg ${feature.color}`}>{feature.icon}</div>
                                     <div>
                                         <CardTitle className="text-lg">{feature.title}</CardTitle>
-                                        <CardDescription className="text-sm mt-1">{feature.description}</CardDescription>
+                                        <CardDescription className="text-sm mt-1">
+                                            {feature.description}
+                                        </CardDescription>
                                     </div>
                                 </div>
                             </CardHeader>
@@ -118,9 +114,7 @@ export function SimplifiedFeatureNavigation({ workspaceId }: SimplifiedFeatureNa
                             <Card className="hover:shadow-md transition-shadow cursor-pointer">
                                 <CardContent className="p-4">
                                     <div className="flex items-center space-x-3">
-                                        <div className="p-2 rounded-lg bg-gray-50 text-gray-600">
-                                            {action.icon}
-                                        </div>
+                                        <div className="p-2 rounded-lg bg-gray-50 text-gray-600">{action.icon}</div>
                                         <div>
                                             <h3 className="font-medium text-sm">{action.title}</h3>
                                             <p className="text-xs text-gray-600">{action.description}</p>
@@ -144,19 +138,13 @@ export function SimplifiedFeatureNavigation({ workspaceId }: SimplifiedFeatureNa
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                         <Button asChild variant="outline" size="sm" className="justify-start">
-                            <Link href={`/dashboard/workspaces/${workspaceId}/chat`}>
-                                Chat
-                            </Link>
+                            <Link href={`/dashboard/workspaces/${workspaceId}/chat`}>Chat</Link>
                         </Button>
                         <Button asChild variant="outline" size="sm" className="justify-start">
-                            <Link href={`/dashboard/workspaces/${workspaceId}/teams`}>
-                                Teams
-                            </Link>
+                            <Link href={`/dashboard/workspaces/${workspaceId}/teams`}>Teams</Link>
                         </Button>
                         <Button asChild variant="outline" size="sm" className="justify-start">
-                            <Link href={`/dashboard/workspaces/${workspaceId}/translate`}>
-                                Translate
-                            </Link>
+                            <Link href={`/dashboard/workspaces/${workspaceId}/translate`}>Translate</Link>
                         </Button>
                     </div>
                 </div>
