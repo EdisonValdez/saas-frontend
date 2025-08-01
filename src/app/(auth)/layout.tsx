@@ -10,15 +10,15 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
             <div className="container flex h-screen w-screen flex-col items-center justify-center">
                 <Link
-                    href="/"
+                    href="/about"
                     className={cn(buttonVariants({ variant: 'ghost' }), 'absolute left-4 top-4 md:left-8 md:top-8')}
                 >
                     <>
                         <Icons.chevronLeft className="mr-2 h-4 w-4" />
-                        Home
+                        Back
                     </>
                 </Link>
                 <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">{children}</div>
