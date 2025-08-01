@@ -115,7 +115,7 @@ function extractTaxInformation(content: string, subject: string): ExtractedData 
     ]
 
     for (const { pattern, key } of amountPatterns) {
-        const matches = content.matchAll(pattern)
+        const matches = Array.from(content.matchAll(pattern))
         for (const match of matches) {
             const amount = parseFloat(match[1].replace(/,/g, ''))
             if (!isNaN(amount)) {
