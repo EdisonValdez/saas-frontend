@@ -86,7 +86,7 @@ export function Footer1({ className }: React.HTMLAttributes<HTMLElement>) {
                     <div className="col-span-1 lg:col-span-2">
                         <h3 className="font-semibold">Contact</h3>
                         <ul className="mt-4 space-y-2">
-                            <li className="text-sm text-muted-foreground">support@Acme.com</li>
+                            <li className="text-sm text-muted-foreground">support@promptax.com</li>
                         </ul>
                     </div>
                 </div>
