@@ -17,10 +17,10 @@ export const PromptaxNavbar: React.FC = () => {
 
     // Navigation items based on authentication status
     const marketingNavigationItems = [
-        { title: 'Platform', href: '/platform' },
-        { title: 'Docs', href: '/docs' },
-        { title: 'Demo', href: '/demo' },
+        { title: 'About', href: '/about' },
         { title: 'Pricing', href: '/pricing' },
+        { title: 'Terms', href: '/terms' },
+        { title: 'Privacy', href: '/privacy' },
     ]
 
     const authenticatedNavigationItems = [
@@ -31,6 +31,8 @@ export const PromptaxNavbar: React.FC = () => {
         { title: 'Billing', href: '/dashboard/billing' },
     ]
 
+    // Only show navigation items for authenticated users
+    // For unauthenticated users, show marketing navigation only
     const navigationItems = status === 'authenticated' ? authenticatedNavigationItems : marketingNavigationItems
 
     return (
