@@ -113,12 +113,12 @@ export function Pricing1({ prices, user }: PricingProps) {
                                         </SelectContent>
                                     </Select>
                                 )}
-                                <Button
-                                    onClick={() => processSubscription(price.price_id, selectedWorkspaceId)}
-                                    className="w-full px-4 py-2 text-sm"
-                                >
-                                    {session ? 'Go to Checkout' : 'Login to Checkout'}
-                                </Button>
+                                <CheckoutButton
+                                priceId={price.price_id}
+                                workspaceId={selectedWorkspaceId}
+                                planName={price.name}
+                                className="w-full px-4 py-2 text-sm"
+                            />
                             </CardFooter>
                         </Card>
                     ))
