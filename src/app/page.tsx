@@ -1,19 +1,21 @@
 import { redirect } from 'next/navigation'
-import { getCurrentUserServer } from '@/lib/session'
+import { auth } from '@/lib/auth'
 
 export default async function IndexPage() {
     try {
-        const user = await getCurrentUserServer()
-        if (user) {
-            // User is authenticated, redirect to dashboard
+        // Use basic session check without external API validation
+        const session = await auth()
+
+        if (session?.user) {
+            // User has a valid session, redirect to dashboard
             redirect('/dashboard')
         } else {
-            // User is not authenticated, redirect to login
+            // No session found, redirect to login
             redirect('/login')
         }
     } catch (error) {
         // If auth check fails, redirect to login as fallback
-        console.log('Auth check failed, redirecting to login:', error)
+        console.log('Auth check failed, redirecting to login')
         redirect('/login')
     }
 }
