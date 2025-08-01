@@ -16,8 +16,7 @@ export function Footer1({ className }: React.HTMLAttributes<HTMLElement>) {
                             <span className="font-bold">{siteConfig.name}</span>
                         </Link>
                         <p className="mt-4 text-sm text-muted-foreground">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua.
+                            {siteConfig.description}
                         </p>
                         <div className="flex mt-6 space-x-4">
                             <Link href="#" className="text-muted-foreground hover:text-primary">
