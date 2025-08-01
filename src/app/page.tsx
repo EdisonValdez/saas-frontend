@@ -6,17 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LogIn, UserPlus, ArrowRight, Home } from 'lucide-react'
 
 export default async function IndexPage() {
-    // Note: Auth temporarily disabled for demo, so this might not redirect
-    // but the logic is in place for when auth is re-enabled
-    try {
-        const user = await getCurrentUserServer()
-        if (user) {
-            redirect('/dashboard')
-        }
-    } catch (error) {
-        // Auth temporarily disabled for demo - continue to show landing
-        console.log('Auth check failed (demo mode):', error)
-    }
+    // Auth temporarily disabled for demo mode
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
