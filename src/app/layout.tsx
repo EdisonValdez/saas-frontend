@@ -57,7 +57,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     <ReactQueryProvider>
                         <NextAuthSesionProvider session={session}>
                             <ConditionalNavbar />
-                            <main className="pt-16">{children}</main>
+                            <main>{children}</main>
                             <Toaster />
                             <TailwindIndicator />
                         </NextAuthSesionProvider>
