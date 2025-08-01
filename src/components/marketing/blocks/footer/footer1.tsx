@@ -15,9 +15,7 @@ export function Footer1({ className }: React.HTMLAttributes<HTMLElement>) {
                             <Icons.logo className="w-6 h-6" />
                             <span className="font-bold">{siteConfig.name}</span>
                         </Link>
-                        <p className="mt-4 text-sm text-muted-foreground">
-                            {siteConfig.description}
-                        </p>
+                        <p className="mt-4 text-sm text-muted-foreground">{siteConfig.description}</p>
                         <div className="flex mt-6 space-x-4">
                             <Link href="#" className="text-muted-foreground hover:text-primary">
                                 <span className="sr-only">Facebook</span>
@@ -77,7 +75,10 @@ export function Footer1({ className }: React.HTMLAttributes<HTMLElement>) {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/privacy#cookies" className="text-sm text-muted-foreground hover:text-primary">
+                                <Link
+                                    href="/privacy#cookies"
+                                    className="text-sm text-muted-foreground hover:text-primary"
+                                >
                                     Cookie Policy
                                 </Link>
                             </li>

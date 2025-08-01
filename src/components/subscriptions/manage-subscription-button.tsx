@@ -50,7 +50,9 @@ export function ManageSubscriptionButton() {
             disabled={loading}
             className={buttonVariants({ variant: 'default' })}
         >
-            {loading ? 'Loading...' : (
+            {loading ? (
+                'Loading...'
+            ) : (
                 <>
                     Manage Subscription
                     <ExternalLink className="w-4 h-4 ml-2" />

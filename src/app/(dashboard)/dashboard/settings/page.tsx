@@ -56,10 +56,7 @@ export default async function SettingsPage() {
                     <div className="grid gap-6">
                         {/* Billing Section */}
                         <section id="billing">
-                            <BillingSection
-                                user={user}
-                                subscription={workspaces?.[0]?.subscription}
-                            />
+                            <BillingSection user={user} subscription={workspaces?.[0]?.subscription} />
                         </section>
 
                         {/* Account Settings */}

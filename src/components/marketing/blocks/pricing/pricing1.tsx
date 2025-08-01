@@ -52,8 +52,6 @@ export function Pricing1({ prices, user }: PricingProps) {
 
     const handleValueChange = (value: string) => setSelectedWorkspaceId(value)
 
-
-
     return (
         <div className="w-full py-20 lg:py-40 container flex flex-col gap-12 md:max-w-[64rem]">
             <div className="text-center">
@@ -84,7 +82,9 @@ export function Pricing1({ prices, user }: PricingProps) {
                             <CardContent>
                                 <div className="text-center">
                                     <p className="text-4xl font-bold">{formatPrice(price.price, price.currency)}</p>
-                                    <p className="text-sm text-muted-foreground">{showMonthly ? '/ month' : '/ year'}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        {showMonthly ? '/ month' : '/ year'}
+                                    </p>
                                 </div>
                                 <div className="mt-6">
                                     {price.services?.map((feature) => (
@@ -114,18 +114,20 @@ export function Pricing1({ prices, user }: PricingProps) {
                                     </Select>
                                 )}
                                 <CheckoutButton
-                                priceId={price.price_id}
-                                workspaceId={selectedWorkspaceId}
-                                planName={price.name}
-                                className="w-full px-4 py-2 text-sm"
-                            />
+                                    priceId={price.price_id}
+                                    workspaceId={selectedWorkspaceId}
+                                    planName={price.name}
+                                    className="w-full px-4 py-2 text-sm"
+                                />
                             </CardFooter>
                         </Card>
                     ))
                 ) : (
                     <Card className="shadow-md border col-span-full">
                         <CardHeader>
-                            <CardTitle className="text-xl font-semibold text-center">No Pricing Plans Available</CardTitle>
+                            <CardTitle className="text-xl font-semibold text-center">
+                                No Pricing Plans Available
+                            </CardTitle>
                             <CardDescription className="text-center">
                                 Pricing plans are currently being updated. Please check back later.
                             </CardDescription>

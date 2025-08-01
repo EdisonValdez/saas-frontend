@@ -19,14 +19,14 @@ interface CheckoutButtonProps {
     disabled?: boolean
 }
 
-export function CheckoutButton({ 
-    priceId, 
-    workspaceId, 
+export function CheckoutButton({
+    priceId,
+    workspaceId,
     planName = 'this plan',
     className,
     variant = 'default',
     size = 'default',
-    disabled = false
+    disabled = false,
 }: CheckoutButtonProps) {
     const [loading, setLoading] = useState(false)
     const { data: session } = useSession()
@@ -58,7 +58,7 @@ export function CheckoutButton({
 
             const response = await fetch('/api/subscriptions/checkout', {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
@@ -71,7 +71,7 @@ export function CheckoutButton({
             }
 
             const { session_id } = await response.json()
-            
+
             if (!session_id) {
                 throw new Error('No session ID received from server')
             }
@@ -91,7 +91,8 @@ export function CheckoutButton({
             console.error('Checkout error:', error)
             toast({
                 title: 'Checkout Failed',
-                description: error instanceof Error ? error.message : 'An error occurred while processing your subscription.',
+                description:
+                    error instanceof Error ? error.message : 'An error occurred while processing your subscription.',
                 variant: 'destructive',
             })
         } finally {
@@ -100,7 +101,7 @@ export function CheckoutButton({
     }
 
     return (
-        <Button 
+        <Button
             onClick={handleCheckout}
             disabled={loading || disabled}
             variant={variant}

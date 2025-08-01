@@ -14,14 +14,15 @@ export default function TermsPage() {
     return (
         <div className="container mx-auto px-4 py-8 max-w-4xl">
             <div className="mb-8">
-                <Link href="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4">
+                <Link
+                    href="/"
+                    className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4"
+                >
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to Home
                 </Link>
                 <h1 className="text-4xl font-bold mb-4">Terms of Service</h1>
-                <p className="text-muted-foreground">
-                    Last updated: {new Date().toLocaleDateString()}
-                </p>
+                <p className="text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
             </div>
 
             <div className="space-y-8">
@@ -31,8 +32,9 @@ export default function TermsPage() {
                     </CardHeader>
                     <CardContent className="prose max-w-none">
                         <p>
-                            By accessing and using Promptax ("Service"), you accept and agree to be bound by the terms and 
-                            provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                            By accessing and using Promptax ("Service"), you accept and agree to be bound by the terms
+                            and provision of this agreement. If you do not agree to abide by the above, please do not
+                            use this service.
                         </p>
                     </CardContent>
                 </Card>
@@ -43,8 +45,8 @@ export default function TermsPage() {
                     </CardHeader>
                     <CardContent className="prose max-w-none">
                         <p>
-                            Promptax is an AI-powered tax workflow assistant that helps transform complex tax documents 
-                            into completed forms. Our service provides automated document processing, form generation, 
+                            Promptax is an AI-powered tax workflow assistant that helps transform complex tax documents
+                            into completed forms. Our service provides automated document processing, form generation,
                             and workflow management capabilities.
                         </p>
                     </CardContent>
@@ -61,7 +63,10 @@ export default function TermsPage() {
                         <ul className="list-disc pl-6 mt-2">
                             <li>Provide accurate, current and complete information during registration</li>
                             <li>Maintain and promptly update your account information</li>
-                            <li>Maintain the security of your password and accept responsibility for all activities under your account</li>
+                            <li>
+                                Maintain the security of your password and accept responsibility for all activities
+                                under your account
+                            </li>
                             <li>Notify us immediately of any unauthorized use of your account</li>
                         </ul>
                     </CardContent>
@@ -72,9 +77,7 @@ export default function TermsPage() {
                         <CardTitle>4. Subscription and Payment</CardTitle>
                     </CardHeader>
                     <CardContent className="prose max-w-none">
-                        <p>
-                            Our Service offers various subscription plans. By subscribing, you agree to:
-                        </p>
+                        <p>Our Service offers various subscription plans. By subscribing, you agree to:</p>
                         <ul className="list-disc pl-6 mt-2">
                             <li>Pay all fees associated with your selected plan</li>
                             <li>Provide accurate billing information</li>
@@ -90,8 +93,8 @@ export default function TermsPage() {
                     </CardHeader>
                     <CardContent className="prose max-w-none">
                         <p>
-                            Your privacy is important to us. Please review our Privacy Policy, which also governs your 
-                            use of the Service, to understand our practices. You retain ownership of your data, and we 
+                            Your privacy is important to us. Please review our Privacy Policy, which also governs your
+                            use of the Service, to understand our practices. You retain ownership of your data, and we
                             use it only as necessary to provide our services.
                         </p>
                         <Link href="/privacy" className="text-primary hover:underline">
@@ -105,9 +108,7 @@ export default function TermsPage() {
                         <CardTitle>6. Acceptable Use</CardTitle>
                     </CardHeader>
                     <CardContent className="prose max-w-none">
-                        <p>
-                            You agree not to use the Service to:
-                        </p>
+                        <p>You agree not to use the Service to:</p>
                         <ul className="list-disc pl-6 mt-2">
                             <li>Upload malicious code or conduct security testing without permission</li>
                             <li>Attempt to gain unauthorized access to any part of the Service</li>
@@ -124,8 +125,8 @@ export default function TermsPage() {
                     </CardHeader>
                     <CardContent className="prose max-w-none">
                         <p>
-                            The Service is provided "as is" without warranties of any kind. We shall not be liable for 
-                            any indirect, incidental, special, consequential, or punitive damages, including without 
+                            The Service is provided "as is" without warranties of any kind. We shall not be liable for
+                            any indirect, incidental, special, consequential, or punitive damages, including without
                             limitation, loss of profits, data, use, goodwill, or other intangible losses.
                         </p>
                     </CardContent>
@@ -137,8 +138,8 @@ export default function TermsPage() {
                     </CardHeader>
                     <CardContent className="prose max-w-none">
                         <p>
-                            We may terminate or suspend your account immediately, without prior notice or liability, 
-                            for any reason whatsoever, including without limitation if you breach the Terms. Upon 
+                            We may terminate or suspend your account immediately, without prior notice or liability, for
+                            any reason whatsoever, including without limitation if you breach the Terms. Upon
                             termination, your right to use the Service will cease immediately.
                         </p>
                     </CardContent>
@@ -150,9 +151,9 @@ export default function TermsPage() {
                     </CardHeader>
                     <CardContent className="prose max-w-none">
                         <p>
-                            We reserve the right to modify these terms at any time. We will notify users of any material 
-                            changes. Your continued use of the Service after such modifications will constitute acknowledgment 
-                            and agreement of the modified terms.
+                            We reserve the right to modify these terms at any time. We will notify users of any material
+                            changes. Your continued use of the Service after such modifications will constitute
+                            acknowledgment and agreement of the modified terms.
                         </p>
                     </CardContent>
                 </Card>
@@ -162,11 +163,10 @@ export default function TermsPage() {
                         <CardTitle>10. Contact Information</CardTitle>
                     </CardHeader>
                     <CardContent className="prose max-w-none">
-                        <p>
-                            If you have any questions about these Terms of Service, please contact us at:
-                        </p>
+                        <p>If you have any questions about these Terms of Service, please contact us at:</p>
                         <p className="mt-2">
-                            Email: support@promptax.com<br />
+                            Email: support@promptax.com
+                            <br />
                             Website: promptax.com
                         </p>
                     </CardContent>

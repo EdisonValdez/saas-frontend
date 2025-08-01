@@ -13,16 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { useToast } from '@/components/ui/use-toast'
-import { 
-    CreditCard, 
-    Receipt, 
-    Calendar, 
-    CheckCircle2, 
-    AlertCircle, 
-    XCircle,
-    ExternalLink,
-    Settings
-} from 'lucide-react'
+import { CreditCard, Receipt, Calendar, CheckCircle2, AlertCircle, XCircle, ExternalLink, Settings } from 'lucide-react'
 
 interface BillingSectionProps {
     user: UserDetails
@@ -80,7 +71,7 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
             }
 
             const data = await response.json()
-            
+
             if (data.url) {
                 window.location.href = data.url
             } else {
@@ -118,9 +109,7 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                             <CreditCard className="w-5 h-5" />
                             Current Plan
                         </CardTitle>
-                        <CardDescription>
-                            Your active subscription details
-                        </CardDescription>
+                        <CardDescription>Your active subscription details</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {subscription ? (
@@ -130,13 +119,14 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                                     <div className="flex items-center gap-2">
                                         {getStatusIcon(subscription.status)}
                                         <Badge className={getStatusColor(subscription.status)}>
-                                            {subscription.status?.charAt(0).toUpperCase() + subscription.status?.slice(1)}
+                                            {subscription.status?.charAt(0).toUpperCase() +
+                                                subscription.status?.slice(1)}
                                         </Badge>
                                     </div>
                                 </div>
-                                
+
                                 <Separator />
-                                
+
                                 {subscription.status === 'trialing' && subscription.trial_end && (
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-muted-foreground">Trial ends</span>
@@ -145,7 +135,7 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                                         </span>
                                     </div>
                                 )}
-                                
+
                                 {subscription.status === 'active' && subscription.period_end && (
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-muted-foreground">Next billing</span>
@@ -154,7 +144,7 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                                         </span>
                                     </div>
                                 )}
-                                
+
                                 {subscription.status === 'canceled' && subscription.cancel_at && (
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-muted-foreground">Cancels on</span>
@@ -163,7 +153,7 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                                         </span>
                                     </div>
                                 )}
-                                
+
                                 {subscription.period_start && (
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm text-muted-foreground">Started</span>
@@ -172,7 +162,7 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                                         </span>
                                     </div>
                                 )}
-                                
+
                                 {subscription.cancel_at_period_end && (
                                     <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                                         <p className="text-sm text-yellow-800">
@@ -202,9 +192,7 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                             <Receipt className="w-5 h-5" />
                             Billing Management
                         </CardTitle>
-                        <CardDescription>
-                            Manage payment methods and view billing history
-                        </CardDescription>
+                        <CardDescription>Manage payment methods and view billing history</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="space-y-3">
@@ -221,14 +209,14 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                                 <span>Billing information</span>
                             </div>
                         </div>
-                        
+
                         <Separator />
-                        
-                        <Button 
+
+                        <Button
                             onClick={handleManageSubscription}
                             disabled={loading}
                             className="w-full"
-                            variant={subscription ? "default" : "secondary"}
+                            variant={subscription ? 'default' : 'secondary'}
                         >
                             {loading ? (
                                 'Loading...'
@@ -239,7 +227,7 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                                 </>
                             )}
                         </Button>
-                        
+
                         {subscription && (
                             <p className="text-xs text-muted-foreground">
                                 Opens Stripe Customer Portal in a new window
@@ -253,9 +241,7 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
             <Card>
                 <CardHeader>
                     <CardTitle>Quick Actions</CardTitle>
-                    <CardDescription>
-                        Common billing and subscription tasks
-                    </CardDescription>
+                    <CardDescription>Common billing and subscription tasks</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-4 md:grid-cols-3">
@@ -265,9 +251,9 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                                 View All Plans
                             </Button>
                         </Link>
-                        
-                        <Button 
-                            variant="outline" 
+
+                        <Button
+                            variant="outline"
                             className="w-full justify-start"
                             onClick={handleManageSubscription}
                             disabled={loading || !subscription}
@@ -275,9 +261,9 @@ export function BillingSection({ user, subscription }: BillingSectionProps) {
                             <Receipt className="w-4 h-4 mr-2" />
                             Download Invoices
                         </Button>
-                        
-                        <Button 
-                            variant="outline" 
+
+                        <Button
+                            variant="outline"
                             className="w-full justify-start"
                             onClick={handleManageSubscription}
                             disabled={loading || !subscription}
