@@ -167,19 +167,12 @@ class EnhancedApiClient {
     }
 
     async getCreditUsage(workspaceId: string): Promise<ApiResponse<CreditUsage>> {
-        // Try proxy first, fallback to direct Django call
-        const proxyResult = await this.request<CreditUsage>(
-            API_ENDPOINTS.workspaces.creditUsage(workspaceId), 
-            {}, 
-            true
+        // Use the Next.js proxy route which handles the Django backend correctly
+        return this.request<CreditUsage>(
+            API_ENDPOINTS.workspaces.creditUsage(workspaceId),
+            {},
+            true // Use proxy
         )
-        
-        if (proxyResult.success) {
-            return proxyResult
-        }
-
-        // Fallback to direct Django call
-        return this.request<CreditUsage>(API_ENDPOINTS.workspaces.creditUsage(workspaceId))
     }
 
     // Client management methods
