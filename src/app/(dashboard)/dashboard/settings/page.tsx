@@ -15,6 +15,7 @@ import { getUserWorkspaces } from '@/lib/user-workspaces'
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 import { ResetPasswordForm } from '@/components/auth/reset-password-form'
 import { ResetUsernameForm } from '@/components/auth/reset-username-form'
+import { BillingSection } from '@/components/subscriptions/billing-section'
 import { DashboardMainNav } from '@/components/dashboard/main-nav'
 
 export const metadata: Metadata = {
