@@ -32,25 +32,35 @@ interface GenerationStep {
 }
 
 interface FormGenerationWorkflowProps {
-  selectedFormIds: string[]
-  clientId: string
+  workspaceId: string
+  clientId?: string
+  clientData?: Record<string, any>
+  preSelectedTemplateId?: string
   onComplete?: (results: any) => void
 }
 
-export default function FormGenerationWorkflow({ 
-  selectedFormIds, 
-  clientId, 
-  onComplete 
+export default function FormGenerationWorkflow({
+  workspaceId,
+  clientId,
+  clientData = {},
+  preSelectedTemplateId,
+  onComplete
 }: FormGenerationWorkflowProps) {
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [currentStep, setCurrentStep] = useState(0)
+  const [currentStep, setCurrentStep] = useState<'template' | 'configure' | 'generate' | 'complete'>('template')
+  const [selectedTemplate, setSelectedTemplate] = useState<TaxFormTemplate | null>(null)
+  const [generationConfig, setGenerationConfig] = useState({
+    form_name: '',
+    save_as_draft: false,
+    client_data: clientData
+  })
   const [overallProgress, setOverallProgress] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
   const [showFormSelection, setShowFormSelection] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
-  const [selectedFormForPreview, setSelectedFormForPreview] = useState('')
   const [showManagement, setShowManagement] = useState(false)
-  const [selectedFormForManagement, setSelectedFormForManagement] = useState('')
+
+  // API hooks
+  const generateFormMutation = useGenerateForm()
+  const { data: preSelectedTemplate } = useTaxFormTemplate(preSelectedTemplateId || '', !!preSelectedTemplateId)
 
   const [generationSteps, setGenerationSteps] = useState<GenerationStep[]>([
     {
