@@ -14,6 +14,7 @@ import { getUserWorkspaces } from '@/lib/user-workspaces'
 
 import { SubscriptionDetails } from '@/components/subscriptions/details'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { DashboardMainNav } from '@/components/dashboard/main-nav'
 
 export const metadata: Metadata = {
