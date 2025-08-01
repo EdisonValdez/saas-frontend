@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export const config = {
-    matcher: [
-        '/dashboard/:path*',
-    ],
+    matcher: ['/dashboard/:path*'],
 }
 
 // Simplified middleware for debugging

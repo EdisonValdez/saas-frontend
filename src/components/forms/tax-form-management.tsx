@@ -140,7 +140,7 @@ export function TaxFormManagement() {
     // Load tax form templates
     const { data: templatesData, isLoading: templatesLoading } = useTaxFormTemplates({
         tax_year: currentYear,
-        is_active: true
+        is_active: true,
     })
     const templates = templatesData?.results || []
 
@@ -316,9 +316,9 @@ export function TaxFormManagement() {
 
     const TemplateCard = ({ template }: { template: TaxFormTemplate }) => {
         const complexityMap: Record<string, string> = {
-            'simple': 'bg-green-100 text-green-800',
-            'intermediate': 'bg-yellow-100 text-yellow-800',
-            'complex': 'bg-red-100 text-red-800'
+            simple: 'bg-green-100 text-green-800',
+            intermediate: 'bg-yellow-100 text-yellow-800',
+            complex: 'bg-red-100 text-red-800',
         }
 
         const formatEstimatedTime = (minutes: number) => {
@@ -494,14 +494,14 @@ export function TaxFormManagement() {
                                 </Card>
                             ))
                         ) : templates.length > 0 ? (
-                            templates.map((template) => (
-                                <TemplateCard key={template.id} template={template} />
-                            ))
+                            templates.map((template) => <TemplateCard key={template.id} template={template} />)
                         ) : (
                             <div className="col-span-full text-center py-8">
                                 <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                                 <p className="text-gray-600">No tax form templates available</p>
-                                <p className="text-sm text-gray-500">Templates will appear here when loaded from the backend</p>
+                                <p className="text-sm text-gray-500">
+                                    Templates will appear here when loaded from the backend
+                                </p>
                             </div>
                         )}
                     </div>

@@ -33,13 +33,13 @@ class AuthService {
         try {
             // Try NextAuth session first
             const nextAuthSession = await getSession()
-            
+
             if (nextAuthSession?.access && nextAuthSession?.refresh) {
                 this.sessionCache = {
                     user: nextAuthSession.user,
                     access: nextAuthSession.access,
                     refresh: nextAuthSession.refresh,
-                    expires: nextAuthSession.expires
+                    expires: nextAuthSession.expires,
                 }
                 // Cache for 5 minutes
                 this.sessionExpiry = Date.now() + 5 * 60 * 1000
@@ -52,7 +52,7 @@ class AuthService {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
             })
 
             if (!response.ok) {
@@ -76,7 +76,7 @@ class AuthService {
                 return {
                     error: 'No refresh token available',
                     status: 401,
-                    success: false
+                    success: false,
                 }
             }
 
@@ -85,7 +85,7 @@ class AuthService {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ refresh: session.refresh })
+                body: JSON.stringify({ refresh: session.refresh }),
             })
 
             if (!response.ok) {
@@ -93,30 +93,30 @@ class AuthService {
                 return {
                     error: errorData.detail || 'Failed to refresh token',
                     status: response.status,
-                    success: false
+                    success: false,
                 }
             }
 
             const tokenData = await response.json()
-            
+
             // Update cached session
             this.sessionCache = {
                 ...session,
                 access: tokenData.access,
-                refresh: tokenData.refresh || session.refresh
+                refresh: tokenData.refresh || session.refresh,
             }
             this.sessionExpiry = Date.now() + 5 * 60 * 1000
 
             return {
                 data: this.sessionCache,
                 status: 200,
-                success: true
+                success: true,
             }
         } catch (error) {
             return {
                 error: error instanceof Error ? error.message : 'Network error',
                 status: 0,
-                success: false
+                success: false,
             }
         }
     }
@@ -133,13 +133,13 @@ class AuthService {
 
             return {
                 status: 200,
-                success: true
+                success: true,
             }
         } catch (error) {
             return {
                 error: error instanceof Error ? error.message : 'Sign out failed',
                 status: 500,
-                success: false
+                success: false,
             }
         }
     }
@@ -169,7 +169,7 @@ class AuthService {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ token })
+                body: JSON.stringify({ token }),
             })
 
             return response.ok
@@ -200,9 +200,7 @@ export async function requireAuth(): Promise<AuthSession> {
     return session
 }
 
-export async function withAuth<T>(
-    callback: (session: AuthSession) => Promise<T>
-): Promise<T> {
+export async function withAuth<T>(callback: (session: AuthSession) => Promise<T>): Promise<T> {
     const session = await requireAuth()
     return callback(session)
 }

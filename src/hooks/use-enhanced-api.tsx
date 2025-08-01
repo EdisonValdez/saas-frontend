@@ -3,7 +3,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { enhancedApiClient, queryKeys, type ApiResponse, type CreditUsage, type ClientData } from '@/lib/api-client-enhanced'
+import {
+    enhancedApiClient,
+    queryKeys,
+    type ApiResponse,
+    type CreditUsage,
+    type ClientData,
+} from '@/lib/api-client-enhanced'
 import { authService } from '@/lib/auth-bridge'
 import { useEffect, useState } from 'react'
 
@@ -18,7 +24,7 @@ export function useEnhancedAuth() {
             const session = await authService.getSession()
             setAuthSession(session)
         }
-        
+
         if (status === 'authenticated') {
             getSession()
         }
@@ -53,7 +59,7 @@ export function useCreditUsage(workspaceId: string) {
         queryFn: () => enhancedApiClient.getCreditUsage(workspaceId),
         enabled: !!workspaceId,
         refetchInterval: 30000, // Refetch every 30 seconds
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
@@ -63,17 +69,16 @@ export function useWorkspaceClients(workspaceId: string) {
         queryKey: queryKeys.clients(workspaceId),
         queryFn: () => enhancedApiClient.getWorkspaceClients(workspaceId),
         enabled: !!workspaceId,
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
 // Hook for creating a client
 export function useCreateClient(workspaceId: string) {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
-        mutationFn: (clientData: Partial<ClientData>) => 
-            enhancedApiClient.createClient(workspaceId, clientData),
+        mutationFn: (clientData: Partial<ClientData>) => enhancedApiClient.createClient(workspaceId, clientData),
         onSuccess: () => {
             // Invalidate and refetch clients list
             queryClient.invalidateQueries({ queryKey: queryKeys.clients(workspaceId) })
@@ -84,17 +89,14 @@ export function useCreateClient(workspaceId: string) {
 // Hook for invoking agents
 export function useInvokeAgent() {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
-        mutationFn: ({ prompt, workspaceId, context }: { 
-            prompt: string
-            workspaceId: string
-            context?: any 
-        }) => enhancedApiClient.invokeAgent(prompt, workspaceId, context),
+        mutationFn: ({ prompt, workspaceId, context }: { prompt: string; workspaceId: string; context?: any }) =>
+            enhancedApiClient.invokeAgent(prompt, workspaceId, context),
         onSuccess: (data, variables) => {
             // Invalidate credit usage after successful agent invocation
-            queryClient.invalidateQueries({ 
-                queryKey: queryKeys.creditUsage(variables.workspaceId) 
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.creditUsage(variables.workspaceId),
             })
         },
     })
@@ -106,7 +108,7 @@ export function useWorkspace(workspaceId: string) {
         queryKey: queryKeys.workspace(workspaceId),
         queryFn: () => enhancedApiClient.getWorkspace(workspaceId),
         enabled: !!workspaceId,
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
@@ -116,7 +118,7 @@ export function useEmailAgentSessions(workspaceId: string) {
         queryKey: queryKeys.emailSessions(workspaceId),
         queryFn: () => enhancedApiClient.getEmailAgentSessions(workspaceId),
         enabled: !!workspaceId,
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
@@ -126,24 +128,21 @@ export function useTaxAssistantSessions(workspaceId: string) {
         queryKey: queryKeys.taxSessions(workspaceId),
         queryFn: () => enhancedApiClient.getTaxAssistantSessions(workspaceId),
         enabled: !!workspaceId,
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
 // Hook for document upload
 export function useUploadDocument() {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
-        mutationFn: ({ clientId, file, metadata }: { 
-            clientId: string
-            file: File
-            metadata?: any 
-        }) => enhancedApiClient.uploadDocument(clientId, file, metadata),
+        mutationFn: ({ clientId, file, metadata }: { clientId: string; file: File; metadata?: any }) =>
+            enhancedApiClient.uploadDocument(clientId, file, metadata),
         onSuccess: (data, variables) => {
             // Invalidate documents list
-            queryClient.invalidateQueries({ 
-                queryKey: queryKeys.documents(variables.clientId) 
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.documents(variables.clientId),
             })
         },
     })
@@ -155,28 +154,25 @@ export function useWorkspaceChats(workspaceId: string) {
         queryKey: queryKeys.chats(workspaceId),
         queryFn: () => enhancedApiClient.getWorkspaceChats(workspaceId),
         enabled: !!workspaceId,
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
 // Hook for sending chat messages
 export function useSendChatMessage() {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
-        mutationFn: ({ workspaceId, chatId, message }: { 
-            workspaceId: string
-            chatId: string
-            message: string 
-        }) => enhancedApiClient.sendChatMessage(workspaceId, chatId, message),
+        mutationFn: ({ workspaceId, chatId, message }: { workspaceId: string; chatId: string; message: string }) =>
+            enhancedApiClient.sendChatMessage(workspaceId, chatId, message),
         onSuccess: (data, variables) => {
             // Invalidate chats to refresh messages
-            queryClient.invalidateQueries({ 
-                queryKey: queryKeys.chats(variables.workspaceId) 
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.chats(variables.workspaceId),
             })
             // Also invalidate credit usage as chat might consume credits
-            queryClient.invalidateQueries({ 
-                queryKey: queryKeys.creditUsage(variables.workspaceId) 
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.creditUsage(variables.workspaceId),
             })
         },
     })
@@ -185,7 +181,7 @@ export function useSendChatMessage() {
 // Hook for handling API errors
 export function useApiErrorHandler() {
     const router = useRouter()
-    
+
     const handleError = (error: ApiResponse<any>) => {
         if (error.status === 401) {
             // Unauthorized - redirect to login
@@ -198,19 +194,19 @@ export function useApiErrorHandler() {
             // Server error - show generic error
             console.error('Server error:', error.error)
         }
-        
+
         return error.error || 'An error occurred'
     }
-    
+
     return { handleError }
 }
 
 // Hook for checking if user can perform actions based on credits
 export function useCanPerformAction(workspaceId: string, requiredCredits: number = 1) {
     const { data: creditUsage, isLoading } = useCreditUsage(workspaceId)
-    
+
     const canPerform = creditUsage ? creditUsage.remaining >= requiredCredits : false
-    
+
     return {
         canPerform,
         isLoading,

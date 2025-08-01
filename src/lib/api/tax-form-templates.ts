@@ -13,7 +13,7 @@ import type {
     FormGenerationRequest,
     FormGenerationResponse,
     EnhancedTaxFormTemplate,
-    TemplateCache
+    TemplateCache,
 } from '@/types/tax-forms'
 
 class TaxFormTemplateApiClient {
@@ -31,7 +31,7 @@ class TaxFormTemplateApiClient {
         const cacheKey = JSON.stringify(filters || {})
         const cached = this.cache.filters.get(cacheKey)
         const lastFetched = this.cache.lastFetched.get(cacheKey) || 0
-        
+
         // Return cached data if still valid
         if (cached && Date.now() - lastFetched < this.cache.ttl) {
             return {
@@ -57,9 +57,9 @@ class TaxFormTemplateApiClient {
         if (response.success && response.data) {
             this.cache.filters.set(cacheKey, response.data)
             this.cache.lastFetched.set(cacheKey, Date.now())
-            
+
             // Cache individual templates
-            response.data.results.forEach(template => {
+            response.data.results.forEach((template) => {
                 this.cache.templates.set(template.id, template)
             })
         }
@@ -72,7 +72,7 @@ class TaxFormTemplateApiClient {
         if (useCache) {
             const cached = this.cache.templates.get(templateId)
             const lastFetched = this.cache.lastFetched.get(templateId) || 0
-            
+
             if (cached && Date.now() - lastFetched < this.cache.ttl) {
                 return {
                     data: cached,
@@ -161,7 +161,10 @@ class TaxFormTemplateApiClient {
         return enhancedApiClient.request<TaxFormTemplateChange[]>(`${this.baseEndpoint}/${templateId}/changes/`)
     }
 
-    async createNewVersion(templateId: string, request: CreateVersionRequest): Promise<ApiResponse<CreateVersionResponse>> {
+    async createNewVersion(
+        templateId: string,
+        request: CreateVersionRequest
+    ): Promise<ApiResponse<CreateVersionResponse>> {
         const response = await enhancedApiClient.request<CreateVersionResponse>(
             `${this.baseEndpoint}/${templateId}/create_new_version/`,
             {
@@ -191,7 +194,7 @@ class TaxFormTemplateApiClient {
     // Enhanced template operations
     async getEnhancedTemplate(templateId: string): Promise<ApiResponse<EnhancedTaxFormTemplate>> {
         const response = await this.getTemplate(templateId)
-        
+
         if (!response.success || !response.data) {
             return response as ApiResponse<EnhancedTaxFormTemplate>
         }
@@ -213,7 +216,7 @@ class TaxFormTemplateApiClient {
     // Bulk operations
     async getTemplatesByYear(taxYear: number): Promise<ApiResponse<TaxFormTemplate[]>> {
         const response = await this.getTemplates({ tax_year: taxYear })
-        
+
         if (response.success && response.data) {
             return {
                 ...response,
@@ -226,7 +229,7 @@ class TaxFormTemplateApiClient {
 
     async getTemplatesByCategory(category: string): Promise<ApiResponse<TaxFormTemplate[]>> {
         const response = await this.getTemplates({ category })
-        
+
         if (response.success && response.data) {
             return {
                 ...response,
@@ -238,9 +241,12 @@ class TaxFormTemplateApiClient {
     }
 
     // Search operations
-    async searchTemplates(query: string, filters?: Omit<TaxFormTemplateFilters, 'search'>): Promise<ApiResponse<TaxFormTemplate[]>> {
+    async searchTemplates(
+        query: string,
+        filters?: Omit<TaxFormTemplateFilters, 'search'>
+    ): Promise<ApiResponse<TaxFormTemplate[]>> {
         const response = await this.getTemplates({ ...filters, search: query })
-        
+
         if (response.success && response.data) {
             return {
                 ...response,
@@ -274,15 +280,17 @@ class TaxFormTemplateApiClient {
     }
 
     private hasCalculations(template: TaxFormTemplate): boolean {
-        return template.sections.some(section =>
-            section.fields.some(field => field.calculation)
-        ) || (template.calculations && Object.keys(template.calculations).length > 0)
+        return (
+            template.sections.some((section) => section.fields.some((field) => field.calculation)) ||
+            (template.calculations && Object.keys(template.calculations).length > 0)
+        )
     }
 
     private hasDependencies(template: TaxFormTemplate): boolean {
-        return template.sections.some(section =>
-            section.fields.some(field => field.dependencies && field.dependencies.length > 0) ||
-            section.conditionalLogic
+        return template.sections.some(
+            (section) =>
+                section.fields.some((field) => field.dependencies && field.dependencies.length > 0) ||
+                section.conditionalLogic
         )
     }
 
@@ -338,7 +346,7 @@ class TaxFormTemplateApiClient {
         try {
             const template = JSON.parse(jsonData) as TaxFormTemplate
             const errors = this.validateTemplate(template)
-            
+
             if (errors.length > 0) {
                 console.error('Template validation errors:', errors)
                 return null

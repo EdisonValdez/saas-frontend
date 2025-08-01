@@ -12,20 +12,23 @@ export function NextAuthSesionProvider({
     children: React.ReactNode
     session: any
 }): React.ReactNode {
-    const [queryClient] = useState(() => new QueryClient({
-        defaultOptions: {
-            queries: {
-                staleTime: 1000 * 60 * 5, // 5 minutes
-                retry: (failureCount, error: any) => {
-                    // Don't retry on 401/403 errors
-                    if (error?.status === 401 || error?.status === 403) {
-                        return false
-                    }
-                    return failureCount < 3
+    const [queryClient] = useState(
+        () =>
+            new QueryClient({
+                defaultOptions: {
+                    queries: {
+                        staleTime: 1000 * 60 * 5, // 5 minutes
+                        retry: (failureCount, error: any) => {
+                            // Don't retry on 401/403 errors
+                            if (error?.status === 401 || error?.status === 403) {
+                                return false
+                            }
+                            return failureCount < 3
+                        },
+                    },
                 },
-            },
-        },
-    }))
+            })
+    )
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -36,9 +39,7 @@ export function NextAuthSesionProvider({
             >
                 {children}
             </SessionProvider>
-            {process.env.NODE_ENV === 'development' && (
-                <ReactQueryDevtools initialIsOpen={false} />
-            )}
+            {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
         </QueryClientProvider>
     )
 }

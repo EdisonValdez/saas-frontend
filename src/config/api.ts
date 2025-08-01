@@ -163,15 +163,11 @@ export const API_ERROR_CODES = {
     SERVICE_UNAVAILABLE: 503,
 } as const
 
-export type ApiErrorCode = typeof API_ERROR_CODES[keyof typeof API_ERROR_CODES]
+export type ApiErrorCode = (typeof API_ERROR_CODES)[keyof typeof API_ERROR_CODES]
 
 // Helper function to check if an endpoint requires authentication
 export function requiresAuth(endpoint: string): boolean {
-    const publicEndpoints = [
-        API_ENDPOINTS.auth.login,
-        API_ENDPOINTS.auth.register,
-        API_ENDPOINTS.subscriptions.pricing,
-    ]
+    const publicEndpoints = [API_ENDPOINTS.auth.login, API_ENDPOINTS.auth.register, API_ENDPOINTS.subscriptions.pricing]
     return !publicEndpoints.includes(endpoint)
 }
 
@@ -187,7 +183,7 @@ export function mapToBackendEndpoint(frontendEndpoint: string): string {
     // Check for workspace-specific endpoints
     const workspacePattern = /^\/api\/workspaces\/([^\/]+)\/([^\/]+)\/?$/
     const workspaceMatch = frontendEndpoint.match(workspacePattern)
-    
+
     if (workspaceMatch) {
         const [, workspaceId, resource] = workspaceMatch
         switch (resource) {
@@ -209,7 +205,7 @@ export function mapToBackendEndpoint(frontendEndpoint: string): string {
     // Check for client-specific endpoints
     const clientPattern = /^\/api\/clients\/([^\/]+)\/([^\/]+)\/?$/
     const clientMatch = frontendEndpoint.match(clientPattern)
-    
+
     if (clientMatch) {
         const [, clientId, resource] = clientMatch
         switch (resource) {

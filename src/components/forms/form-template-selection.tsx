@@ -17,7 +17,7 @@ import {
     useSearchTaxFormTemplates,
     useTaxFormTemplatesByYear,
     useTaxFormTemplatesByCategory,
-    useSyncFromFilesystem
+    useSyncFromFilesystem,
 } from '@/hooks/use-tax-form-templates'
 import { useTaxFormTemplates as useBackendTemplates } from '@/hooks/use-tax-forms-backend'
 import { convertBackendToOriginal } from '@/lib/api/tax-forms-compatibility'
@@ -38,7 +38,7 @@ export default function FormTemplateSelection({
     selectedTemplateId,
     workspaceId,
     className,
-    useBackendApi = false
+    useBackendApi = false,
 }: FormTemplateSelectionProps) {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
     const [searchQuery, setSearchQuery] = useState('')
@@ -49,25 +49,35 @@ export default function FormTemplateSelection({
     const [showFilters, setShowFilters] = useState(false)
 
     // API calls - choose between original and backend API
-    const { data: templates, isLoading, error, refetch } = useBackendApi
+    const {
+        data: templates,
+        isLoading,
+        error,
+        refetch,
+    } = useBackendApi
         ? (() => {
-            const { data: backendTemplates, isLoading, error, refetch } = useBackendTemplates({
-                tax_year: filters.tax_year,
-                is_active: true
-            })
-            return {
-                data: backendTemplates ? { results: backendTemplates.map(convertBackendToOriginal) } : undefined,
-                isLoading,
-                error,
-                refetch
-            }
-        })()
+              const {
+                  data: backendTemplates,
+                  isLoading,
+                  error,
+                  refetch,
+              } = useBackendTemplates({
+                  tax_year: filters.tax_year,
+                  is_active: true,
+              })
+              return {
+                  data: backendTemplates ? { results: backendTemplates.map(convertBackendToOriginal) } : undefined,
+                  isLoading,
+                  error,
+                  refetch,
+              }
+          })()
         : useTaxFormTemplates(filters)
 
-    const { data: searchResults, isLoading: isSearching } = useSearchTaxFormTemplates(
-        searchQuery,
-        { tax_year: filters.tax_year, category: filters.category }
-    )
+    const { data: searchResults, isLoading: isSearching } = useSearchTaxFormTemplates(searchQuery, {
+        tax_year: filters.tax_year,
+        category: filters.category,
+    })
     const syncMutation = useSyncFromFilesystem()
 
     // Determine which data to show
@@ -75,15 +85,19 @@ export default function FormTemplateSelection({
     const isLoadingData = searchQuery ? isSearching : isLoading
 
     // Filter options
-    const categories = useMemo(() => [
-        'Individual', 'Business', 'Partnership', 'Corporation', 'Estate', 'Trust', 'Nonprofit'
-    ], [])
+    const categories = useMemo(
+        () => ['Individual', 'Business', 'Partnership', 'Corporation', 'Estate', 'Trust', 'Nonprofit'],
+        []
+    )
 
-    const complexityLevels = useMemo(() => [
-        { value: 'simple', label: 'Simple', color: 'bg-green-100 text-green-800' },
-        { value: 'intermediate', label: 'Intermediate', color: 'bg-yellow-100 text-yellow-800' },
-        { value: 'complex', label: 'Complex', color: 'bg-red-100 text-red-800' },
-    ], [])
+    const complexityLevels = useMemo(
+        () => [
+            { value: 'simple', label: 'Simple', color: 'bg-green-100 text-green-800' },
+            { value: 'intermediate', label: 'Intermediate', color: 'bg-yellow-100 text-yellow-800' },
+            { value: 'complex', label: 'Complex', color: 'bg-red-100 text-red-800' },
+        ],
+        []
+    )
 
     const taxYears = useMemo(() => {
         const currentYear = new Date().getFullYear()
@@ -91,7 +105,7 @@ export default function FormTemplateSelection({
     }, [])
 
     const handleFilterChange = (key: keyof TaxFormTemplateFilters, value: any) => {
-        setFilters(prev => ({
+        setFilters((prev) => ({
             ...prev,
             [key]: value === 'all' ? undefined : value,
             page: 1, // Reset to first page when filtering
@@ -106,7 +120,7 @@ export default function FormTemplateSelection({
     }
 
     const getComplexityBadge = (complexity: string) => {
-        const config = complexityLevels.find(level => level.value === complexity)
+        const config = complexityLevels.find((level) => level.value === complexity)
         return config || { value: complexity, label: complexity, color: 'bg-gray-100 text-gray-800' }
     }
 
@@ -122,11 +136,11 @@ export default function FormTemplateSelection({
         const isSelected = selectedTemplateId === template.id
 
         return (
-            <Card 
+            <Card
                 className={cn(
-                    "cursor-pointer transition-all duration-200 hover:shadow-md",
-                    isSelected && "ring-2 ring-primary border-primary",
-                    "h-full"
+                    'cursor-pointer transition-all duration-200 hover:shadow-md',
+                    isSelected && 'ring-2 ring-primary border-primary',
+                    'h-full'
                 )}
                 onClick={() => onSelectTemplate(template)}
             >
@@ -136,21 +150,15 @@ export default function FormTemplateSelection({
                             <CardTitle className="text-lg font-semibold text-gray-900">
                                 {template.form_number}
                             </CardTitle>
-                            <CardDescription className="text-sm text-gray-600 mt-1">
-                                {template.name}
-                            </CardDescription>
+                            <CardDescription className="text-sm text-gray-600 mt-1">{template.name}</CardDescription>
                         </div>
-                        <Badge className={complexity.color}>
-                            {complexity.label}
-                        </Badge>
+                        <Badge className={complexity.color}>{complexity.label}</Badge>
                     </div>
                 </CardHeader>
                 <CardContent className="pt-0">
                     <div className="space-y-3">
-                        <p className="text-sm text-gray-600 line-clamp-2">
-                            {template.description}
-                        </p>
-                        
+                        <p className="text-sm text-gray-600 line-clamp-2">{template.description}</p>
+
                         <div className="flex items-center gap-4 text-xs text-gray-500">
                             <div className="flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
@@ -168,7 +176,7 @@ export default function FormTemplateSelection({
 
                         <div className="flex items-center justify-between">
                             <div className="flex flex-wrap gap-1">
-                                {template.filing_status?.slice(0, 2).map(status => (
+                                {template.filing_status?.slice(0, 2).map((status) => (
                                     <Badge key={status} variant="secondary" className="text-xs">
                                         {status}
                                     </Badge>
@@ -179,9 +187,7 @@ export default function FormTemplateSelection({
                                     </Badge>
                                 )}
                             </div>
-                            <div className="text-xs text-gray-500">
-                                v{template.version}
-                            </div>
+                            <div className="text-xs text-gray-500">v{template.version}</div>
                         </div>
                     </div>
                 </CardContent>
@@ -194,10 +200,10 @@ export default function FormTemplateSelection({
         const isSelected = selectedTemplateId === template.id
 
         return (
-            <Card 
+            <Card
                 className={cn(
-                    "cursor-pointer transition-all duration-200 hover:shadow-sm",
-                    isSelected && "ring-2 ring-primary border-primary"
+                    'cursor-pointer transition-all duration-200 hover:shadow-sm',
+                    isSelected && 'ring-2 ring-primary border-primary'
                 )}
                 onClick={() => onSelectTemplate(template)}
             >
@@ -209,15 +215,11 @@ export default function FormTemplateSelection({
                                     <h3 className="font-semibold text-gray-900">{template.form_number}</h3>
                                     <p className="text-sm text-gray-600 mt-1">{template.name}</p>
                                 </div>
-                                <Badge className={complexity.color}>
-                                    {complexity.label}
-                                </Badge>
+                                <Badge className={complexity.color}>{complexity.label}</Badge>
                             </div>
-                            <p className="text-sm text-gray-600 mt-2 line-clamp-1">
-                                {template.description}
-                            </p>
+                            <p className="text-sm text-gray-600 mt-2 line-clamp-1">{template.description}</p>
                         </div>
-                        
+
                         <div className="flex items-center gap-6 text-sm text-gray-500">
                             <div className="flex items-center gap-1">
                                 <Calendar className="h-4 w-4" />
@@ -231,9 +233,7 @@ export default function FormTemplateSelection({
                                 <Tag className="h-4 w-4" />
                                 {template.category}
                             </div>
-                            <div className="text-xs">
-                                v{template.version}
-                            </div>
+                            <div className="text-xs">v{template.version}</div>
                         </div>
                     </div>
                 </CardContent>
@@ -242,11 +242,7 @@ export default function FormTemplateSelection({
     }
 
     const LoadingSkeleton = () => (
-        <div className={cn(
-            viewMode === 'grid' 
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-                : "space-y-4"
-        )}>
+        <div className={cn(viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4' : 'space-y-4')}>
             {Array.from({ length: 6 }).map((_, i) => (
                 <Card key={i}>
                     <CardHeader>
@@ -267,23 +263,16 @@ export default function FormTemplateSelection({
     )
 
     return (
-        <div className={cn("space-y-6", className)}>
+        <div className={cn('space-y-6', className)}>
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900">Tax Form Templates</h2>
-                    <p className="text-gray-600">
-                        Choose a template to start generating your tax form
-                    </p>
+                    <p className="text-gray-600">Choose a template to start generating your tax form</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleSync}
-                        disabled={syncMutation.isPending}
-                    >
-                        <RefreshCw className={cn("h-4 w-4 mr-2", syncMutation.isPending && "animate-spin")} />
+                    <Button variant="outline" size="sm" onClick={handleSync} disabled={syncMutation.isPending}>
+                        <RefreshCw className={cn('h-4 w-4 mr-2', syncMutation.isPending && 'animate-spin')} />
                         Sync Templates
                     </Button>
                 </div>
@@ -300,7 +289,7 @@ export default function FormTemplateSelection({
                         className="pl-10"
                     />
                 </div>
-                
+
                 <Sheet open={showFilters} onOpenChange={setShowFilters}>
                     <SheetTrigger asChild>
                         <Button variant="outline" size="sm">
@@ -311,20 +300,21 @@ export default function FormTemplateSelection({
                     <SheetContent>
                         <SheetHeader>
                             <SheetTitle>Filter Templates</SheetTitle>
-                            <SheetDescription>
-                                Narrow down templates by your criteria
-                            </SheetDescription>
+                            <SheetDescription>Narrow down templates by your criteria</SheetDescription>
                         </SheetHeader>
-                        
+
                         <div className="space-y-6 mt-6">
                             <div>
                                 <Label htmlFor="tax-year">Tax Year</Label>
-                                <Select value={filters.tax_year?.toString()} onValueChange={(value) => handleFilterChange('tax_year', parseInt(value))}>
+                                <Select
+                                    value={filters.tax_year?.toString()}
+                                    onValueChange={(value) => handleFilterChange('tax_year', parseInt(value))}
+                                >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select tax year" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {taxYears.map(year => (
+                                        {taxYears.map((year) => (
                                             <SelectItem key={year} value={year.toString()}>
                                                 {year}
                                             </SelectItem>
@@ -335,13 +325,16 @@ export default function FormTemplateSelection({
 
                             <div>
                                 <Label htmlFor="category">Category</Label>
-                                <Select value={filters.category || 'all'} onValueChange={(value) => handleFilterChange('category', value)}>
+                                <Select
+                                    value={filters.category || 'all'}
+                                    onValueChange={(value) => handleFilterChange('category', value)}
+                                >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select category" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="all">All Categories</SelectItem>
-                                        {categories.map(category => (
+                                        {categories.map((category) => (
                                             <SelectItem key={category} value={category}>
                                                 {category}
                                             </SelectItem>
@@ -352,13 +345,16 @@ export default function FormTemplateSelection({
 
                             <div>
                                 <Label htmlFor="complexity">Complexity</Label>
-                                <Select value={filters.complexity || 'all'} onValueChange={(value) => handleFilterChange('complexity', value)}>
+                                <Select
+                                    value={filters.complexity || 'all'}
+                                    onValueChange={(value) => handleFilterChange('complexity', value)}
+                                >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select complexity" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="all">All Levels</SelectItem>
-                                        {complexityLevels.map(level => (
+                                        {complexityLevels.map((level) => (
                                             <SelectItem key={level.value} value={level.value}>
                                                 {level.label}
                                             </SelectItem>
@@ -395,15 +391,8 @@ export default function FormTemplateSelection({
                 {error && (
                     <Card className="border-red-200 bg-red-50">
                         <CardContent className="p-4">
-                            <p className="text-red-800">
-                                Failed to load templates. Please try again.
-                            </p>
-                            <Button 
-                                variant="outline" 
-                                size="sm" 
-                                onClick={() => refetch()}
-                                className="mt-2"
-                            >
+                            <p className="text-red-800">Failed to load templates. Please try again.</p>
+                            <Button variant="outline" size="sm" onClick={() => refetch()} className="mt-2">
                                 Retry
                             </Button>
                         </CardContent>
@@ -419,12 +408,7 @@ export default function FormTemplateSelection({
                                 {searchQuery ? 'No templates found matching your search.' : 'No templates available.'}
                             </p>
                             {searchQuery && (
-                                <Button 
-                                    variant="outline" 
-                                    size="sm" 
-                                    onClick={() => setSearchQuery('')}
-                                    className="mt-2"
-                                >
+                                <Button variant="outline" size="sm" onClick={() => setSearchQuery('')} className="mt-2">
                                     Clear Search
                                 </Button>
                             )}
@@ -433,12 +417,12 @@ export default function FormTemplateSelection({
                 )}
 
                 {!isLoadingData && displayTemplates && displayTemplates.length > 0 && (
-                    <div className={cn(
-                        viewMode === 'grid' 
-                            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-                            : "space-y-4"
-                    )}>
-                        {displayTemplates.map(template => 
+                    <div
+                        className={cn(
+                            viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4' : 'space-y-4'
+                        )}
+                    >
+                        {displayTemplates.map((template) =>
                             viewMode === 'grid' ? (
                                 <TemplateCard key={template.id} template={template} />
                             ) : (
@@ -451,9 +435,7 @@ export default function FormTemplateSelection({
                 {/* Pagination would go here if needed */}
                 {templates && templates.count > (filters.page_size || 20) && (
                     <div className="flex justify-center mt-6">
-                        <Button variant="outline">
-                            Load More Templates
-                        </Button>
+                        <Button variant="outline">Load More Templates</Button>
                     </div>
                 )}
             </div>

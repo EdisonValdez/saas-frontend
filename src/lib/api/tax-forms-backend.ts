@@ -5,7 +5,7 @@ import type {
     TaxFormTemplateListParams,
     TemplatesByYearResponse,
     ApiResponse,
-    TemplateCache
+    TemplateCache,
 } from '@/types/tax-forms-backend'
 
 // Cache for templates
@@ -17,11 +17,11 @@ const CACHE_DURATION = 15 * 60 * 1000 // 15 minutes
  */
 async function apiRequest<T>(endpoint: string): Promise<T> {
     const response = await enhancedApiClient.request<T>(endpoint)
-    
+
     if (!response.success) {
         throw new Error(response.error || 'API request failed')
     }
-    
+
     return response.data as T
 }
 
@@ -30,7 +30,7 @@ async function apiRequest<T>(endpoint: string): Promise<T> {
  */
 export async function getTaxFormTemplates(params?: TaxFormTemplateListParams): Promise<TaxFormTemplate[]> {
     let queryString = ''
-    
+
     if (params) {
         const queryParams = new URLSearchParams()
         if (params.tax_year) queryParams.append('tax_year', params.tax_year.toString())
@@ -38,7 +38,7 @@ export async function getTaxFormTemplates(params?: TaxFormTemplateListParams): P
         if (params.is_active !== undefined) queryParams.append('is_active', params.is_active.toString())
         queryString = queryParams.toString() ? `?${queryParams.toString()}` : ''
     }
-    
+
     return apiRequest<TaxFormTemplate[]>(`/api/taxforms/templates/${queryString}`)
 }
 
@@ -49,20 +49,20 @@ export async function getTaxFormTemplate(id: string): Promise<TaxFormTemplate> {
     // Check cache first
     const now = Date.now()
     const cached = templateCache.get(id)
-    
-    if (cached && (now - cached.timestamp < CACHE_DURATION)) {
+
+    if (cached && now - cached.timestamp < CACHE_DURATION) {
         return cached.data
     }
-    
+
     // Fetch from API
     const template = await apiRequest<TaxFormTemplate>(`/api/taxforms/templates/${id}/`)
-    
+
     // Update cache
     templateCache.set(id, {
         data: template,
-        timestamp: now
+        timestamp: now,
     })
-    
+
     return template
 }
 
@@ -102,7 +102,7 @@ export function clearTemplateCache(): void {
  */
 export function isTemplateCached(id: string): boolean {
     const cached = templateCache.get(id)
-    return cached ? (Date.now() - cached.timestamp < CACHE_DURATION) : false
+    return cached ? Date.now() - cached.timestamp < CACHE_DURATION : false
 }
 
 /**
@@ -110,7 +110,7 @@ export function isTemplateCached(id: string): boolean {
  */
 export function getCachedTemplate(id: string): TaxFormTemplate | null {
     const cached = templateCache.get(id)
-    if (cached && (Date.now() - cached.timestamp < CACHE_DURATION)) {
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
         return cached.data
     }
     return null
@@ -128,7 +128,7 @@ export async function refreshTemplate(id: string): Promise<TaxFormTemplate> {
  * Batch load templates for multiple IDs
  */
 export async function getTaxFormTemplatesBatch(ids: string[]): Promise<TaxFormTemplate[]> {
-    const promises = ids.map(id => getTaxFormTemplate(id))
+    const promises = ids.map((id) => getTaxFormTemplate(id))
     return Promise.all(promises)
 }
 
@@ -145,9 +145,7 @@ export async function getCurrentYearTemplates(): Promise<TaxFormTemplate[]> {
  */
 export async function searchTemplatesByFormNumber(formNumber: string): Promise<TaxFormTemplate[]> {
     const allTemplates = await getTaxFormTemplates({ is_active: true })
-    return allTemplates.filter(template => 
-        template.form_number.toLowerCase().includes(formNumber.toLowerCase())
-    )
+    return allTemplates.filter((template) => template.form_number.toLowerCase().includes(formNumber.toLowerCase()))
 }
 
 /**
@@ -155,7 +153,7 @@ export async function searchTemplatesByFormNumber(formNumber: string): Promise<T
  */
 export async function getTemplateJurisdictions(): Promise<string[]> {
     const allTemplates = await getTaxFormTemplates({ is_active: true })
-    const jurisdictions = new Set(allTemplates.map(t => t.jurisdiction).filter(Boolean))
+    const jurisdictions = new Set(allTemplates.map((t) => t.jurisdiction).filter(Boolean))
     return Array.from(jurisdictions) as string[]
 }
 
@@ -164,7 +162,7 @@ export async function getTemplateJurisdictions(): Promise<string[]> {
  */
 export async function getAvailableTaxYears(): Promise<number[]> {
     const allTemplates = await getTaxFormTemplates({ is_active: true })
-    const years = new Set(allTemplates.map(t => t.tax_year))
+    const years = new Set(allTemplates.map((t) => t.tax_year))
     return Array.from(years).sort((a, b) => b - a) // Most recent first
 }
 
@@ -176,7 +174,8 @@ export const taxFormQueryKeys = {
     details: () => [...taxFormQueryKeys.all, 'detail'] as const,
     detail: (id: string) => [...taxFormQueryKeys.details(), id] as const,
     versions: (templateId: string) => [...taxFormQueryKeys.detail(templateId), 'versions'] as const,
-    version: (templateId: string, versionNumber: number) => [...taxFormQueryKeys.versions(templateId), versionNumber] as const,
+    version: (templateId: string, versionNumber: number) =>
+        [...taxFormQueryKeys.versions(templateId), versionNumber] as const,
     byYear: (year?: number) => [...taxFormQueryKeys.all, 'byYear', year] as const,
     jurisdictions: () => [...taxFormQueryKeys.all, 'jurisdictions'] as const,
     years: () => [...taxFormQueryKeys.all, 'years'] as const,

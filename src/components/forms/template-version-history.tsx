@@ -2,20 +2,20 @@
 
 import { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
-import { 
-    History, 
-    User, 
-    Calendar, 
-    FileText, 
-    Plus, 
-    Edit, 
-    Trash2, 
+import {
+    History,
+    User,
+    Calendar,
+    FileText,
+    Plus,
+    Edit,
+    Trash2,
     RefreshCw,
     ChevronDown,
     ChevronRight,
     GitBranch,
     Tag,
-    Clock
+    Clock,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,15 +24,19 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Separator } from '@/components/ui/separator'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { 
-    useTaxFormTemplateChanges, 
-    useCreateTemplateVersion,
-    useTaxFormTemplate 
-} from '@/hooks/use-tax-form-templates'
+import { useTaxFormTemplateChanges, useCreateTemplateVersion, useTaxFormTemplate } from '@/hooks/use-tax-form-templates'
 import type { TaxFormTemplateChange } from '@/types/tax-forms'
 import { cn } from '@/lib/utils'
 
@@ -66,17 +70,20 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
     const handleCreateVersion = () => {
         if (!newVersionData.change_reason.trim()) return
 
-        createVersionMutation.mutate({
-            templateId,
-            request: {
-                change_reason: newVersionData.change_reason,
+        createVersionMutation.mutate(
+            {
+                templateId,
+                request: {
+                    change_reason: newVersionData.change_reason,
+                },
+            },
+            {
+                onSuccess: () => {
+                    setShowCreateVersion(false)
+                    setNewVersionData({ change_reason: '', description: '' })
+                },
             }
-        }, {
-            onSuccess: () => {
-                setShowCreateVersion(false)
-                setNewVersionData({ change_reason: '', description: '' })
-            }
-        })
+        )
     }
 
     const getChangeTypeIcon = (changeType: TaxFormTemplateChange['change_type']) => {
@@ -126,9 +133,9 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
 
     const formatChangeDescription = (change: TaxFormTemplateChange['changes'][0]) => {
         const { action, field, description } = change
-        
+
         if (description) return description
-        
+
         if (field) {
             switch (action) {
                 case 'added':
@@ -141,7 +148,7 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                     return `${action} ${field}`
             }
         }
-        
+
         return `${action} change`
     }
 
@@ -167,7 +174,7 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
 
     if (isLoading) {
         return (
-            <div className={cn("space-y-6", className)}>
+            <div className={cn('space-y-6', className)}>
                 <div className="flex items-center justify-between">
                     <Skeleton className="h-8 w-48" />
                     <Skeleton className="h-10 w-32" />
@@ -179,7 +186,7 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
 
     if (error) {
         return (
-            <div className={cn("space-y-6", className)}>
+            <div className={cn('space-y-6', className)}>
                 <Card className="border-red-200 bg-red-50">
                     <CardContent className="p-4">
                         <p className="text-red-800">Failed to load version history.</p>
@@ -193,16 +200,14 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
     }
 
     return (
-        <div className={cn("space-y-6", className)}>
+        <div className={cn('space-y-6', className)}>
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <History className="h-6 w-6 text-gray-600" />
                     <div>
                         <h3 className="text-lg font-semibold text-gray-900">Version History</h3>
-                        <p className="text-sm text-gray-600">
-                            Track changes and create new versions of this template
-                        </p>
+                        <p className="text-sm text-gray-600">Track changes and create new versions of this template</p>
                     </div>
                 </div>
 
@@ -220,7 +225,7 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                                 Create a new version of this template with your changes.
                             </DialogDescription>
                         </DialogHeader>
-                        
+
                         <div className="space-y-4">
                             <div>
                                 <Label htmlFor="change-reason">Change Reason *</Label>
@@ -228,41 +233,40 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                                     id="change-reason"
                                     placeholder="Brief description of changes..."
                                     value={newVersionData.change_reason}
-                                    onChange={(e) => setNewVersionData(prev => ({
-                                        ...prev,
-                                        change_reason: e.target.value
-                                    }))}
+                                    onChange={(e) =>
+                                        setNewVersionData((prev) => ({
+                                            ...prev,
+                                            change_reason: e.target.value,
+                                        }))
+                                    }
                                 />
                             </div>
-                            
+
                             <div>
                                 <Label htmlFor="description">Detailed Description</Label>
                                 <Textarea
                                     id="description"
                                     placeholder="Optional detailed description..."
                                     value={newVersionData.description}
-                                    onChange={(e) => setNewVersionData(prev => ({
-                                        ...prev,
-                                        description: e.target.value
-                                    }))}
+                                    onChange={(e) =>
+                                        setNewVersionData((prev) => ({
+                                            ...prev,
+                                            description: e.target.value,
+                                        }))
+                                    }
                                 />
                             </div>
                         </div>
 
                         <DialogFooter>
-                            <Button
-                                variant="outline"
-                                onClick={() => setShowCreateVersion(false)}
-                            >
+                            <Button variant="outline" onClick={() => setShowCreateVersion(false)}>
                                 Cancel
                             </Button>
                             <Button
                                 onClick={handleCreateVersion}
                                 disabled={!newVersionData.change_reason.trim() || createVersionMutation.isPending}
                             >
-                                {createVersionMutation.isPending && (
-                                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                                )}
+                                {createVersionMutation.isPending && <RefreshCw className="h-4 w-4 mr-2 animate-spin" />}
                                 Create Version
                             </Button>
                         </DialogFooter>
@@ -280,11 +284,10 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                                     <Tag className="h-4 w-4 text-primary" />
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-gray-900">
-                                        Current Version: {template.version}
-                                    </p>
+                                    <p className="font-semibold text-gray-900">Current Version: {template.version}</p>
                                     <p className="text-sm text-gray-600">
-                                        Last modified {formatDistanceToNow(new Date(template.metadata.last_modified))} ago
+                                        Last modified {formatDistanceToNow(new Date(template.metadata.last_modified))}{' '}
+                                        ago
                                     </p>
                                 </div>
                             </div>
@@ -317,7 +320,7 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                                                 {getChangeTypeIcon(change.change_type)}
                                             </div>
                                         </div>
-                                        
+
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <Badge className={getChangeTypeBadgeColor(change.change_type)}>
@@ -327,7 +330,7 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                                                     Version {change.version}
                                                 </span>
                                             </div>
-                                            
+
                                             <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
                                                 <div className="flex items-center gap-1">
                                                     <User className="h-3 w-3" />
@@ -338,16 +341,14 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                                                     {formatDistanceToNow(new Date(change.changed_at))} ago
                                                 </div>
                                             </div>
-                                            
+
                                             {change.change_reason && (
-                                                <p className="text-sm text-gray-800 mb-3">
-                                                    {change.change_reason}
-                                                </p>
+                                                <p className="text-sm text-gray-800 mb-3">{change.change_reason}</p>
                                             )}
-                                            
+
                                             {change.changes.length > 0 && (
                                                 <Collapsible>
-                                                    <CollapsibleTrigger 
+                                                    <CollapsibleTrigger
                                                         className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800"
                                                         onClick={() => toggleExpanded(change.id)}
                                                     >
@@ -356,35 +357,34 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                                                         ) : (
                                                             <ChevronRight className="h-4 w-4" />
                                                         )}
-                                                        View {change.changes.length} change{change.changes.length !== 1 ? 's' : ''}
+                                                        View {change.changes.length} change
+                                                        {change.changes.length !== 1 ? 's' : ''}
                                                     </CollapsibleTrigger>
-                                                    
+
                                                     <CollapsibleContent className="mt-3">
                                                         <div className="space-y-2 pl-6 border-l-2 border-gray-200">
                                                             {change.changes.map((changeDetail, i) => (
                                                                 <div key={i} className="text-sm">
                                                                     <div className="flex items-center gap-2">
-                                                                        <Badge 
-                                                                            variant="outline" 
-                                                                            className="text-xs"
-                                                                        >
+                                                                        <Badge variant="outline" className="text-xs">
                                                                             {changeDetail.action}
                                                                         </Badge>
                                                                         <span className="text-gray-700">
                                                                             {formatChangeDescription(changeDetail)}
                                                                         </span>
                                                                     </div>
-                                                                    {changeDetail.old_value && changeDetail.new_value && (
-                                                                        <div className="mt-1 text-xs text-gray-500">
-                                                                            <span className="line-through text-red-600">
-                                                                                {String(changeDetail.old_value)}
-                                                                            </span>
-                                                                            {' → '}
-                                                                            <span className="text-green-600">
-                                                                                {String(changeDetail.new_value)}
-                                                                            </span>
-                                                                        </div>
-                                                                    )}
+                                                                    {changeDetail.old_value &&
+                                                                        changeDetail.new_value && (
+                                                                            <div className="mt-1 text-xs text-gray-500">
+                                                                                <span className="line-through text-red-600">
+                                                                                    {String(changeDetail.old_value)}
+                                                                                </span>
+                                                                                {' → '}
+                                                                                <span className="text-green-600">
+                                                                                    {String(changeDetail.new_value)}
+                                                                                </span>
+                                                                            </div>
+                                                                        )}
                                                                 </div>
                                                             ))}
                                                         </div>
@@ -392,7 +392,7 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                                                 </Collapsible>
                                             )}
                                         </div>
-                                        
+
                                         <div className="flex-shrink-0">
                                             <Badge variant="outline" className="text-xs">
                                                 {new Date(change.changed_at).toLocaleDateString()}
@@ -400,7 +400,7 @@ export default function TemplateVersionHistory({ templateId, className }: Templa
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 {index < changes.length - 1 && <Separator />}
                             </CardContent>
                         </Card>

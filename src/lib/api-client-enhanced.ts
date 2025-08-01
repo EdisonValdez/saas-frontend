@@ -1,5 +1,12 @@
 import { authService, type AuthSession } from './auth-bridge'
-import { API_ENDPOINTS, DJANGO_ENDPOINTS, getDjangoUrl, API_CONFIG, API_ERROR_CODES, mapToBackendEndpoint } from '@/config/api'
+import {
+    API_ENDPOINTS,
+    DJANGO_ENDPOINTS,
+    getDjangoUrl,
+    API_CONFIG,
+    API_ERROR_CODES,
+    mapToBackendEndpoint,
+} from '@/config/api'
 
 export interface ApiResponse<T = any> {
     data?: T
@@ -62,18 +69,14 @@ class EnhancedApiClient {
     private retryCount = 0
     private maxRetries = API_CONFIG.retries
 
-    private async request<T>(
-        endpoint: string, 
-        options: RequestInit = {},
-        useProxy = false
-    ): Promise<ApiResponse<T>> {
+    private async request<T>(endpoint: string, options: RequestInit = {}, useProxy = false): Promise<ApiResponse<T>> {
         try {
             // Get authentication headers
             const authHeaders = await authService.getAuthHeaders()
-            
+
             // Determine the URL - either proxy through Next.js API or direct to Django
             const url = useProxy ? endpoint : getDjangoUrl(mapToBackendEndpoint(endpoint))
-            
+
             const response = await fetch(url, {
                 ...API_CONFIG.cors,
                 ...options,
@@ -97,7 +100,7 @@ class EnhancedApiClient {
             if (response.status === API_ERROR_CODES.UNAUTHORIZED && this.retryCount < 1) {
                 this.retryCount++
                 const refreshResult = await authService.refreshSession()
-                
+
                 if (refreshResult.success) {
                     // Retry the request with refreshed token
                     return this.request<T>(endpoint, options, useProxy)
@@ -117,7 +120,9 @@ class EnhancedApiClient {
 
             return {
                 data: response.ok ? data : undefined,
-                error: !response.ok ? (data.error || data.detail || data.message || `HTTP ${response.status}`) : undefined,
+                error: !response.ok
+                    ? data.error || data.detail || data.message || `HTTP ${response.status}`
+                    : undefined,
                 status: response.status,
                 success: response.ok,
                 message: data.message,
@@ -126,7 +131,7 @@ class EnhancedApiClient {
             // Handle network errors with retry
             if (this.retryCount < this.maxRetries) {
                 this.retryCount++
-                await new Promise(resolve => setTimeout(resolve, API_CONFIG.retryDelay))
+                await new Promise((resolve) => setTimeout(resolve, API_CONFIG.retryDelay))
                 return this.request<T>(endpoint, options, useProxy)
             }
 
@@ -319,9 +324,7 @@ class EnhancedApiClient {
     }
 
     // Method to clear cache and retry failed requests
-    async retryWithFreshAuth<T>(
-        originalRequest: () => Promise<ApiResponse<T>>
-    ): Promise<ApiResponse<T>> {
+    async retryWithFreshAuth<T>(originalRequest: () => Promise<ApiResponse<T>>): Promise<ApiResponse<T>> {
         authService.clearCache()
         return originalRequest()
     }

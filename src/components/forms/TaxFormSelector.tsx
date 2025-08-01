@@ -52,7 +52,7 @@ export function TaxFormSelector({ onSelectTemplate, selectedYear, className }: T
 
     if (loading) {
         return (
-            <div className={cn("flex items-center justify-center p-8", className)}>
+            <div className={cn('flex items-center justify-center p-8', className)}>
                 <Loader2 className="h-6 w-6 animate-spin mr-2" />
                 <span>Loading templates...</span>
             </div>
@@ -61,15 +61,11 @@ export function TaxFormSelector({ onSelectTemplate, selectedYear, className }: T
 
     if (error) {
         return (
-            <div className={cn("flex items-center justify-center p-8", className)}>
+            <div className={cn('flex items-center justify-center p-8', className)}>
                 <div className="text-center">
                     <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-2" />
                     <div className="text-red-600 font-medium">{error}</div>
-                    <Button 
-                        variant="outline" 
-                        onClick={() => window.location.reload()} 
-                        className="mt-2"
-                    >
+                    <Button variant="outline" onClick={() => window.location.reload()} className="mt-2">
                         Retry
                     </Button>
                 </div>
@@ -81,11 +77,11 @@ export function TaxFormSelector({ onSelectTemplate, selectedYear, className }: T
     const activeTemplates = templates[activeYear] || []
 
     return (
-        <div className={cn("tax-form-selector space-y-6", className)}>
+        <div className={cn('tax-form-selector space-y-6', className)}>
             {/* Year Tabs */}
             <div className="year-tabs">
                 <div className="flex flex-wrap gap-2">
-                    {years.map(year => (
+                    {years.map((year) => (
                         <Button
                             key={year}
                             variant={year === activeYear ? 'default' : 'outline'}
@@ -103,21 +99,13 @@ export function TaxFormSelector({ onSelectTemplate, selectedYear, className }: T
                 {activeTemplates.length === 0 ? (
                     <div className="no-templates text-center py-8">
                         <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <div className="text-gray-600 text-lg mb-2">
-                            No templates available for {activeYear}
-                        </div>
-                        <div className="text-gray-500 text-sm">
-                            Templates for this tax year haven't been loaded yet
-                        </div>
+                        <div className="text-gray-600 text-lg mb-2">No templates available for {activeYear}</div>
+                        <div className="text-gray-500 text-sm">Templates for this tax year haven't been loaded yet</div>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {activeTemplates.map(template => (
-                            <TemplateCard
-                                key={template.id}
-                                template={template}
-                                onSelect={onSelectTemplate}
-                            />
+                        {activeTemplates.map((template) => (
+                            <TemplateCard key={template.id} template={template} onSelect={onSelectTemplate} />
                         ))}
                     </div>
                 )}
@@ -133,7 +121,7 @@ interface TemplateCardProps {
 
 function TemplateCard({ template, onSelect }: TemplateCardProps) {
     return (
-        <Card 
+        <Card
             className="template-card cursor-pointer hover:shadow-md transition-shadow"
             onClick={() => onSelect(template)}
         >
@@ -144,12 +132,8 @@ function TemplateCard({ template, onSelect }: TemplateCardProps) {
                         <div className="flex items-center gap-2">
                             <FileText className="h-5 w-5 text-blue-600" />
                             <div className="min-w-0 flex-1">
-                                <h3 className="font-semibold text-gray-900 truncate">
-                                    {template.form_name}
-                                </h3>
-                                <div className="form-number text-sm text-gray-600">
-                                    {template.form_number}
-                                </div>
+                                <h3 className="font-semibold text-gray-900 truncate">{template.form_name}</h3>
+                                <div className="form-number text-sm text-gray-600">{template.form_number}</div>
                             </div>
                         </div>
                         {!template.is_active && (
@@ -161,20 +145,14 @@ function TemplateCard({ template, onSelect }: TemplateCardProps) {
 
                     {/* Details */}
                     <div className="space-y-2">
-                        <div className="tax-year text-sm text-gray-600">
-                            Tax Year: {template.tax_year}
-                        </div>
+                        <div className="tax-year text-sm text-gray-600">Tax Year: {template.tax_year}</div>
 
                         {template.jurisdiction && (
-                            <div className="text-sm text-gray-600">
-                                Jurisdiction: {template.jurisdiction}
-                            </div>
+                            <div className="text-sm text-gray-600">Jurisdiction: {template.jurisdiction}</div>
                         )}
 
                         {template.description && (
-                            <div className="text-sm text-gray-600 line-clamp-2">
-                                {template.description}
-                            </div>
+                            <div className="text-sm text-gray-600 line-clamp-2">{template.description}</div>
                         )}
 
                         {template.current_version && (
@@ -183,9 +161,7 @@ function TemplateCard({ template, onSelect }: TemplateCardProps) {
                                     Version: {template.current_version.version_number}
                                 </span>
                                 {template.current_version.created_by_name && (
-                                    <span className="text-gray-500">
-                                        by {template.current_version.created_by_name}
-                                    </span>
+                                    <span className="text-gray-500">by {template.current_version.created_by_name}</span>
                                 )}
                             </div>
                         )}
@@ -194,9 +170,7 @@ function TemplateCard({ template, onSelect }: TemplateCardProps) {
                     {/* Footer */}
                     <div className="pt-2 border-t border-gray-100">
                         <div className="flex items-center justify-between text-xs text-gray-500">
-                            <span>
-                                Updated: {new Date(template.updated_at).toLocaleDateString()}
-                            </span>
+                            <span>Updated: {new Date(template.updated_at).toLocaleDateString()}</span>
                             {template.category && (
                                 <Badge variant="outline" className="text-xs">
                                     {template.category}

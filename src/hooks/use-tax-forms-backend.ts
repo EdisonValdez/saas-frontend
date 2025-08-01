@@ -10,13 +10,13 @@ import {
     getCurrentYearTemplates,
     getAvailableTaxYears,
     getTemplateJurisdictions,
-    taxFormQueryKeys
+    taxFormQueryKeys,
 } from '@/lib/api/tax-forms-backend'
 import type {
     TaxFormTemplate,
     TaxFormTemplateVersion,
     TaxFormTemplateListParams,
-    TemplatesByYearResponse
+    TemplatesByYearResponse,
 } from '@/types/tax-forms-backend'
 
 // Hook for fetching all templates with optional parameters
@@ -115,17 +115,15 @@ export function useTemplatesByJurisdiction(jurisdiction: string, enabled = true)
 export function useTaxFormSelector(selectedYear?: number) {
     const currentYear = new Date().getFullYear()
     const targetYear = selectedYear || currentYear
-    
-    const { 
-        data: templatesByYear, 
-        isLoading, 
-        error 
-    } = useTaxFormTemplatesByYear()
-    
+
+    const { data: templatesByYear, isLoading, error } = useTaxFormTemplatesByYear()
+
     const years = templatesByYear ? Object.keys(templatesByYear).sort().reverse() : []
-    const activeYear = years.includes(targetYear.toString()) ? targetYear.toString() : years[0] || currentYear.toString()
+    const activeYear = years.includes(targetYear.toString())
+        ? targetYear.toString()
+        : years[0] || currentYear.toString()
     const activeTemplates = templatesByYear?.[activeYear] || []
-    
+
     return {
         templatesByYear,
         years,
@@ -133,7 +131,7 @@ export function useTaxFormSelector(selectedYear?: number) {
         activeTemplates,
         isLoading,
         error,
-        hasTemplates: activeTemplates.length > 0
+        hasTemplates: activeTemplates.length > 0,
     }
 }
 
@@ -141,20 +139,23 @@ export function useTaxFormSelector(selectedYear?: number) {
 export function useEnhancedTemplate(templateId: string, enabled = true) {
     const templateQuery = useTaxFormTemplate(templateId, enabled)
     const versionsQuery = useTemplateVersions(templateId, enabled && !!templateQuery.data)
-    
-    const enhancedData = templateQuery.data ? {
-        ...templateQuery.data,
-        totalVersions: versionsQuery.data?.length || 0,
-        hasMultipleVersions: (versionsQuery.data?.length || 0) > 1,
-        latestVersion: versionsQuery.data?.[0], // Assuming versions are sorted by latest first
-        isOutdated: templateQuery.data.current_version?.version_number !== versionsQuery.data?.[0]?.version_number
-    } : undefined
-    
+
+    const enhancedData = templateQuery.data
+        ? {
+              ...templateQuery.data,
+              totalVersions: versionsQuery.data?.length || 0,
+              hasMultipleVersions: (versionsQuery.data?.length || 0) > 1,
+              latestVersion: versionsQuery.data?.[0], // Assuming versions are sorted by latest first
+              isOutdated:
+                  templateQuery.data.current_version?.version_number !== versionsQuery.data?.[0]?.version_number,
+          }
+        : undefined
+
     return {
         ...templateQuery,
         data: enhancedData,
         versions: versionsQuery.data,
         isLoadingVersions: versionsQuery.isLoading,
-        versionsError: versionsQuery.error
+        versionsError: versionsQuery.error,
     }
 }

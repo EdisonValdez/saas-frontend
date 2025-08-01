@@ -49,10 +49,7 @@ export default function BackendTaxFormExample({ workspaceId }: { workspaceId: st
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <TaxFormSelector 
-                                onSelectTemplate={handleBackendTemplateSelect}
-                                selectedYear={2024}
-                            />
+                            <TaxFormSelector onSelectTemplate={handleBackendTemplateSelect} selectedYear={2024} />
                         </CardContent>
                     </Card>
 
@@ -66,13 +63,27 @@ export default function BackendTaxFormExample({ workspaceId }: { workspaceId: st
                                     <div>
                                         <h4 className="font-semibold mb-2">Template Information</h4>
                                         <div className="space-y-2 text-sm">
-                                            <div><strong>Form Name:</strong> {selectedBackendTemplate.form_name}</div>
-                                            <div><strong>Form Number:</strong> {selectedBackendTemplate.form_number}</div>
-                                            <div><strong>Tax Year:</strong> {selectedBackendTemplate.tax_year}</div>
-                                            <div><strong>Template File:</strong> {selectedBackendTemplate.template_file}</div>
                                             <div>
-                                                <strong>Status:</strong> 
-                                                <Badge className={selectedBackendTemplate.is_active ? 'ml-2 bg-green-100 text-green-800' : 'ml-2 bg-red-100 text-red-800'}>
+                                                <strong>Form Name:</strong> {selectedBackendTemplate.form_name}
+                                            </div>
+                                            <div>
+                                                <strong>Form Number:</strong> {selectedBackendTemplate.form_number}
+                                            </div>
+                                            <div>
+                                                <strong>Tax Year:</strong> {selectedBackendTemplate.tax_year}
+                                            </div>
+                                            <div>
+                                                <strong>Template File:</strong> {selectedBackendTemplate.template_file}
+                                            </div>
+                                            <div>
+                                                <strong>Status:</strong>
+                                                <Badge
+                                                    className={
+                                                        selectedBackendTemplate.is_active
+                                                            ? 'ml-2 bg-green-100 text-green-800'
+                                                            : 'ml-2 bg-red-100 text-red-800'
+                                                    }
+                                                >
                                                     {selectedBackendTemplate.is_active ? 'Active' : 'Inactive'}
                                                 </Badge>
                                             </div>
@@ -83,10 +94,24 @@ export default function BackendTaxFormExample({ workspaceId }: { workspaceId: st
                                         <div>
                                             <h4 className="font-semibold mb-2">Current Version</h4>
                                             <div className="space-y-2 text-sm">
-                                                <div><strong>Version:</strong> {selectedBackendTemplate.current_version.version_number}</div>
-                                                <div><strong>Created By:</strong> {selectedBackendTemplate.current_version.created_by_name}</div>
-                                                <div><strong>Created:</strong> {new Date(selectedBackendTemplate.current_version.created_at).toLocaleDateString()}</div>
-                                                <div><strong>Change Notes:</strong> {selectedBackendTemplate.current_version.change_notes}</div>
+                                                <div>
+                                                    <strong>Version:</strong>{' '}
+                                                    {selectedBackendTemplate.current_version.version_number}
+                                                </div>
+                                                <div>
+                                                    <strong>Created By:</strong>{' '}
+                                                    {selectedBackendTemplate.current_version.created_by_name}
+                                                </div>
+                                                <div>
+                                                    <strong>Created:</strong>{' '}
+                                                    {new Date(
+                                                        selectedBackendTemplate.current_version.created_at
+                                                    ).toLocaleDateString()}
+                                                </div>
+                                                <div>
+                                                    <strong>Change Notes:</strong>{' '}
+                                                    {selectedBackendTemplate.current_version.change_notes}
+                                                </div>
                                             </div>
                                         </div>
                                     )}
@@ -134,27 +159,38 @@ export default function BackendTaxFormExample({ workspaceId }: { workspaceId: st
                                     <div>
                                         <h4 className="font-semibold mb-2">Template Information</h4>
                                         <div className="space-y-2 text-sm">
-                                            <div><strong>Name:</strong> {selectedOriginalTemplate.name}</div>
-                                            <div><strong>Form Number:</strong> {selectedOriginalTemplate.form_number}</div>
-                                            <div><strong>Tax Year:</strong> {selectedOriginalTemplate.tax_year}</div>
-                                            <div><strong>Category:</strong> {selectedOriginalTemplate.category}</div>
+                                            <div>
+                                                <strong>Name:</strong> {selectedOriginalTemplate.name}
+                                            </div>
+                                            <div>
+                                                <strong>Form Number:</strong> {selectedOriginalTemplate.form_number}
+                                            </div>
+                                            <div>
+                                                <strong>Tax Year:</strong> {selectedOriginalTemplate.tax_year}
+                                            </div>
+                                            <div>
+                                                <strong>Category:</strong> {selectedOriginalTemplate.category}
+                                            </div>
                                             <div>
                                                 <strong>Complexity:</strong>
-                                                <Badge className="ml-2">
-                                                    {selectedOriginalTemplate.complexity}
-                                                </Badge>
+                                                <Badge className="ml-2">{selectedOriginalTemplate.complexity}</Badge>
                                             </div>
-                                            <div><strong>Estimated Time:</strong> {selectedOriginalTemplate.estimated_time} minutes</div>
+                                            <div>
+                                                <strong>Estimated Time:</strong>{' '}
+                                                {selectedOriginalTemplate.estimated_time} minutes
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div>
                                         <h4 className="font-semibold mb-2">Sections</h4>
                                         <div className="space-y-1 text-sm">
-                                            {selectedOriginalTemplate.sections.map(section => (
+                                            {selectedOriginalTemplate.sections.map((section) => (
                                                 <div key={section.id} className="flex justify-between">
                                                     <span>{section.title}</span>
-                                                    <span className="text-gray-500">{section.fields.length} fields</span>
+                                                    <span className="text-gray-500">
+                                                        {section.fields.length} fields
+                                                    </span>
                                                 </div>
                                             ))}
                                         </div>
@@ -173,7 +209,7 @@ export default function BackendTaxFormExample({ workspaceId }: { workspaceId: st
 
             {/* Action buttons */}
             <div className="flex gap-4 justify-center">
-                <Button 
+                <Button
                     onClick={() => {
                         setSelectedBackendTemplate(null)
                         setSelectedOriginalTemplate(null)
@@ -182,12 +218,8 @@ export default function BackendTaxFormExample({ workspaceId }: { workspaceId: st
                 >
                     Clear Selections
                 </Button>
-                
-                {(selectedBackendTemplate || selectedOriginalTemplate) && (
-                    <Button>
-                        Use Selected Template
-                    </Button>
-                )}
+
+                {(selectedBackendTemplate || selectedOriginalTemplate) && <Button>Use Selected Template</Button>}
             </div>
         </div>
     )

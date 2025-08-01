@@ -2,10 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { 
-    taxFormTemplateApi, 
-    taxFormTemplateQueryKeys 
-} from '@/lib/api/tax-form-templates'
+import { taxFormTemplateApi, taxFormTemplateQueryKeys } from '@/lib/api/tax-form-templates'
 import type {
     TaxFormTemplate,
     TaxFormTemplateChange,
@@ -15,7 +12,7 @@ import type {
     SyncFromFilesystemRequest,
     CreateVersionRequest,
     FormGenerationRequest,
-    EnhancedTaxFormTemplate
+    EnhancedTaxFormTemplate,
 } from '@/types/tax-forms'
 import { toast } from 'sonner'
 
@@ -25,7 +22,7 @@ export function useTaxFormTemplates(filters?: TaxFormTemplateFilters) {
         queryKey: taxFormTemplateQueryKeys.list(filters),
         queryFn: () => taxFormTemplateApi.getTemplates(filters),
         staleTime: 5 * 60 * 1000, // 5 minutes
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
         retry: (failureCount, error: any) => {
             if (error?.status === 401 || error?.status === 403) {
                 return false
@@ -39,15 +36,14 @@ export function useTaxFormTemplates(filters?: TaxFormTemplateFilters) {
 export function useInfiniteTaxFormTemplates(filters?: Omit<TaxFormTemplateFilters, 'page'>) {
     return useInfiniteQuery({
         queryKey: taxFormTemplateQueryKeys.list(filters),
-        queryFn: ({ pageParam = 1 }) => 
-            taxFormTemplateApi.getTemplates({ ...filters, page: pageParam }),
+        queryFn: ({ pageParam = 1 }) => taxFormTemplateApi.getTemplates({ ...filters, page: pageParam }),
         getNextPageParam: (lastPage) => {
             if (!lastPage.success || !lastPage.data?.next) return undefined
             const url = new URL(lastPage.data.next)
             return parseInt(url.searchParams.get('page') || '1')
         },
         select: (data) => ({
-            pages: data.pages.map(page => page.success ? page.data : undefined).filter(Boolean),
+            pages: data.pages.map((page) => (page.success ? page.data : undefined)).filter(Boolean),
             pageParams: data.pageParams,
         }),
         staleTime: 5 * 60 * 1000,
@@ -61,7 +57,7 @@ export function useTaxFormTemplate(templateId: string, enabled = true) {
         queryFn: () => taxFormTemplateApi.getTemplate(templateId),
         enabled: enabled && !!templateId,
         staleTime: 10 * 60 * 1000, // 10 minutes for individual templates
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
@@ -72,7 +68,7 @@ export function useEnhancedTaxFormTemplate(templateId: string, enabled = true) {
         queryFn: () => taxFormTemplateApi.getEnhancedTemplate(templateId),
         enabled: enabled && !!templateId,
         staleTime: 10 * 60 * 1000,
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
@@ -83,7 +79,7 @@ export function useTaxFormTemplateChanges(templateId: string, enabled = true) {
         queryFn: () => taxFormTemplateApi.getTemplateChanges(templateId),
         enabled: enabled && !!templateId,
         staleTime: 2 * 60 * 1000, // 2 minutes for changes
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
@@ -94,7 +90,7 @@ export function useSearchTaxFormTemplates(query: string, filters?: Omit<TaxFormT
         queryFn: () => taxFormTemplateApi.searchTemplates(query, filters),
         enabled: !!query && query.length >= 2,
         staleTime: 1 * 60 * 1000, // 1 minute for search results
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
@@ -105,7 +101,7 @@ export function useTaxFormTemplatesByYear(taxYear: number, enabled = true) {
         queryFn: () => taxFormTemplateApi.getTemplatesByYear(taxYear),
         enabled: enabled && !!taxYear,
         staleTime: 10 * 60 * 1000,
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
@@ -116,7 +112,7 @@ export function useTaxFormTemplatesByCategory(category: string, enabled = true) 
         queryFn: () => taxFormTemplateApi.getTemplatesByCategory(category),
         enabled: enabled && !!category,
         staleTime: 5 * 60 * 1000,
-        select: (response) => response.success ? response.data : undefined,
+        select: (response) => (response.success ? response.data : undefined),
     })
 }
 
@@ -125,13 +121,12 @@ export function useCreateTaxFormTemplate() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (templateData: TemplateCreationData) => 
-            taxFormTemplateApi.createTemplate(templateData),
+        mutationFn: (templateData: TemplateCreationData) => taxFormTemplateApi.createTemplate(templateData),
         onSuccess: (response) => {
             if (response.success) {
                 // Invalidate template lists
-                queryClient.invalidateQueries({ 
-                    queryKey: taxFormTemplateQueryKeys.lists() 
+                queryClient.invalidateQueries({
+                    queryKey: taxFormTemplateQueryKeys.lists(),
                 })
                 toast.success('Template created successfully')
             } else {
@@ -154,16 +149,16 @@ export function useUpdateTaxFormTemplate() {
         onSuccess: (response, variables) => {
             if (response.success) {
                 // Update the specific template in cache
-                queryClient.setQueryData(
-                    taxFormTemplateQueryKeys.detail(variables.templateId),
-                    { ...response, success: true }
-                )
-                // Invalidate lists and enhanced data
-                queryClient.invalidateQueries({ 
-                    queryKey: taxFormTemplateQueryKeys.lists() 
+                queryClient.setQueryData(taxFormTemplateQueryKeys.detail(variables.templateId), {
+                    ...response,
+                    success: true,
                 })
-                queryClient.invalidateQueries({ 
-                    queryKey: taxFormTemplateQueryKeys.enhanced(variables.templateId) 
+                // Invalidate lists and enhanced data
+                queryClient.invalidateQueries({
+                    queryKey: taxFormTemplateQueryKeys.lists(),
+                })
+                queryClient.invalidateQueries({
+                    queryKey: taxFormTemplateQueryKeys.enhanced(variables.templateId),
                 })
                 toast.success('Template updated successfully')
             } else {
@@ -186,12 +181,12 @@ export function useDeleteTaxFormTemplate() {
         onSuccess: (response, templateId) => {
             if (response.success) {
                 // Remove from cache
-                queryClient.removeQueries({ 
-                    queryKey: taxFormTemplateQueryKeys.detail(templateId) 
+                queryClient.removeQueries({
+                    queryKey: taxFormTemplateQueryKeys.detail(templateId),
                 })
                 // Invalidate lists
-                queryClient.invalidateQueries({ 
-                    queryKey: taxFormTemplateQueryKeys.lists() 
+                queryClient.invalidateQueries({
+                    queryKey: taxFormTemplateQueryKeys.lists(),
                 })
                 toast.success('Template deleted successfully')
                 router.push('/dashboard/tax-forms/templates')
@@ -210,23 +205,22 @@ export function useSyncFromFilesystem() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (request: SyncFromFilesystemRequest) =>
-            taxFormTemplateApi.syncFromFilesystem(request),
+        mutationFn: (request: SyncFromFilesystemRequest) => taxFormTemplateApi.syncFromFilesystem(request),
         onSuccess: (response) => {
             if (response.success && response.data) {
                 // Clear all template cache after sync
-                queryClient.invalidateQueries({ 
-                    queryKey: taxFormTemplateQueryKeys.all 
+                queryClient.invalidateQueries({
+                    queryKey: taxFormTemplateQueryKeys.all,
                 })
-                
+
                 const { synced_templates, created_templates, updated_templates, errors } = response.data
-                
+
                 if (synced_templates > 0) {
                     toast.success(
                         `Sync completed: ${created_templates.length} created, ${updated_templates.length} updated`
                     )
                 }
-                
+
                 if (errors.length > 0) {
                     toast.warning(`Sync completed with ${errors.length} errors`)
                 }
@@ -250,17 +244,18 @@ export function useCreateTemplateVersion() {
         onSuccess: (response, variables) => {
             if (response.success && response.data) {
                 // Update template cache with new version
-                queryClient.setQueryData(
-                    taxFormTemplateQueryKeys.detail(variables.templateId),
-                    { data: response.data.template, success: true, status: 200 }
-                )
+                queryClient.setQueryData(taxFormTemplateQueryKeys.detail(variables.templateId), {
+                    data: response.data.template,
+                    success: true,
+                    status: 200,
+                })
                 // Invalidate changes to refresh history
-                queryClient.invalidateQueries({ 
-                    queryKey: taxFormTemplateQueryKeys.changes(variables.templateId) 
+                queryClient.invalidateQueries({
+                    queryKey: taxFormTemplateQueryKeys.changes(variables.templateId),
                 })
                 // Invalidate lists
-                queryClient.invalidateQueries({ 
-                    queryKey: taxFormTemplateQueryKeys.lists() 
+                queryClient.invalidateQueries({
+                    queryKey: taxFormTemplateQueryKeys.lists(),
                 })
                 toast.success(`New version ${response.data.new_version} created`)
             } else {
@@ -276,8 +271,7 @@ export function useCreateTemplateVersion() {
 
 export function useGenerateForm() {
     return useMutation({
-        mutationFn: (request: FormGenerationRequest) =>
-            taxFormTemplateApi.generateForm(request),
+        mutationFn: (request: FormGenerationRequest) => taxFormTemplateApi.generateForm(request),
         onSuccess: (response) => {
             if (response.success) {
                 toast.success('Form generated successfully')
@@ -297,15 +291,15 @@ export function useTaxFormTemplateCache() {
     const queryClient = useQueryClient()
 
     const clearCache = () => {
-        queryClient.invalidateQueries({ 
-            queryKey: taxFormTemplateQueryKeys.all 
+        queryClient.invalidateQueries({
+            queryKey: taxFormTemplateQueryKeys.all,
         })
         taxFormTemplateApi.clearCache()
     }
 
     const invalidateTemplate = (templateId: string) => {
-        queryClient.invalidateQueries({ 
-            queryKey: taxFormTemplateQueryKeys.detail(templateId) 
+        queryClient.invalidateQueries({
+            queryKey: taxFormTemplateQueryKeys.detail(templateId),
         })
         taxFormTemplateApi.invalidateTemplate(templateId)
     }
@@ -330,16 +324,13 @@ export function useOptimisticTemplateUpdate() {
     const queryClient = useQueryClient()
 
     const updateTemplate = (templateId: string, updater: (old: TaxFormTemplate) => TaxFormTemplate) => {
-        queryClient.setQueryData(
-            taxFormTemplateQueryKeys.detail(templateId),
-            (old: any) => {
-                if (!old?.success || !old?.data) return old
-                return {
-                    ...old,
-                    data: updater(old.data)
-                }
+        queryClient.setQueryData(taxFormTemplateQueryKeys.detail(templateId), (old: any) => {
+            if (!old?.success || !old?.data) return old
+            return {
+                ...old,
+                data: updater(old.data),
             }
-        )
+        })
     }
 
     return { updateTemplate }
@@ -353,15 +344,15 @@ export function useTaxFormTemplateValidation() {
 
     const validateTemplateSection = (section: TaxFormTemplate['sections'][0]) => {
         const errors: string[] = []
-        
+
         if (!section.name?.trim()) {
             errors.push('Section name is required')
         }
-        
+
         if (section.fields.length === 0) {
             errors.push('At least one field is required')
         }
-        
+
         section.fields.forEach((field, index) => {
             if (!field.name?.trim()) {
                 errors.push(`Field ${index + 1}: Name is required`)
@@ -370,7 +361,7 @@ export function useTaxFormTemplateValidation() {
                 errors.push(`Field "${field.name}": Type is required`)
             }
         })
-        
+
         return errors
     }
 

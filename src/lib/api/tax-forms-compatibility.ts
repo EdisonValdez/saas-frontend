@@ -29,7 +29,7 @@ export function convertBackendToOriginal(backendTemplate: BackendTemplate): Orig
             last_modified_by: backendTemplate.current_version?.created_by_name || 'system',
             source_file_path: backendTemplate.template_file,
             is_active: backendTemplate.is_active,
-        }
+        },
     }
 }
 
@@ -60,7 +60,7 @@ export function convertOriginalToBackend(originalTemplate: OriginalTemplate): Ba
             change_notes: 'Converted from original format',
             is_active: originalTemplate.metadata.is_active,
             created_at: originalTemplate.metadata.created_at,
-        }
+        },
     }
 }
 
@@ -69,18 +69,18 @@ export function convertOriginalToBackend(originalTemplate: OriginalTemplate): Ba
  */
 function mapComplexity(category?: string): 'simple' | 'intermediate' | 'complex' {
     if (!category) return 'intermediate'
-    
+
     const simpleCategories = ['individual', 'simple', 'basic']
     const complexCategories = ['business', 'corporation', 'partnership', 'complex', 'advanced']
-    
+
     const lowerCategory = category.toLowerCase()
-    
-    if (simpleCategories.some(cat => lowerCategory.includes(cat))) {
+
+    if (simpleCategories.some((cat) => lowerCategory.includes(cat))) {
         return 'simple'
-    } else if (complexCategories.some(cat => lowerCategory.includes(cat))) {
+    } else if (complexCategories.some((cat) => lowerCategory.includes(cat))) {
         return 'complex'
     }
-    
+
     return 'intermediate'
 }
 
@@ -89,9 +89,9 @@ function mapComplexity(category?: string): 'simple' | 'intermediate' | 'complex'
  */
 function estimateTimeFromMapping(fieldMapping: Record<string, any>): number {
     const fieldCount = Object.keys(fieldMapping).length
-    
-    if (fieldCount < 10) return 30  // 30 minutes
-    if (fieldCount < 25) return 90  // 1.5 hours
+
+    if (fieldCount < 10) return 30 // 30 minutes
+    if (fieldCount < 25) return 90 // 1.5 hours
     if (fieldCount < 50) return 180 // 3 hours
     return 360 // 6 hours
 }
@@ -101,11 +101,11 @@ function estimateTimeFromMapping(fieldMapping: Record<string, any>): number {
  */
 function extractFilingStatus(fieldMapping: Record<string, any>): string[] {
     const filingStatusField = fieldMapping['filing_status'] || fieldMapping['status'] || fieldMapping['filing_type']
-    
+
     if (filingStatusField && Array.isArray(filingStatusField.options)) {
         return filingStatusField.options
     }
-    
+
     // Default filing statuses
     return ['single', 'married_filing_jointly', 'married_filing_separately', 'head_of_household']
 }
@@ -115,16 +115,16 @@ function extractFilingStatus(fieldMapping: Record<string, any>): string[] {
  */
 function convertFieldMappingToSections(fieldMapping: Record<string, any>): OriginalTemplate['sections'] {
     const sections: OriginalTemplate['sections'] = []
-    
+
     // Group fields by logical sections
     const sectionGroups: Record<string, any[]> = {
-        'personal_info': [],
-        'income': [],
-        'deductions': [],
-        'calculations': [],
-        'other': []
+        personal_info: [],
+        income: [],
+        deductions: [],
+        calculations: [],
+        other: [],
     }
-    
+
     Object.entries(fieldMapping).forEach(([key, field]) => {
         const sectionName = determineSectionFromFieldName(key)
         sectionGroups[sectionName].push({
@@ -140,7 +140,7 @@ function convertFieldMappingToSections(fieldMapping: Record<string, any>): Origi
             dependencies: field.dependencies,
         })
     })
-    
+
     Object.entries(sectionGroups).forEach(([sectionName, fields], index) => {
         if (fields.length > 0) {
             sections.push({
@@ -149,11 +149,11 @@ function convertFieldMappingToSections(fieldMapping: Record<string, any>): Origi
                 title: formatSectionTitle(sectionName),
                 description: getSectionDescription(sectionName),
                 order: index,
-                fields
+                fields,
             })
         }
     })
-    
+
     return sections
 }
 
@@ -162,9 +162,9 @@ function convertFieldMappingToSections(fieldMapping: Record<string, any>): Origi
  */
 function convertSectionsToFieldMapping(sections: OriginalTemplate['sections']): Record<string, any> {
     const fieldMapping: Record<string, any> = {}
-    
-    sections.forEach(section => {
-        section.fields.forEach(field => {
+
+    sections.forEach((section) => {
+        section.fields.forEach((field) => {
             fieldMapping[field.name] = {
                 label: field.label,
                 type: field.type,
@@ -174,11 +174,11 @@ function convertSectionsToFieldMapping(sections: OriginalTemplate['sections']): 
                 options: field.options,
                 calculation: field.calculation,
                 dependencies: field.dependencies,
-                section: section.name
+                section: section.name,
             }
         })
     })
-    
+
     return fieldMapping
 }
 
@@ -190,19 +190,19 @@ function determineSectionFromFieldName(fieldName: string): string {
     const incomeFields = ['wages', 'salary', 'interest', 'dividend', 'business_income', 'rental']
     const deductionFields = ['deduction', 'itemized', 'standard', 'charity', 'mortgage']
     const calculationFields = ['tax', 'credit', 'refund', 'owed', 'total', 'subtotal']
-    
+
     const lowerFieldName = fieldName.toLowerCase()
-    
-    if (personalFields.some(field => lowerFieldName.includes(field))) {
+
+    if (personalFields.some((field) => lowerFieldName.includes(field))) {
         return 'personal_info'
-    } else if (incomeFields.some(field => lowerFieldName.includes(field))) {
+    } else if (incomeFields.some((field) => lowerFieldName.includes(field))) {
         return 'income'
-    } else if (deductionFields.some(field => lowerFieldName.includes(field))) {
+    } else if (deductionFields.some((field) => lowerFieldName.includes(field))) {
         return 'deductions'
-    } else if (calculationFields.some(field => lowerFieldName.includes(field))) {
+    } else if (calculationFields.some((field) => lowerFieldName.includes(field))) {
         return 'calculations'
     }
-    
+
     return 'other'
 }
 
@@ -212,7 +212,7 @@ function determineSectionFromFieldName(fieldName: string): string {
 function formatLabel(fieldName: string): string {
     return fieldName
         .split('_')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ')
 }
 
@@ -221,13 +221,13 @@ function formatLabel(fieldName: string): string {
  */
 function formatSectionTitle(sectionName: string): string {
     const titles: Record<string, string> = {
-        'personal_info': 'Personal Information',
-        'income': 'Income',
-        'deductions': 'Deductions',
-        'calculations': 'Tax Calculations',
-        'other': 'Additional Information'
+        personal_info: 'Personal Information',
+        income: 'Income',
+        deductions: 'Deductions',
+        calculations: 'Tax Calculations',
+        other: 'Additional Information',
     }
-    
+
     return titles[sectionName] || formatLabel(sectionName)
 }
 
@@ -236,13 +236,13 @@ function formatSectionTitle(sectionName: string): string {
  */
 function getSectionDescription(sectionName: string): string {
     const descriptions: Record<string, string> = {
-        'personal_info': 'Basic taxpayer information and filing status',
-        'income': 'All sources of taxable income',
-        'deductions': 'Deductions and credits to reduce tax liability',
-        'calculations': 'Tax calculations and final amounts',
-        'other': 'Additional required information'
+        personal_info: 'Basic taxpayer information and filing status',
+        income: 'All sources of taxable income',
+        deductions: 'Deductions and credits to reduce tax liability',
+        calculations: 'Tax calculations and final amounts',
+        other: 'Additional required information',
     }
-    
+
     return descriptions[sectionName] || ''
 }
 
