@@ -6,7 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LogIn, UserPlus, ArrowRight, Home } from 'lucide-react'
 
 export default async function IndexPage() {
-    // Auth temporarily disabled for demo mode
+    // Note: Auth check temporarily simplified for demo mode
+    try {
+        const user = await getCurrentUserServer()
+        if (user) {
+            redirect('/dashboard')
+        }
+    } catch (error) {
+        // Auth temporarily disabled for demo - continue to show landing
+        console.log('Auth check failed (demo mode):', error)
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
