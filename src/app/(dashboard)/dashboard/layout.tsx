@@ -27,7 +27,7 @@ export default async function Dashboard({ children }: DashboardLayoutProps) {
     const [user, workspaces] = await Promise.all([userData, workspacesData])
 
     if (!user) {
-        redirect(await signIn('/dashboard'))
+        redirect('/login')
     }
 
     const firstWorkspaceId = workspaces?.[0]?.id
