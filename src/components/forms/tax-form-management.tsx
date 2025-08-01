@@ -314,7 +314,20 @@ export function TaxFormManagement() {
         )
     }
 
-    const TemplateCard = ({ template }: { template: FormTemplate }) => {
+    const TemplateCard = ({ template }: { template: TaxFormTemplate }) => {
+        const complexityMap: Record<string, string> = {
+            'simple': 'bg-green-100 text-green-800',
+            'intermediate': 'bg-yellow-100 text-yellow-800',
+            'complex': 'bg-red-100 text-red-800'
+        }
+
+        const formatEstimatedTime = (minutes: number) => {
+            if (minutes < 60) return `${minutes} min`
+            const hours = Math.floor(minutes / 60)
+            const remainingMinutes = minutes % 60
+            return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`
+        }
+
         return (
             <Card
                 className="hover:shadow-md transition-shadow cursor-pointer"
@@ -333,7 +346,9 @@ export function TaxFormManagement() {
                                 </p>
                             </div>
                         </div>
-                        <Badge className={COMPLEXITY_COLORS[template.complexity]}>{template.complexity}</Badge>
+                        <Badge className={complexityMap[template.complexity] || 'bg-gray-100 text-gray-800'}>
+                            {template.complexity}
+                        </Badge>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -341,12 +356,19 @@ export function TaxFormManagement() {
 
                     <div className="flex items-center gap-2 text-sm">
                         <Clock className="h-4 w-4 text-muted-foreground" />
-                        <span>{template.estimated_time}</span>
+                        <span>{formatEstimatedTime(template.estimated_time)}</span>
                     </div>
 
                     <div className="flex items-center gap-2 text-sm">
                         <BookOpen className="h-4 w-4 text-muted-foreground" />
                         <span>{template.sections.length} sections</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm">
+                        <Badge variant="secondary" className="text-xs">
+                            {template.category}
+                        </Badge>
+                        <span className="text-muted-foreground">v{template.version}</span>
                     </div>
 
                     <Button
