@@ -16,7 +16,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ReactQueryProvider } from '@/lib/react-query'
-import { PromptaxNavbar } from '@/components/promptax-navbar'
+import { ConditionalNavbar } from '@/components/conditional-navbar'
 import { NextAuthSesionProvider } from '@/components/auth/session-provider'
 
 // Authentication
