@@ -23,8 +23,8 @@ import {
 } from '@/components/ui/select'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
 
-import { loadStripe } from '@stripe/stripe-js'
 import { Badge } from '@/components/ui/badge'
+import { CheckoutButton } from '@/components/subscriptions/checkout-button'
 
 interface PricingProps {
     prices: StripePrice[]
