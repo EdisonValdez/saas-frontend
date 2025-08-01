@@ -213,10 +213,20 @@ export default function FormGenerationWorkflow({
       progress: 0,
       error: undefined
     })))
-    setCurrentStep(0)
     setOverallProgress(0)
-    setIsPaused(false)
-    startGeneration()
+    handleStartGeneration()
+  }
+
+  const resetWorkflow = () => {
+    setCurrentStep('template')
+    setSelectedTemplate(null)
+    setGenerationSteps(prev => prev.map(step => ({
+      ...step,
+      status: 'pending',
+      progress: 0,
+      error: undefined
+    })))
+    setOverallProgress(0)
   }
 
   const getStatusIcon = (status: string) => {
