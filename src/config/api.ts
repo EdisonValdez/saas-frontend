@@ -121,8 +121,8 @@ export const DJANGO_ENDPOINTS = {
         extractedData: (documentId: string) => `/api/documents/${documentId}/extracted-data/`,
     },
     agents: {
-        invoke: '/api/agents/invoke/',
-        email: '/api/agents/email/',
+        invoke: '/api/agents/invoke',
+        email: '/api/agents/email',
     },
 }
 
