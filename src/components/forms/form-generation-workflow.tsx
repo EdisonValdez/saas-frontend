@@ -4,14 +4,15 @@ import React, { useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import {
-  FileText, Settings, Zap, CheckCircle, AlertTriangle,
-  Clock, User, Database, Calculator, Eye, Download,
-  Loader2, ArrowRight, Play, Pause, RotateCcw, Search
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import { 
+  FileText, Settings, Zap, CheckCircle, AlertTriangle, 
+  Clock, Search, Calculator, Eye, Download,
+  Loader2, ArrowRight, RotateCcw
 } from 'lucide-react'
 import FormTemplateSelection from './form-template-selection'
 import FormPreviewDialog from './form-preview-dialog'
@@ -39,12 +40,12 @@ interface FormGenerationWorkflowProps {
   onComplete?: (results: any) => void
 }
 
-export default function FormGenerationWorkflow({
+export default function FormGenerationWorkflow({ 
   workspaceId,
-  clientId,
+  clientId, 
   clientData = {},
   preSelectedTemplateId,
-  onComplete
+  onComplete 
 }: FormGenerationWorkflowProps) {
   const [currentStep, setCurrentStep] = useState<'template' | 'configure' | 'generate' | 'complete'>('template')
   const [selectedTemplate, setSelectedTemplate] = useState<TaxFormTemplate | null>(null)
@@ -54,10 +55,10 @@ export default function FormGenerationWorkflow({
     client_data: clientData
   })
   const [overallProgress, setOverallProgress] = useState(0)
-  const [showFormSelection, setShowFormSelection] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [showManagement, setShowManagement] = useState(false)
-
+  const [generatedFormData, setGeneratedFormData] = useState<any>(null)
+  
   // API hooks
   const generateFormMutation = useGenerateForm()
   const { data: preSelectedTemplate } = useTaxFormTemplate(preSelectedTemplateId || '', !!preSelectedTemplateId)
@@ -121,6 +122,10 @@ export default function FormGenerationWorkflow({
   React.useEffect(() => {
     if (preSelectedTemplate && !selectedTemplate) {
       setSelectedTemplate(preSelectedTemplate)
+      setGenerationConfig(prev => ({
+        ...prev,
+        form_name: `${preSelectedTemplate.form_number} - ${new Date().toLocaleDateString()}`
+      }))
       setCurrentStep('configure')
     }
   }, [preSelectedTemplate, selectedTemplate])
@@ -151,34 +156,35 @@ export default function FormGenerationWorkflow({
     try {
       // Simulate step-by-step progress
       for (let i = 0; i < generationSteps.length; i++) {
-        setGenerationSteps(prev => prev.map((step, index) =>
+        setGenerationSteps(prev => prev.map((step, index) => 
           index === i ? { ...step, status: 'processing', progress: 0 } : step
         ))
 
         // Simulate progress within each step
         for (let progress = 0; progress <= 100; progress += 20) {
           await new Promise(resolve => setTimeout(resolve, 150))
-
-          setGenerationSteps(prev => prev.map((step, index) =>
+          
+          setGenerationSteps(prev => prev.map((step, index) => 
             index === i ? { ...step, progress } : step
           ))
-
+          
           setOverallProgress(((i * 100 + progress) / generationSteps.length))
         }
 
-        setGenerationSteps(prev => prev.map((step, index) =>
+        setGenerationSteps(prev => prev.map((step, index) => 
           index === i ? { ...step, status: 'completed', progress: 100 } : step
         ))
       }
 
       // Call the actual API
       const result = await generateFormMutation.mutateAsync(request)
-
+      
       if (result.success) {
+        setGeneratedFormData(result.data)
         setCurrentStep('complete')
         setOverallProgress(100)
         toast.success('Form generated successfully!')
-
+        
         if (onComplete) {
           onComplete({
             success: true,
@@ -192,16 +198,16 @@ export default function FormGenerationWorkflow({
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Form generation failed'
-
+      
       // Mark current step as error
-      setGenerationSteps(prev => prev.map((step, index) =>
-        index === generationSteps.findIndex(s => s.status === 'processing') ? {
-          ...step,
-          status: 'error',
-          error: errorMessage
+      setGenerationSteps(prev => prev.map((step, index) => 
+        index === generationSteps.findIndex(s => s.status === 'processing') ? { 
+          ...step, 
+          status: 'error', 
+          error: errorMessage 
         } : step
       ))
-
+      
       toast.error(errorMessage)
     }
   }, [selectedTemplate, generationConfig, workspaceId, generateFormMutation, generationSteps, onComplete])
@@ -220,6 +226,7 @@ export default function FormGenerationWorkflow({
   const resetWorkflow = () => {
     setCurrentStep('template')
     setSelectedTemplate(null)
+    setGeneratedFormData(null)
     setGenerationSteps(prev => prev.map(step => ({
       ...step,
       status: 'pending',
@@ -260,20 +267,19 @@ export default function FormGenerationWorkflow({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Form Generation Workflow</h1>
+          <h1 className="text-3xl font-bold">Tax Form Generation</h1>
           <p className="text-gray-600 mt-1">
-            Complete tax form generation and management system
+            Select a template, configure data, and generate your tax form
           </p>
         </div>
         
         <div className="flex space-x-2">
-          <Button
-            variant="outline"
-            onClick={() => setShowFormSelection(true)}
-          >
-            <FileText className="w-4 h-4 mr-2" />
-            Select Forms
-          </Button>
+          {currentStep !== 'template' && (
+            <Button variant="outline" onClick={resetWorkflow}>
+              <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
+              Start Over
+            </Button>
+          )}
           <Button
             variant="outline"
             onClick={() => setShowManagement(true)}
@@ -284,224 +290,256 @@ export default function FormGenerationWorkflow({
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="cursor-pointer hover:shadow-md transition-shadow" 
-              onClick={() => setShowFormSelection(true)}>
-          <CardContent className="p-4 text-center">
-            <FileText className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-            <div className="font-medium">Select Forms</div>
-            <div className="text-sm text-gray-600">Choose forms to generate</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => setShowPreview(true)}>
-          <CardContent className="p-4 text-center">
-            <Eye className="w-8 h-8 mx-auto mb-2 text-green-500" />
-            <div className="font-medium">Preview Forms</div>
-            <div className="text-sm text-gray-600">Review before generation</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="cursor-pointer hover:shadow-md transition-shadow">
-          <CardContent className="p-4 text-center">
-            <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-500" />
-            <div className="font-medium">Generate</div>
-            <div className="text-sm text-gray-600">Start form generation</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => setShowManagement(true)}>
-          <CardContent className="p-4 text-center">
-            <Settings className="w-8 h-8 mx-auto mb-2 text-purple-500" />
-            <div className="font-medium">Manage</div>
-            <div className="text-sm text-gray-600">Version control & status</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Generation Progress */}
+      {/* Progress Steps */}
       <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center space-x-2">
-                <Zap className="w-5 h-5" />
-                <span>Generation Progress</span>
-              </CardTitle>
-              <CardDescription>
-                Track the progress of form generation workflow
-              </CardDescription>
-            </div>
-            
-            <div className="flex space-x-2">
-              {!isGenerating && !isPaused && (
-                <Button onClick={startGeneration} disabled={selectedFormIds.length === 0}>
-                  <Play className="w-4 h-4 mr-2" />
-                  Start Generation
-                </Button>
-              )}
-              
-              {isGenerating && (
-                <Button variant="outline" onClick={pauseGeneration}>
-                  <Pause className="w-4 h-4 mr-2" />
-                  Pause
-                </Button>
-              )}
-              
-              {isPaused && (
-                <>
-                  <Button onClick={resumeGeneration}>
-                    <Play className="w-4 h-4 mr-2" />
-                    Resume
-                  </Button>
-                  <Button variant="outline" onClick={retryGeneration}>
-                    <RotateCcw className="w-4 h-4 mr-2" />
-                    Retry
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Overall Progress */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="font-medium">Overall Progress</span>
-              <span className="text-sm text-gray-600">
-                {Math.round(overallProgress)}% Complete
-              </span>
-            </div>
-            <Progress value={overallProgress} className="h-3" />
-          </div>
-
-          {/* Selected Forms Summary */}
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="font-medium text-blue-900">Selected Forms</h4>
-              <Badge variant="outline" className="text-blue-700">
-                {selectedFormIds.length} forms
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <Badge variant={currentStep === 'template' ? 'default' : 'secondary'}>
+                1. Template
+              </Badge>
+              <ArrowRight className="h-4 w-4 text-gray-400" />
+              <Badge variant={currentStep === 'configure' ? 'default' : 'secondary'}>
+                2. Configure
+              </Badge>
+              <ArrowRight className="h-4 w-4 text-gray-400" />
+              <Badge variant={currentStep === 'generate' ? 'default' : 'secondary'}>
+                3. Generate
+              </Badge>
+              <ArrowRight className="h-4 w-4 text-gray-400" />
+              <Badge variant={currentStep === 'complete' ? 'default' : 'secondary'}>
+                4. Complete
               </Badge>
             </div>
-            <div className="text-sm text-blue-800">
-              {selectedFormIds.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {selectedFormIds.map(formId => (
-                    <Badge key={formId} variant="secondary">
-                      Form {formId}
-                    </Badge>
-                  ))}
-                </div>
-              ) : (
-                'No forms selected. Click "Select Forms" to choose forms for generation.'
-              )}
-            </div>
           </div>
+          
+          {overallProgress > 0 && (
+            <div className="mb-4">
+              <div className="flex justify-between text-sm mb-2">
+                <span>Overall Progress</span>
+                <span>{Math.round(overallProgress)}%</span>
+              </div>
+              <Progress value={overallProgress} className="h-2" />
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
-          {/* Generation Steps */}
-          <div className="space-y-4">
-            <h4 className="font-medium">Generation Steps</h4>
-            <div className="space-y-3">
+      {/* Step Content */}
+      {currentStep === 'template' && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Search className="w-5 h-5" />
+              <span>Select Tax Form Template</span>
+            </CardTitle>
+            <CardDescription>
+              Choose the appropriate tax form template for generation
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <FormTemplateSelection
+              onSelectTemplate={handleTemplateSelect}
+              selectedTemplateId={selectedTemplate?.id}
+              workspaceId={workspaceId}
+            />
+          </CardContent>
+        </Card>
+      )}
+
+      {currentStep === 'configure' && selectedTemplate && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Settings className="w-5 h-5" />
+              <span>Configure Generation</span>
+            </CardTitle>
+            <CardDescription>
+              Configure the form generation settings and client data
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-semibold mb-4">Selected Template</h3>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium">{selectedTemplate.form_number}</h4>
+                      <Badge>{selectedTemplate.complexity}</Badge>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-2">{selectedTemplate.name}</p>
+                    <div className="flex items-center text-xs text-gray-500 space-x-4">
+                      <span>{selectedTemplate.tax_year}</span>
+                      <span>{selectedTemplate.category}</span>
+                      <span>v{selectedTemplate.version}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold mb-4">Generation Settings</h3>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="form-name">Form Name</Label>
+                    <Input
+                      id="form-name"
+                      value={generationConfig.form_name}
+                      onChange={(e) => setGenerationConfig(prev => ({
+                        ...prev,
+                        form_name: e.target.value
+                      }))}
+                      placeholder="Enter form name..."
+                    />
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="save-draft"
+                      checked={generationConfig.save_as_draft}
+                      onCheckedChange={(checked) => setGenerationConfig(prev => ({
+                        ...prev,
+                        save_as_draft: !!checked
+                      }))}
+                    />
+                    <Label htmlFor="save-draft">Save as draft</Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setCurrentStep('template')}>
+                Back
+              </Button>
+              <Button 
+                onClick={handleStartGeneration}
+                disabled={!generationConfig.form_name.trim() || generateFormMutation.isPending}
+              >
+                {generateFormMutation.isPending && (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                )}
+                Generate Form
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {currentStep === 'generate' && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Zap className="w-5 h-5" />
+              <span>Generating Form</span>
+            </CardTitle>
+            <CardDescription>
+              Processing your form generation request
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
               {generationSteps.map((step, index) => (
-                <div key={step.id} className={`p-4 border rounded-lg ${getStatusColor(step.status)}`}>
+                <div key={step.id} className="border rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-3">
                       {getStatusIcon(step.status)}
                       <div>
-                        <div className="font-medium">{step.title}</div>
-                        <div className="text-sm opacity-80">{step.description}</div>
+                        <h4 className="font-medium">{step.title}</h4>
+                        <p className="text-sm text-gray-600">{step.description}</p>
                       </div>
                     </div>
-                    
-                    <div className="text-right">
-                      <div className="text-sm font-medium">
-                        {step.progress}%
-                      </div>
-                      {step.timeEstimate && step.status === 'pending' && (
-                        <div className="text-xs opacity-70">
-                          Est. {step.timeEstimate}
-                        </div>
-                      )}
-                    </div>
+                    <Badge className={getStatusColor(step.status)}>
+                      {step.status}
+                    </Badge>
                   </div>
                   
-                  {step.status !== 'pending' && (
-                    <Progress value={step.progress} className="h-2 mb-2" />
+                  {step.status === 'processing' && (
+                    <div className="mt-2">
+                      <Progress value={step.progress} className="h-2" />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Estimated time: {step.timeEstimate}
+                      </p>
+                    </div>
                   )}
                   
                   {step.error && (
-                    <Alert className="mt-2 border-red-200 bg-red-50">
-                      <AlertTriangle className="h-4 w-4 text-red-500" />
-                      <AlertDescription className="text-red-700">
-                        {step.error}
-                      </AlertDescription>
+                    <Alert className="mt-2">
+                      <AlertTriangle className="h-4 w-4" />
+                      <AlertDescription>{step.error}</AlertDescription>
                     </Alert>
-                  )}
-                  
-                  {step.details && (step.status === 'processing' || step.status === 'completed') && (
-                    <div className="mt-2 text-sm">
-                      <div className="font-medium mb-1">Details:</div>
-                      <ul className="space-y-1 opacity-80">
-                        {step.details.map((detail, i) => (
-                          <li key={i} className="flex items-center space-x-2">
-                            <div className="w-1 h-1 bg-current rounded-full" />
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
                   )}
                 </div>
               ))}
             </div>
-          </div>
-        </CardContent>
-      </Card>
+            
+            {generationSteps.some(step => step.status === 'error') && (
+              <div className="mt-4 flex justify-end">
+                <Button onClick={retryGeneration}>
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Retry Generation
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
-      {/* Form Selection Dialog */}
-      <Dialog open={showFormSelection} onOpenChange={setShowFormSelection}>
-        <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle>Select Tax Forms</DialogTitle>
-            <DialogDescription>
-              Choose the forms you want to generate for this client
-            </DialogDescription>
-          </DialogHeader>
-          <div className="h-[80vh] overflow-auto">
-            <FormSelectionDashboard />
-          </div>
-        </DialogContent>
-      </Dialog>
+      {currentStep === 'complete' && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <CheckCircle className="w-5 h-5 text-green-500" />
+              <span>Generation Complete</span>
+            </CardTitle>
+            <CardDescription>
+              Your tax form has been successfully generated
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center py-6">
+              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Success!</h3>
+              <p className="text-gray-600 mb-6">
+                Your form has been generated and is ready for review
+              </p>
+              
+              <div className="flex justify-center space-x-2">
+                <Button onClick={() => setShowPreview(true)}>
+                  <Eye className="w-4 h-4 mr-2" />
+                  Preview Form
+                </Button>
+                <Button variant="outline">
+                  <Download className="w-4 h-4 mr-2" />
+                  Download
+                </Button>
+                <Button variant="outline" onClick={resetWorkflow}>
+                  Generate Another
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
-      {/* Form Preview Dialog */}
-      <FormPreviewDialog
-        isOpen={showPreview}
-        onClose={() => setShowPreview(false)}
-        formId={selectedFormForPreview || selectedFormIds[0] || 'form-1'}
-        clientId={clientId}
-      />
+      {/* Dialogs */}
+      {showPreview && (
+        <FormPreviewDialog
+          isOpen={showPreview}
+          onClose={() => setShowPreview(false)}
+          formData={generatedFormData}
+          template={selectedTemplate}
+        />
+      )}
 
-      {/* Form Management Dialog */}
-      <Dialog open={showManagement} onOpenChange={setShowManagement}>
-        <DialogContent className="max-w-5xl max-h-[95vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle>Form Management</DialogTitle>
-            <DialogDescription>
-              Manage form versions, status, and electronic signatures
-            </DialogDescription>
-          </DialogHeader>
-          <div className="h-[80vh] overflow-auto">
-            <FormManagementPanel
-              formId={selectedFormForManagement || selectedFormIds[0] || 'form-1'}
-              currentStatus="review"
-              onStatusChange={(status) => toast.success(`Status updated to ${status}`)}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
+      {showManagement && (
+        <FormManagementPanel
+          isOpen={showManagement}
+          onClose={() => setShowManagement(false)}
+          workspaceId={workspaceId}
+        />
+      )}
     </div>
   )
 }
