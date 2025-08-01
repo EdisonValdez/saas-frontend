@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
-import { signIn } from '@/lib/auth'
 
 import { getCurrentUserServer } from '@/lib/session'
 import { getUserWorkspaces } from '@/lib/user-workspaces'
