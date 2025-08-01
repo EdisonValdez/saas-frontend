@@ -120,6 +120,7 @@ const COMPLEXITY_COLORS = {
 export function TaxFormManagement() {
     const params = useParams<{ workspaceId: string }>()
     const workspaceId = params.workspaceId
+    const currentYear = new Date().getFullYear()
 
     // State management
     const [activeTab, setActiveTab] = useState('forms')
@@ -127,7 +128,7 @@ export function TaxFormManagement() {
     const [statusFilter, setStatusFilter] = useState<'all' | TaxForm['status']>('all')
     const [categoryFilter, setCategoryFilter] = useState<'all' | TaxForm['category']>('all')
     const [selectedForm, setSelectedForm] = useState<TaxForm | null>(null)
-    const [selectedTemplate, setSelectedTemplate] = useState<FormTemplate | null>(null)
+    const [selectedTemplate, setSelectedTemplate] = useState<TaxFormTemplate | null>(null)
     const [showCreateDialog, setShowCreateDialog] = useState(false)
     const [showFormBuilder, setShowFormBuilder] = useState(false)
     const [formData, setFormData] = useState<any>({})
@@ -135,6 +136,13 @@ export function TaxFormManagement() {
     // API hooks
     const { data: clientsData } = useWorkspaceClients(workspaceId)
     const clients = clientsData?.clients || []
+
+    // Load tax form templates
+    const { data: templatesData, isLoading: templatesLoading } = useTaxFormTemplates({
+        tax_year: currentYear,
+        is_active: true
+    })
+    const templates = templatesData?.results || []
 
     // Mock tax forms data
     const mockForms: TaxForm[] = [
