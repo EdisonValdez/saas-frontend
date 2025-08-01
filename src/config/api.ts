@@ -176,8 +176,8 @@ export function mapToBackendEndpoint(frontendEndpoint: string): string {
     // Direct mapping for specific cases
     const endpointMap: Record<string, string> = {
         '/api/auth/session': DJANGO_ENDPOINTS.auth.userDetails,
-        '/api/agents/invoke/': DJANGO_ENDPOINTS.agents.invoke,
-        '/api/agents/email/': DJANGO_ENDPOINTS.agents.email,
+        '/api/agents/invoke': DJANGO_ENDPOINTS.agents.invoke,
+        '/api/agents/email': DJANGO_ENDPOINTS.agents.email,
     }
 
     // Check for workspace-specific endpoints
