@@ -66,23 +66,23 @@ export default function FormGenerationWorkflow({
     {
       id: 'validation',
       title: 'Data Validation',
-      description: 'Validating client data and form requirements',
+      description: 'Validating client data and template requirements',
       status: 'pending',
       progress: 0,
-      timeEstimate: '30 seconds',
+      timeEstimate: '15 seconds',
       details: [
         'Checking required fields completeness',
         'Validating data formats and types',
-        'Verifying calculation dependencies'
+        'Verifying template compatibility'
       ]
     },
     {
       id: 'mapping',
       title: 'Field Mapping',
-      description: 'Mapping client data to form fields',
+      description: 'Mapping client data to template fields',
       status: 'pending',
       progress: 0,
-      timeEstimate: '45 seconds',
+      timeEstimate: '30 seconds',
       details: [
         'Applying intelligent field mappings',
         'Resolving data conflicts',
@@ -95,7 +95,7 @@ export default function FormGenerationWorkflow({
       description: 'Performing tax calculations and validations',
       status: 'pending',
       progress: 0,
-      timeEstimate: '60 seconds',
+      timeEstimate: '45 seconds',
       details: [
         'Computing tax liabilities',
         'Applying deductions and credits',
@@ -105,30 +105,106 @@ export default function FormGenerationWorkflow({
     {
       id: 'generation',
       title: 'Form Generation',
-      description: 'Generating final form documents',
+      description: 'Generating form using selected template',
       status: 'pending',
       progress: 0,
-      timeEstimate: '90 seconds',
+      timeEstimate: '60 seconds',
       details: [
-        'Populating form templates',
-        'Generating PDF documents',
-        'Creating e-file packages'
-      ]
-    },
-    {
-      id: 'review',
-      title: 'Quality Review',
-      description: 'Final quality checks and validation',
-      status: 'pending',
-      progress: 0,
-      timeEstimate: '30 seconds',
-      details: [
-        'Running compliance checks',
-        'Verifying form completeness',
-        'Generating quality reports'
+        'Populating template fields',
+        'Generating form document',
+        'Creating submission package'
       ]
     }
   ])
+
+  // Set pre-selected template if provided
+  React.useEffect(() => {
+    if (preSelectedTemplate && !selectedTemplate) {
+      setSelectedTemplate(preSelectedTemplate)
+      setCurrentStep('configure')
+    }
+  }, [preSelectedTemplate, selectedTemplate])
+
+  const handleTemplateSelect = useCallback((template: TaxFormTemplate) => {
+    setSelectedTemplate(template)
+    setGenerationConfig(prev => ({
+      ...prev,
+      form_name: `${template.form_number} - ${new Date().toLocaleDateString()}`
+    }))
+    setCurrentStep('configure')
+  }, [])
+
+  const handleStartGeneration = useCallback(async () => {
+    if (!selectedTemplate) return
+
+    setCurrentStep('generate')
+    setOverallProgress(0)
+
+    const request: FormGenerationRequest = {
+      template_id: selectedTemplate.id,
+      client_data: generationConfig.client_data,
+      workspace_id: workspaceId,
+      form_name: generationConfig.form_name,
+      save_as_draft: generationConfig.save_as_draft
+    }
+
+    try {
+      // Simulate step-by-step progress
+      for (let i = 0; i < generationSteps.length; i++) {
+        setGenerationSteps(prev => prev.map((step, index) =>
+          index === i ? { ...step, status: 'processing', progress: 0 } : step
+        ))
+
+        // Simulate progress within each step
+        for (let progress = 0; progress <= 100; progress += 20) {
+          await new Promise(resolve => setTimeout(resolve, 150))
+
+          setGenerationSteps(prev => prev.map((step, index) =>
+            index === i ? { ...step, progress } : step
+          ))
+
+          setOverallProgress(((i * 100 + progress) / generationSteps.length))
+        }
+
+        setGenerationSteps(prev => prev.map((step, index) =>
+          index === i ? { ...step, status: 'completed', progress: 100 } : step
+        ))
+      }
+
+      // Call the actual API
+      const result = await generateFormMutation.mutateAsync(request)
+
+      if (result.success) {
+        setCurrentStep('complete')
+        setOverallProgress(100)
+        toast.success('Form generated successfully!')
+
+        if (onComplete) {
+          onComplete({
+            success: true,
+            form: result.data,
+            template: selectedTemplate
+          })
+        }
+      } else {
+        throw new Error(result.error || 'Generation failed')
+      }
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Form generation failed'
+
+      // Mark current step as error
+      setGenerationSteps(prev => prev.map((step, index) =>
+        index === generationSteps.findIndex(s => s.status === 'processing') ? {
+          ...step,
+          status: 'error',
+          error: errorMessage
+        } : step
+      ))
+
+      toast.error(errorMessage)
+    }
+  }, [selectedTemplate, generationConfig, workspaceId, generateFormMutation, generationSteps, onComplete])
 
   const startGeneration = async () => {
     setIsGenerating(true)
