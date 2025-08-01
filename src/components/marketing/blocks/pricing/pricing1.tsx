@@ -132,53 +132,69 @@ export function Pricing1({ prices, user }: PricingProps) {
             </div>
 
             <div className="grid gap-8 md:grid-cols-3">
-                {sortedPrices.map((price) => (
-                    <Card key={price.price_id} className="shadow-md border">
+                {sortedPrices.length > 0 ? (
+                    sortedPrices.map((price) => (
+                        <Card key={price.price_id} className="shadow-md border">
+                            <CardHeader>
+                                <CardTitle className="text-xl font-semibold">{price.name}</CardTitle>
+                                <CardDescription>{price.nickname}</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-center">
+                                    <p className="text-4xl font-bold">{formatPrice(price.price, price.currency)}</p>
+                                    <p className="text-sm text-muted-foreground">{showMonthly ? '/ month' : '/ year'}</p>
+                                </div>
+                                <div className="mt-6">
+                                    {price.services?.map((feature) => (
+                                        <div key={feature.feature_id} className="flex items-start space-x-2">
+                                            <p className="text-sm text-muted-foreground">{feature.feature_desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </CardContent>
+                            <CardFooter className="flex flex-col items-center mt-4 space-y-2">
+                                {session && user?.workspaces && user?.workspaces?.length > 0 && (
+                                    <Select value={selectedWorkspaceId || ''} onValueChange={handleValueChange}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a workspace" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Workspaces</SelectLabel>
+                                                {user &&
+                                                    user.workspaces?.map((workspace) => (
+                                                        <SelectItem key={workspace.id} value={workspace.id}>
+                                                            {workspace.name}
+                                                        </SelectItem>
+                                                    ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                                <Button
+                                    onClick={() => processSubscription(price.price_id, selectedWorkspaceId)}
+                                    className="w-full px-4 py-2 text-sm"
+                                >
+                                    {session ? 'Go to Checkout' : 'Login to Checkout'}
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    ))
+                ) : (
+                    <Card className="shadow-md border col-span-full">
                         <CardHeader>
-                            <CardTitle className="text-xl font-semibold">{price.name}</CardTitle>
-                            <CardDescription>{price.nickname}</CardDescription>
+                            <CardTitle className="text-xl font-semibold text-center">No Pricing Plans Available</CardTitle>
+                            <CardDescription className="text-center">
+                                Pricing plans are currently being updated. Please check back later.
+                            </CardDescription>
                         </CardHeader>
-                        <CardContent>
-                            <div className="text-center">
-                                <p className="text-4xl font-bold">{formatPrice(price.price, price.currency)}</p>
-                                <p className="text-sm text-muted-foreground">{showMonthly ? '/ month' : '/ year'}</p>
-                            </div>
-                            <div className="mt-6">
-                                {price.services?.map((feature) => (
-                                    <div key={feature.feature_id} className="flex items-start space-x-2">
-                                        <p className="text-sm text-muted-foreground">{feature.feature_desc}</p>
-                                    </div>
-                                ))}
-                            </div>
+                        <CardContent className="text-center">
+                            <p className="text-muted-foreground">
+                                If you need immediate assistance, please contact our support team.
+                            </p>
                         </CardContent>
-                        <CardFooter className="flex flex-col items-center mt-4 space-y-2">
-                            {session && user?.workspaces && user?.workspaces?.length > 0 && (
-                                <Select value={selectedWorkspaceId || ''} onValueChange={handleValueChange}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a workspace" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectLabel>Workspaces</SelectLabel>
-                                            {user &&
-                                                user.workspaces?.map((workspace) => (
-                                                    <SelectItem key={workspace.id} value={workspace.id}>
-                                                        {workspace.name}
-                                                    </SelectItem>
-                                                ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            )}
-                            <Button
-                                onClick={() => processSubscription(price.price_id, selectedWorkspaceId)}
-                                className="w-full px-4 py-2 text-sm"
-                            >
-                                {session ? 'Go to Checkout' : 'Login to Checkout'}
-                            </Button>
-                        </CardFooter>
                     </Card>
-                ))}
+                )}
             </div>
         </div>
     )
