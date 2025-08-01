@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -8,14 +8,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { 
-  FileText, Settings, Zap, CheckCircle, AlertTriangle, 
+import {
+  FileText, Settings, Zap, CheckCircle, AlertTriangle,
   Clock, User, Database, Calculator, Eye, Download,
-  Loader2, ArrowRight, Play, Pause, RotateCcw
+  Loader2, ArrowRight, Play, Pause, RotateCcw, Search
 } from 'lucide-react'
-import FormSelectionDashboard from './form-selection-dashboard'
+import FormTemplateSelection from './form-template-selection'
 import FormPreviewDialog from './form-preview-dialog'
 import FormManagementPanel from './form-management-panel'
+import { useGenerateForm, useTaxFormTemplate } from '@/hooks/use-tax-form-templates'
+import type { TaxFormTemplate, FormGenerationRequest } from '@/types/tax-forms'
 import { toast } from 'sonner'
 
 interface GenerationStep {
