@@ -49,28 +49,45 @@ export default async function SettingsPage() {
                         <Link href="/dashboard/settings" className="font-semibold text-primary">
                             General
                         </Link>
+                        <Link href="/dashboard/settings#billing" className="hover:text-primary">
+                            Billing & Subscription
+                        </Link>
                     </nav>
                     <div className="grid gap-6">
-                        <Card>
-                            <CardHeader>
-                                <CardDescription>
-                                    Follow the instruction in the email to reset your password.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <ResetPasswordForm />
-                            </CardContent>
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardDescription>
-                                    Follow the instruction in the email to reset your user name.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <ResetUsernameForm />
-                            </CardContent>
-                        </Card>
+                        {/* Billing Section */}
+                        <section id="billing">
+                            <BillingSection
+                                user={user}
+                                subscription={workspaces?.[0]?.subscription}
+                            />
+                        </section>
+
+                        {/* Account Settings */}
+                        <div className="pt-8">
+                            <h3 className="text-lg font-medium mb-6">Account Settings</h3>
+                            <div className="space-y-6">
+                                <Card>
+                                    <CardHeader>
+                                        <CardDescription>
+                                            Follow the instruction in the email to reset your password.
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <ResetPasswordForm />
+                                    </CardContent>
+                                </Card>
+                                <Card>
+                                    <CardHeader>
+                                        <CardDescription>
+                                            Follow the instruction in the email to reset your user name.
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <ResetUsernameForm />
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>
