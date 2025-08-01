@@ -80,8 +80,8 @@ export const API_ENDPOINTS: ApiEndpoints = {
         extraction: (documentId: string) => `/api/documents/${documentId}/extraction/`,
     },
     agents: {
-        invoke: '/api/agents/invoke/',
-        email: '/api/agents/email/',
+        invoke: '/api/agents/invoke',
+        email: '/api/agents/email',
     },
     subscriptions: {
         pricing: '/api/subscriptions/pricing/',
