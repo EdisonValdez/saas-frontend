@@ -48,10 +48,24 @@ export default function FormTemplateSelection({
     })
     const [showFilters, setShowFilters] = useState(false)
 
-    // API calls
-    const { data: templates, isLoading, error, refetch } = useTaxFormTemplates(filters)
+    // API calls - choose between original and backend API
+    const { data: templates, isLoading, error, refetch } = useBackendApi
+        ? (() => {
+            const { data: backendTemplates, isLoading, error, refetch } = useBackendTemplates({
+                tax_year: filters.tax_year,
+                is_active: true
+            })
+            return {
+                data: backendTemplates ? { results: backendTemplates.map(convertBackendToOriginal) } : undefined,
+                isLoading,
+                error,
+                refetch
+            }
+        })()
+        : useTaxFormTemplates(filters)
+
     const { data: searchResults, isLoading: isSearching } = useSearchTaxFormTemplates(
-        searchQuery, 
+        searchQuery,
         { tax_year: filters.tax_year, category: filters.category }
     )
     const syncMutation = useSyncFromFilesystem()
