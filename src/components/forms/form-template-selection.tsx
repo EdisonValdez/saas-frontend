@@ -12,14 +12,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { 
-    useTaxFormTemplates, 
-    useSearchTaxFormTemplates, 
-    useTaxFormTemplatesByYear, 
+import {
+    useTaxFormTemplates,
+    useSearchTaxFormTemplates,
+    useTaxFormTemplatesByYear,
     useTaxFormTemplatesByCategory,
-    useSyncFromFilesystem 
+    useSyncFromFilesystem
 } from '@/hooks/use-tax-form-templates'
+import { useTaxFormTemplates as useBackendTemplates } from '@/hooks/use-tax-forms-backend'
+import { convertBackendToOriginal } from '@/lib/api/tax-forms-compatibility'
 import type { TaxFormTemplate, TaxFormTemplateFilters } from '@/types/tax-forms'
+import type { TaxFormTemplate as BackendTemplate } from '@/types/tax-forms-backend'
 import { cn } from '@/lib/utils'
 
 interface FormTemplateSelectionProps {
