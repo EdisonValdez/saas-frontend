@@ -183,7 +183,7 @@ For business income and expenses, here's your guidance:
 export async function POST(request: Request) {
     try {
         // Check authentication
-        const session = await getServerSession(authOptions)
+        const session = await auth()
         if (!session?.user?.email) {
             return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
         }
