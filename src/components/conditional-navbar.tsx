@@ -23,11 +23,11 @@ export function ConditionalNavbar() {
         '/resend-activation',
         '/confirm-password-reset',
         '/confirm-username-reset',
-        '/user-activation'
+        '/user-activation',
     ]
 
     // Check if current route should hide navbar
-    const shouldHideNavbar = hideNavbarRoutes.some(route => pathname.startsWith(route))
+    const shouldHideNavbar = hideNavbarRoutes.some((route) => pathname.startsWith(route))
 
     // Don't render until mounted to avoid hydration mismatch
     if (!mounted) {
