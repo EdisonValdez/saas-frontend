@@ -51,7 +51,7 @@ export function SubscriptionDetails({ subscription }: SubscriptionDetailsProps) 
                     <ManageSubscriptionButton />
                 ) : (
                     <Link href="/pricing">
-                        <Button variant="default">Subscribe</Button>
+                        <Button variant="default">View Plans</Button>
                     </Link>
                 )}
             </CardFooter>
