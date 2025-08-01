@@ -90,7 +90,7 @@ export const API_ENDPOINTS: ApiEndpoints = {
     },
 }
 
-// Django backend endpoints mapping
+// Django backend endpoints mapping (with proper trailing slashes)
 export const DJANGO_ENDPOINTS = {
     auth: {
         login: '/auth/jwt/create/',
@@ -105,7 +105,7 @@ export const DJANGO_ENDPOINTS = {
     workspaces: {
         list: '/api/workspaces/',
         detail: (workspaceId: string) => `/api/workspaces/${workspaceId}/`,
-        creditUsage: (workspaceId: string) => `/api/workspaces/${workspaceId}/credit-usage/`,
+        creditUsage: (workspaceId: string) => `/api/workspaces/${workspaceId}/credit-usage/`, // Django expects trailing slash
         chats: (workspaceId: string) => `/api/workspaces/${workspaceId}/chats/`,
         clients: (workspaceId: string) => `/api/workspaces/${workspaceId}/clients/`,
         emailAgent: (workspaceId: string) => `/api/workspaces/${workspaceId}/email-agent/`,
