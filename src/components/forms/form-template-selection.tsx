@@ -30,6 +30,7 @@ interface FormTemplateSelectionProps {
     selectedTemplateId?: string
     workspaceId?: string
     className?: string
+    useBackendApi?: boolean // Flag to use backend-aligned API
 }
 
 export default function FormTemplateSelection({
