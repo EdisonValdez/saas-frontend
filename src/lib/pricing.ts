@@ -29,8 +29,9 @@ export async function getSubscribableProductPrices(): Promise<StripePrice[]> {
 
     try {
         const res = await fetch(PRICES_ENDPOINT, config)
-        const data = await res.json()
-        return data
+        const response = await res.json()
+        // Handle both wrapped and unwrapped response formats
+        return response.data || response
     } catch (error) {
         throw new Error('An error happened while fetching the prices')
     }
