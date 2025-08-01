@@ -52,65 +52,7 @@ export function Pricing1({ prices, user }: PricingProps) {
 
     const handleValueChange = (value: string) => setSelectedWorkspaceId(value)
 
-    const processSubscription = async (planId: string, workspaceId: string | null) => {
-        if (!session) {
-            const currentUrl = window.location.pathname + window.location.search
-            router.push(`/login?callbackUrl=${encodeURIComponent(currentUrl)}`)
-            return
-        }
 
-        if (!planId) {
-            toast({
-                title: 'Invalid Plan',
-                description: 'Please select a valid plan.',
-                variant: 'destructive',
-            })
-            return
-        }
-
-        const payload = {
-            price_id: planId,
-            ...(workspaceId ? { workspace_id: workspaceId } : {}),
-        }
-
-        try {
-            const response = await fetch(siteConfig.paths.api.subscriptions.checkout, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            })
-
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
-
-            const { session_id } = await response.json()
-            const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
-
-            if (!stripe) {
-                toast({
-                    title: 'Stripe Error',
-                    description: 'Failed to initialize payment gateway.',
-                    variant: 'destructive',
-                })
-                return
-            }
-
-            const { error } = await stripe.redirectToCheckout({ sessionId: session_id })
-
-            if (error) {
-                toast({
-                    title: 'Checkout Failed',
-                    description: 'Could not complete the checkout process.',
-                    variant: 'destructive',
-                })
-            }
-        } catch (error) {
-            toast({
-                title: 'Error Occurred',
-                description: 'An error occurred while processing your subscription.',
-                variant: 'destructive',
-            })
-        }
-    }
 
     return (
         <div className="w-full py-20 lg:py-40 container flex flex-col gap-12 md:max-w-[64rem]">
