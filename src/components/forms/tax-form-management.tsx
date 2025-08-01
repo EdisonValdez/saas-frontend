@@ -42,6 +42,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { useWorkspaceClients } from '@/lib/hooks/api-hooks'
+import { useTaxFormTemplates, useTaxFormTemplatesByYear } from '@/hooks/use-tax-form-templates'
+import type { TaxFormTemplate } from '@/types/tax-forms'
 
 interface TaxForm {
     id: string
