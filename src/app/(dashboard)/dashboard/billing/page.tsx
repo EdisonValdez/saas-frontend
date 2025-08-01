@@ -14,6 +14,7 @@ import { getUserWorkspaces } from '@/lib/user-workspaces'
 
 import { SubscriptionDetails } from '@/components/subscriptions/details'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { DashboardMainNav } from '@/components/dashboard/main-nav'
 
 export const metadata: Metadata = {
@@ -50,21 +51,32 @@ export default async function BillingPage() {
                     </nav>
                     <div className="grid gap-6">
                         <div className="grid gap-8">
-                            {workspaces &&
-                                workspaces.map((workspace) => {
-                                    if (workspace.subscription) {
-                                        return (
-                                            <Card key={workspace.id} className="w-max">
-                                                <CardHeader>
-                                                    <CardTitle>{workspace.name}</CardTitle>
-                                                </CardHeader>
-                                                <CardContent>
-                                                    <SubscriptionDetails subscription={workspace.subscription} />
-                                                </CardContent>
-                                            </Card>
-                                        )
-                                    }
-                                })}
+                            {workspaces && workspaces.length > 0 ? (
+                                workspaces.map((workspace) => (
+                                    <Card key={workspace.id} className="w-max">
+                                        <CardHeader>
+                                            <CardTitle>{workspace.name}</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <SubscriptionDetails subscription={workspace.subscription} />
+                                        </CardContent>
+                                    </Card>
+                                ))
+                            ) : (
+                                <Card className="w-max">
+                                    <CardHeader>
+                                        <CardTitle>No Workspaces Found</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <p className="text-muted-foreground">
+                                            You don't have any workspaces yet. Create a workspace to get started.
+                                        </p>
+                                        <Link href="/dashboard/workspaces" className="inline-block mt-4">
+                                            <Button variant="default">Create Workspace</Button>
+                                        </Link>
+                                    </CardContent>
+                                </Card>
+                            )}
                         </div>
                     </div>
                 </div>

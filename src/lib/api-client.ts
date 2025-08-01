@@ -176,7 +176,7 @@ class ApiClient {
         workspaceId: string,
         context?: any
     ): Promise<ApiResponse<{ response: string; credits_used: number }>> {
-        return this.request('/agents/invoke/', {
+        return this.request('/agents/invoke', {
             method: 'POST',
             body: JSON.stringify({
                 prompt,

@@ -8,6 +8,7 @@ import { formatDateWithTime } from '@/lib/utils'
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ManageSubscriptionButton } from '@/components/subscriptions/manage-subscription-button'
+import { CheckoutButton } from '@/components/subscriptions/checkout-button'
 import { Button } from '@/components/ui/button'
 
 interface SubscriptionDetailsProps {
@@ -50,7 +51,7 @@ export function SubscriptionDetails({ subscription }: SubscriptionDetailsProps) 
                     <ManageSubscriptionButton />
                 ) : (
                     <Link href="/pricing">
-                        <Button variant="default">Subscribe</Button>
+                        <Button variant="default">View Plans</Button>
                     </Link>
                 )}
             </CardFooter>

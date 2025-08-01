@@ -80,8 +80,8 @@ export const API_ENDPOINTS: ApiEndpoints = {
         extraction: (documentId: string) => `/api/documents/${documentId}/extraction/`,
     },
     agents: {
-        invoke: '/api/agents/invoke/',
-        email: '/api/agents/email/',
+        invoke: '/api/agents/invoke',
+        email: '/api/agents/email',
     },
     subscriptions: {
         pricing: '/api/subscriptions/pricing/',
@@ -121,8 +121,8 @@ export const DJANGO_ENDPOINTS = {
         extractedData: (documentId: string) => `/api/documents/${documentId}/extracted-data/`,
     },
     agents: {
-        invoke: '/api/agents/invoke/',
-        email: '/api/agents/email/',
+        invoke: '/api/agents/invoke',
+        email: '/api/agents/email',
     },
 }
 
@@ -176,8 +176,8 @@ export function mapToBackendEndpoint(frontendEndpoint: string): string {
     // Direct mapping for specific cases
     const endpointMap: Record<string, string> = {
         '/api/auth/session': DJANGO_ENDPOINTS.auth.userDetails,
-        '/api/agents/invoke/': DJANGO_ENDPOINTS.agents.invoke,
-        '/api/agents/email/': DJANGO_ENDPOINTS.agents.email,
+        '/api/agents/invoke': DJANGO_ENDPOINTS.agents.invoke,
+        '/api/agents/email': DJANGO_ENDPOINTS.agents.email,
     }
 
     // Check for workspace-specific endpoints

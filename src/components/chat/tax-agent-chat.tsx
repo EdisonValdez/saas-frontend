@@ -187,7 +187,7 @@ export function TaxAgentChat() {
 
             try {
                 const request: AgentRequest = { prompt: content }
-                const response = await fetch('/api/agents/invoke/', {
+                const response = await fetch('/api/agents/invoke', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

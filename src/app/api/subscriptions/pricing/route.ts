@@ -36,7 +36,7 @@ export async function GET(request: Request) {
         try {
             const res = await fetch(PRODUCTS_ENDPOINT, config)
             const data = await res.json()
-            return NextResponse.json({ data }, { status: res.status })
+            return NextResponse.json(data, { status: res.status })
         } catch (error) {
             return new NextResponse(
                 JSON.stringify({

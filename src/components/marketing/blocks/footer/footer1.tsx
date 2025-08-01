@@ -15,10 +15,7 @@ export function Footer1({ className }: React.HTMLAttributes<HTMLElement>) {
                             <Icons.logo className="w-6 h-6" />
                             <span className="font-bold">{siteConfig.name}</span>
                         </Link>
-                        <p className="mt-4 text-sm text-muted-foreground">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua.
-                        </p>
+                        <p className="mt-4 text-sm text-muted-foreground">{siteConfig.description}</p>
                         <div className="flex mt-6 space-x-4">
                             <Link href="#" className="text-muted-foreground hover:text-primary">
                                 <span className="sr-only">Facebook</span>
@@ -68,17 +65,20 @@ export function Footer1({ className }: React.HTMLAttributes<HTMLElement>) {
                         <h3 className="font-semibold">Legal</h3>
                         <ul className="mt-4 space-y-2">
                             <li>
-                                <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                                <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary">
                                     Terms of Service
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                                <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary">
                                     Privacy Policy
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                                <Link
+                                    href="/privacy#cookies"
+                                    className="text-sm text-muted-foreground hover:text-primary"
+                                >
                                     Cookie Policy
                                 </Link>
                             </li>
@@ -87,7 +87,7 @@ export function Footer1({ className }: React.HTMLAttributes<HTMLElement>) {
                     <div className="col-span-1 lg:col-span-2">
                         <h3 className="font-semibold">Contact</h3>
                         <ul className="mt-4 space-y-2">
-                            <li className="text-sm text-muted-foreground">support@Acme.com</li>
+                            <li className="text-sm text-muted-foreground">support@promptax.com</li>
                         </ul>
                     </div>
                 </div>

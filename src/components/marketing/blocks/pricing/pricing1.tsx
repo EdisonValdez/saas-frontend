@@ -23,8 +23,8 @@ import {
 } from '@/components/ui/select'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
 
-import { loadStripe } from '@stripe/stripe-js'
 import { Badge } from '@/components/ui/badge'
+import { CheckoutButton } from '@/components/subscriptions/checkout-button'
 
 interface PricingProps {
     prices: StripePrice[]
@@ -52,66 +52,6 @@ export function Pricing1({ prices, user }: PricingProps) {
 
     const handleValueChange = (value: string) => setSelectedWorkspaceId(value)
 
-    const processSubscription = async (planId: string, workspaceId: string | null) => {
-        if (!session) {
-            const currentUrl = window.location.pathname + window.location.search
-            router.push(`/login?callbackUrl=${encodeURIComponent(currentUrl)}`)
-            return
-        }
-
-        if (!planId) {
-            toast({
-                title: 'Invalid Plan',
-                description: 'Please select a valid plan.',
-                variant: 'destructive',
-            })
-            return
-        }
-
-        const payload = {
-            price_id: planId,
-            ...(workspaceId ? { workspace_id: workspaceId } : {}),
-        }
-
-        try {
-            const response = await fetch(siteConfig.paths.api.subscriptions.checkout, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            })
-
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
-
-            const { session_id } = await response.json()
-            const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
-
-            if (!stripe) {
-                toast({
-                    title: 'Stripe Error',
-                    description: 'Failed to initialize payment gateway.',
-                    variant: 'destructive',
-                })
-                return
-            }
-
-            const { error } = await stripe.redirectToCheckout({ sessionId: session_id })
-
-            if (error) {
-                toast({
-                    title: 'Checkout Failed',
-                    description: 'Could not complete the checkout process.',
-                    variant: 'destructive',
-                })
-            }
-        } catch (error) {
-            toast({
-                title: 'Error Occurred',
-                description: 'An error occurred while processing your subscription.',
-                variant: 'destructive',
-            })
-        }
-    }
-
     return (
         <div className="w-full py-20 lg:py-40 container flex flex-col gap-12 md:max-w-[64rem]">
             <div className="text-center">
@@ -132,53 +72,73 @@ export function Pricing1({ prices, user }: PricingProps) {
             </div>
 
             <div className="grid gap-8 md:grid-cols-3">
-                {sortedPrices.map((price) => (
-                    <Card key={price.price_id} className="shadow-md border">
+                {sortedPrices.length > 0 ? (
+                    sortedPrices.map((price) => (
+                        <Card key={price.price_id} className="shadow-md border">
+                            <CardHeader>
+                                <CardTitle className="text-xl font-semibold">{price.name}</CardTitle>
+                                <CardDescription>{price.nickname}</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-center">
+                                    <p className="text-4xl font-bold">{formatPrice(price.price, price.currency)}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        {showMonthly ? '/ month' : '/ year'}
+                                    </p>
+                                </div>
+                                <div className="mt-6">
+                                    {price.services?.map((feature) => (
+                                        <div key={feature.feature_id} className="flex items-start space-x-2">
+                                            <p className="text-sm text-muted-foreground">{feature.feature_desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </CardContent>
+                            <CardFooter className="flex flex-col items-center mt-4 space-y-2">
+                                {session && user?.workspaces && user?.workspaces?.length > 0 && (
+                                    <Select value={selectedWorkspaceId || ''} onValueChange={handleValueChange}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a workspace" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Workspaces</SelectLabel>
+                                                {user &&
+                                                    user.workspaces?.map((workspace) => (
+                                                        <SelectItem key={workspace.id} value={workspace.id}>
+                                                            {workspace.name}
+                                                        </SelectItem>
+                                                    ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                                <CheckoutButton
+                                    priceId={price.price_id}
+                                    workspaceId={selectedWorkspaceId}
+                                    planName={price.name}
+                                    className="w-full px-4 py-2 text-sm"
+                                />
+                            </CardFooter>
+                        </Card>
+                    ))
+                ) : (
+                    <Card className="shadow-md border col-span-full">
                         <CardHeader>
-                            <CardTitle className="text-xl font-semibold">{price.name}</CardTitle>
-                            <CardDescription>{price.nickname}</CardDescription>
+                            <CardTitle className="text-xl font-semibold text-center">
+                                No Pricing Plans Available
+                            </CardTitle>
+                            <CardDescription className="text-center">
+                                Pricing plans are currently being updated. Please check back later.
+                            </CardDescription>
                         </CardHeader>
-                        <CardContent>
-                            <div className="text-center">
-                                <p className="text-4xl font-bold">{formatPrice(price.price, price.currency)}</p>
-                                <p className="text-sm text-muted-foreground">{showMonthly ? '/ month' : '/ year'}</p>
-                            </div>
-                            <div className="mt-6">
-                                {price.services?.map((feature) => (
-                                    <div key={feature.feature_id} className="flex items-start space-x-2">
-                                        <p className="text-sm text-muted-foreground">{feature.feature_desc}</p>
-                                    </div>
-                                ))}
-                            </div>
+                        <CardContent className="text-center">
+                            <p className="text-muted-foreground">
+                                If you need immediate assistance, please contact our support team.
+                            </p>
                         </CardContent>
-                        <CardFooter className="flex flex-col items-center mt-4 space-y-2">
-                            {session && user?.workspaces && user?.workspaces?.length > 0 && (
-                                <Select value={selectedWorkspaceId || ''} onValueChange={handleValueChange}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a workspace" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectLabel>Workspaces</SelectLabel>
-                                            {user &&
-                                                user.workspaces?.map((workspace) => (
-                                                    <SelectItem key={workspace.id} value={workspace.id}>
-                                                        {workspace.name}
-                                                    </SelectItem>
-                                                ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            )}
-                            <Button
-                                onClick={() => processSubscription(price.price_id, selectedWorkspaceId)}
-                                className="w-full px-4 py-2 text-sm"
-                            >
-                                {session ? 'Go to Checkout' : 'Login to Checkout'}
-                            </Button>
-                        </CardFooter>
                     </Card>
-                ))}
+                )}
             </div>
         </div>
     )
