@@ -37,7 +37,8 @@ export default function FormTemplateSelection({
     onSelectTemplate,
     selectedTemplateId,
     workspaceId,
-    className
+    className,
+    useBackendApi = false
 }: FormTemplateSelectionProps) {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
     const [searchQuery, setSearchQuery] = useState('')
