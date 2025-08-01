@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import Home from '@/app/page'
+import Home from '@/app/(marketing)/page'
 
 describe('Home', () => {
     it('should have About Page button', () => {

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
 
 // Rate limiting store (in production, use Redis or database)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
@@ -183,7 +184,7 @@ For business income and expenses, here's your guidance:
 export async function POST(request: Request) {
     try {
         // Check authentication
-        const session = await auth()
+        const session = await getServerSession(authOptions)
         if (!session?.user?.email) {
             return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
         }

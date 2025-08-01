@@ -42,8 +42,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { useWorkspaceClients } from '@/lib/hooks/api-hooks'
-import { useTaxFormTemplates, useTaxFormTemplatesByYear } from '@/hooks/use-tax-form-templates'
-import type { TaxFormTemplate } from '@/types/tax-forms'
 
 interface TaxForm {
     id: string
@@ -93,7 +91,91 @@ interface FormField {
     validation?: any
 }
 
-// Templates are now loaded dynamically from the API
+const FORM_TEMPLATES: FormTemplate[] = [
+    {
+        id: '1040',
+        name: 'Individual Income Tax Return',
+        form_number: 'Form 1040',
+        description: 'Standard individual income tax return for most taxpayers',
+        category: 'individual',
+        tax_year: 2024,
+        complexity: 'standard',
+        estimated_time: '2-4 hours',
+        required_documents: ['W-2', '1099s', 'Bank statements', 'Investment statements'],
+        sections: [
+            {
+                id: 'personal_info',
+                title: 'Personal Information',
+                description: 'Basic taxpayer information',
+                required: true,
+                fields: [
+                    { id: 'first_name', name: 'firstName', label: 'First Name', type: 'text', required: true },
+                    { id: 'last_name', name: 'lastName', label: 'Last Name', type: 'text', required: true },
+                    { id: 'ssn', name: 'ssn', label: 'Social Security Number', type: 'text', required: true },
+                    { id: 'dob', name: 'dateOfBirth', label: 'Date of Birth', type: 'date', required: true },
+                ],
+            },
+            {
+                id: 'income',
+                title: 'Income',
+                description: 'All sources of income',
+                required: true,
+                fields: [
+                    { id: 'wages', name: 'wages', label: 'Wages, salaries, tips', type: 'currency', required: false },
+                    { id: 'interest', name: 'interest', label: 'Taxable interest', type: 'currency', required: false },
+                    {
+                        id: 'dividends',
+                        name: 'dividends',
+                        label: 'Ordinary dividends',
+                        type: 'currency',
+                        required: false,
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        id: '1120',
+        name: 'Corporation Income Tax Return',
+        form_number: 'Form 1120',
+        description: 'Income tax return for C corporations',
+        category: 'business',
+        tax_year: 2024,
+        complexity: 'complex',
+        estimated_time: '8-16 hours',
+        required_documents: ['Financial statements', 'General ledger', 'Depreciation schedules'],
+        sections: [
+            {
+                id: 'corp_info',
+                title: 'Corporation Information',
+                description: 'Basic corporation details',
+                required: true,
+                fields: [
+                    {
+                        id: 'corp_name',
+                        name: 'corporationName',
+                        label: 'Corporation Name',
+                        type: 'text',
+                        required: true,
+                    },
+                    { id: 'ein', name: 'ein', label: 'Employer Identification Number', type: 'text', required: true },
+                ],
+            },
+        ],
+    },
+    {
+        id: '1065',
+        name: 'Partnership Return of Income',
+        form_number: 'Form 1065',
+        description: 'Return of partnership income',
+        category: 'business',
+        tax_year: 2024,
+        complexity: 'complex',
+        estimated_time: '6-12 hours',
+        required_documents: ['Partnership agreement', 'K-1s', 'Financial statements'],
+        sections: [],
+    },
+]
 
 const STATUS_COLORS = {
     draft: 'bg-gray-100 text-gray-800',
@@ -120,7 +202,6 @@ const COMPLEXITY_COLORS = {
 export function TaxFormManagement() {
     const params = useParams<{ workspaceId: string }>()
     const workspaceId = params.workspaceId
-    const currentYear = new Date().getFullYear()
 
     // State management
     const [activeTab, setActiveTab] = useState('forms')
@@ -128,7 +209,7 @@ export function TaxFormManagement() {
     const [statusFilter, setStatusFilter] = useState<'all' | TaxForm['status']>('all')
     const [categoryFilter, setCategoryFilter] = useState<'all' | TaxForm['category']>('all')
     const [selectedForm, setSelectedForm] = useState<TaxForm | null>(null)
-    const [selectedTemplate, setSelectedTemplate] = useState<TaxFormTemplate | null>(null)
+    const [selectedTemplate, setSelectedTemplate] = useState<FormTemplate | null>(null)
     const [showCreateDialog, setShowCreateDialog] = useState(false)
     const [showFormBuilder, setShowFormBuilder] = useState(false)
     const [formData, setFormData] = useState<any>({})
@@ -136,13 +217,6 @@ export function TaxFormManagement() {
     // API hooks
     const { data: clientsData } = useWorkspaceClients(workspaceId)
     const clients = clientsData?.clients || []
-
-    // Load tax form templates
-    const { data: templatesData, isLoading: templatesLoading } = useTaxFormTemplates({
-        tax_year: currentYear,
-        is_active: true,
-    })
-    const templates = templatesData?.results || []
 
     // Mock tax forms data
     const mockForms: TaxForm[] = [
@@ -314,20 +388,7 @@ export function TaxFormManagement() {
         )
     }
 
-    const TemplateCard = ({ template }: { template: TaxFormTemplate }) => {
-        const complexityMap: Record<string, string> = {
-            simple: 'bg-green-100 text-green-800',
-            intermediate: 'bg-yellow-100 text-yellow-800',
-            complex: 'bg-red-100 text-red-800',
-        }
-
-        const formatEstimatedTime = (minutes: number) => {
-            if (minutes < 60) return `${minutes} min`
-            const hours = Math.floor(minutes / 60)
-            const remainingMinutes = minutes % 60
-            return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`
-        }
-
+    const TemplateCard = ({ template }: { template: FormTemplate }) => {
         return (
             <Card
                 className="hover:shadow-md transition-shadow cursor-pointer"
@@ -346,9 +407,7 @@ export function TaxFormManagement() {
                                 </p>
                             </div>
                         </div>
-                        <Badge className={complexityMap[template.complexity] || 'bg-gray-100 text-gray-800'}>
-                            {template.complexity}
-                        </Badge>
+                        <Badge className={COMPLEXITY_COLORS[template.complexity]}>{template.complexity}</Badge>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -356,19 +415,12 @@ export function TaxFormManagement() {
 
                     <div className="flex items-center gap-2 text-sm">
                         <Clock className="h-4 w-4 text-muted-foreground" />
-                        <span>{formatEstimatedTime(template.estimated_time)}</span>
+                        <span>{template.estimated_time}</span>
                     </div>
 
                     <div className="flex items-center gap-2 text-sm">
                         <BookOpen className="h-4 w-4 text-muted-foreground" />
                         <span>{template.sections.length} sections</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-sm">
-                        <Badge variant="secondary" className="text-xs">
-                            {template.category}
-                        </Badge>
-                        <span className="text-muted-foreground">v{template.version}</span>
                     </div>
 
                     <Button
@@ -477,33 +529,9 @@ export function TaxFormManagement() {
 
                 <TabsContent value="templates" className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {templatesLoading ? (
-                            // Loading skeletons
-                            Array.from({ length: 6 }).map((_, i) => (
-                                <Card key={i} className="animate-pulse">
-                                    <CardHeader>
-                                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="space-y-2">
-                                            <div className="h-3 bg-gray-200 rounded"></div>
-                                            <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))
-                        ) : templates.length > 0 ? (
-                            templates.map((template) => <TemplateCard key={template.id} template={template} />)
-                        ) : (
-                            <div className="col-span-full text-center py-8">
-                                <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                <p className="text-gray-600">No tax form templates available</p>
-                                <p className="text-sm text-gray-500">
-                                    Templates will appear here when loaded from the backend
-                                </p>
-                            </div>
-                        )}
+                        {FORM_TEMPLATES.map((template) => (
+                            <TemplateCard key={template.id} template={template} />
+                        ))}
                     </div>
                 </TabsContent>
             </Tabs>

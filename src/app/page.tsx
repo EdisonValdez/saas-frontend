@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LogIn, UserPlus, ArrowRight, Home } from 'lucide-react'
 
 export default async function IndexPage() {
-    // Note: Auth check temporarily simplified for demo mode
+    // Note: Auth temporarily disabled for demo, so this might not redirect
+    // but the logic is in place for when auth is re-enabled
     try {
         const user = await getCurrentUserServer()
         if (user) {
