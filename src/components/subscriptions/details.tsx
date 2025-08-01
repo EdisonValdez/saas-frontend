@@ -8,6 +8,7 @@ import { formatDateWithTime } from '@/lib/utils'
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ManageSubscriptionButton } from '@/components/subscriptions/manage-subscription-button'
+import { CheckoutButton } from '@/components/subscriptions/checkout-button'
 import { Button } from '@/components/ui/button'
 
 interface SubscriptionDetailsProps {
