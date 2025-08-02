@@ -59,11 +59,7 @@ export async function POST(request: Request, context: z.infer<typeof routeContex
 
     const body = await request.json()
 
-    const apiResponse = await fetch(endpoint, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `JWT ${accessToken}`,
-        },
+    const apiResponse = await createAuthorizedRequest(endpoint, {
         method: 'POST',
         body: JSON.stringify(body),
     })
