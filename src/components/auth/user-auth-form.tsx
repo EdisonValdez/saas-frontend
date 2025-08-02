@@ -56,10 +56,14 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
     }, [isSubmitSuccessful, reset])
 
     async function onSubmit(data: UserLoginData) {
+        console.log('[DEBUG] Login form submission started for:', data.email)
+
         try {
             const signInResult = await loginAction(data, returnUrl)
+            console.log('[DEBUG] Login action completed, result:', signInResult)
 
-            if (signInResult) {
+            if (signInResult?.ok) {
+                console.log('[DEBUG] Login successful, redirecting to:', returnUrl)
                 toast({
                     title: 'Success',
                     description: 'You have successfully logged in.',
@@ -67,13 +71,56 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
 
                 // Redirect to the returnUrl
                 router.push(returnUrl)
+            } else if (signInResult?.error) {
+                console.error('[DEBUG] Login failed with error:', signInResult.error)
+
+                let errorMessage = 'An error occurred during login. Please try again.'
+
+                // Provide more specific error messages based on the error type
+                if (signInResult.error === 'CredentialsSignin') {
+                    errorMessage = 'Invalid email or password. Please check your credentials and try again.'
+                } else if (signInResult.error.includes('fetch')) {
+                    errorMessage = 'Unable to connect to the authentication server. Please check your internet connection and try again.'
+                } else if (signInResult.error.includes('timeout')) {
+                    errorMessage = 'The login request timed out. Please try again.'
+                }
+
+                toast({
+                    title: 'Login Error',
+                    description: errorMessage,
+                    variant: 'destructive',
+                })
             } else {
-                throw new Error('Login failed')
+                console.error('[DEBUG] Login failed with unknown result:', signInResult)
+                toast({
+                    title: 'Login Error',
+                    description: 'Login failed for an unknown reason. Please try again.',
+                    variant: 'destructive',
+                })
             }
         } catch (error) {
+            console.error('[DEBUG] Login form exception:', error)
+            console.error('[DEBUG] Error type:', error instanceof Error ? error.constructor.name : typeof error)
+            console.error('[DEBUG] Error message:', error instanceof Error ? error.message : 'Unknown error')
+            console.error('[DEBUG] Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+
+            let errorMessage = 'An unexpected error occurred during login. Please try again.'
+
+            if (error instanceof Error) {
+                if (error.message.includes('fetch')) {
+                    errorMessage = 'Network error: Unable to connect to the authentication server.'
+                } else if (error.message.includes('timeout')) {
+                    errorMessage = 'Request timeout: The login request took too long to complete.'
+                } else if (error.message.includes('JSON')) {
+                    errorMessage = 'Server response error: The server returned an invalid response.'
+                } else if (error.message) {
+                    errorMessage = `Login error: ${error.message}`
+                }
+            }
+
             toast({
                 title: 'Login Error',
-                description: 'An error occurred during login. Please try again.',
+                description: errorMessage,
                 variant: 'destructive',
             })
         }
