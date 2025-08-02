@@ -128,6 +128,51 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
         }
     }
 
+    async function testDirectAuth() {
+        const formData = form.getValues()
+        if (!formData.email || !formData.password) {
+            toast({
+                title: 'Debug Test Error',
+                description: 'Please enter email and password first',
+                variant: 'destructive',
+            })
+            return
+        }
+
+        try {
+            const response = await fetch('/api/debug-auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password
+                })
+            })
+            const result = await response.json()
+            setDebugResult(result)
+            console.log('[DEBUG] Direct auth test result:', result)
+        } catch (error) {
+            console.error('[DEBUG] Direct auth test error:', error)
+            setDebugResult({ error: error instanceof Error ? error.message : 'Unknown error' })
+        }
+    }
+
+    async function testBackendConnection() {
+        try {
+            const response = await fetch('/api/debug-auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ testType: 'connection' })
+            })
+            const result = await response.json()
+            setDebugResult(result)
+            console.log('[DEBUG] Backend connection test result:', result)
+        } catch (error) {
+            console.error('[DEBUG] Backend connection test error:', error)
+            setDebugResult({ error: error instanceof Error ? error.message : 'Unknown error' })
+        }
+    }
+
     return (
         <div className={cn('grid gap-6', className)} {...props}>
             <div className="flex flex-col space-y-2 text-center">
