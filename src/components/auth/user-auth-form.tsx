@@ -61,21 +61,16 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
         console.log('[DEBUG] Login form submission started for:', data.email)
 
         try {
-            const signInResult = await loginAction(data, returnUrl)
-            console.log('[DEBUG] Login action completed, result:', signInResult)
+            const signInResult = await signIn('credentials', {
+                email: data.email,
+                password: data.password,
+                redirect: false,
+                callbackUrl: returnUrl,
+            })
 
-            if (signInResult?.ok) {
-                console.log('[DEBUG] Login successful, redirecting to:', returnUrl)
-                toast({
-                    title: 'Success',
-                    description: 'You have successfully logged in.',
-                })
+            console.log('[DEBUG] SignIn result:', signInResult)
 
-                // Add a small delay to allow session to be established
-                setTimeout(() => {
-                    router.push(returnUrl)
-                }, 500)
-            } else if (signInResult?.error) {
+            if (signInResult?.error) {
                 console.error('[DEBUG] Login failed with error:', signInResult.error)
 
                 let errorMessage = 'An error occurred during login. Please try again.'
@@ -95,6 +90,15 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                     description: errorMessage,
                     variant: 'destructive',
                 })
+            } else if (signInResult?.ok || signInResult?.url) {
+                console.log('[DEBUG] Login successful, redirecting to:', returnUrl)
+                toast({
+                    title: 'Success',
+                    description: 'You have successfully logged in.',
+                })
+
+                // Redirect to the returnUrl
+                router.push(returnUrl)
             } else {
                 console.error('[DEBUG] Login failed with unknown result:', signInResult)
                 toast({
