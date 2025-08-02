@@ -1,0 +1,29 @@
+Files still containing JWT authorization headers that need to be changed to Bearer:
+
+API Routes:
+- src/app/api/workspaces/[workspaceId]/memberships/[membershipId]/route.ts
+- src/app/api/workspaces/[workspaceId]/teams/[teamId]/invitations/route.ts
+- src/app/api/workspaces/[workspaceId]/teams/[teamId]/invitations/[invitationId]/route.ts
+- src/app/api/workspaces/[workspaceId]/teams/[teamId]/memberships/[membershipId]/route.ts
+- src/app/api/workspaces/[workspaceId]/teams/[teamId]/route.ts
+- src/app/api/workspaces/[workspaceId]/teams/[teamId]/invitations/accept/route.ts
+- src/app/api/workspaces/[workspaceId]/teams/route.ts
+- src/app/api/workspaces/[workspaceId]/teams/[teamId]/leave/route.ts
+- src/app/api/workspaces/[workspaceId]/chats/[chatId]/invite-user/route.ts
+- src/app/api/workspaces/[workspaceId]/chats/[chatId]/messages/[messageId]/route.ts
+- src/app/api/workspaces/[workspaceId]/chats/[chatId]/messages/route.ts
+- src/app/api/workspaces/[workspaceId]/chats/[chatId]/route.ts
+- src/app/api/workspaces/[workspaceId]/chats/[chatId]/toggle-public/route.ts
+- src/app/api/workspaces/[workspaceId]/chats/route.ts
+- src/app/api/workspaces/[workspaceId]/invitations/route.ts
+- src/app/api/workspaces/[workspaceId]/invitations/[invitationId]/route.ts
+- src/app/api/workspaces/[workspaceId]/translate/route.ts
+- src/app/api/workspaces/[workspaceId]/leave/route.ts
+- src/app/api/chats/messages/route.ts
+- src/app/api/invitations/[invitationId]/route.ts
+- src/app/api/subscriptions/create-portal-link/route.ts
+
+Replace pattern: Authorization: `JWT ${
+With: Authorization: `Bearer ${
+
+Note: The auth service in src/lib/auth-bridge.ts is correctly using Bearer format and should be used for all new API calls.
