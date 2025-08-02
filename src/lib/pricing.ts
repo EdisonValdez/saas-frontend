@@ -19,7 +19,7 @@ export async function getSubscribableProductPrices(): Promise<StripePrice[]> {
             config = {
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    Authorization: `JWT ${session.access}`,
+                    Authorization: `Bearer ${session.access}`,
                 }),
             }
         }
