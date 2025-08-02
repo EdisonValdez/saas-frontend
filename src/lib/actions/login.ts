@@ -18,7 +18,8 @@ export async function loginAction(data: any, redirectUrl?: string) {
         console.log('  - NODE_ENV:', process.env.NODE_ENV)
 
         const signInResult = await signIn('credentials', {
-            ...data,
+            email: data.email,
+            password: data.password,
             redirect: false,
             callbackUrl: callbackUrl,
         })
