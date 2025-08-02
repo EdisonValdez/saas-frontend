@@ -111,4 +111,11 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
 }
 
-export default NextAuth(authOptions)
+// Configure NextAuth for App Router
+const handler = NextAuth(authOptions)
+
+// Export the auth function for use in App Router components
+export const auth = handler.auth
+
+// Export default for API routes
+export default handler
