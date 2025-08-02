@@ -1,7 +1,7 @@
 import * as z from 'zod'
 
 import { siteConfig } from '@/config/site'
-import { getAccessToken } from '@/lib/get-access-token'
+import { getAccessToken, createAuthorizedRequest } from '@/lib/get-access-token'
 import { getApiURLWithEndpoint } from '@/lib/utils'
 import { isJWTTokenValid } from '@/lib/verify-token'
 
