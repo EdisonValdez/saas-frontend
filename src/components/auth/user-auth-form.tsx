@@ -57,8 +57,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
     }, [isSubmitSuccessful, reset])
 
     async function onSubmit(data: UserLoginData) {
-        console.log('[DEBUG] Login form submission started for:', data.email)
-
         try {
             const signInResult = await signIn('credentials', {
                 email: data.email,
@@ -67,10 +65,7 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                 callbackUrl: returnUrl,
             })
 
-            console.log('[DEBUG] SignIn result:', signInResult)
-
             if (signInResult?.error) {
-                console.error('[DEBUG] Login failed with error:', signInResult.error)
 
                 let errorMessage = 'An error occurred during login. Please try again.'
 
