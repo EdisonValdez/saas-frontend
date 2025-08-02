@@ -102,7 +102,7 @@ export async function DELETE(req: Request, context: z.infer<typeof routeContextS
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${await getAccessToken()}`, // Simplified for example purposes
+                Authorization: `JWT ${await getAccessToken()}`, // Simplified for example purposes
             },
         })
 
