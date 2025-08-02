@@ -18,7 +18,7 @@ export async function getUserSubscriptionPlan(): Promise<Subscription[]> {
     const response = await fetch(getUserSubscriptionPlanEndpoint, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `JWT ${session?.access}`,
+            Authorization: `Bearer ${session?.access}`,
         },
         method: 'GET',
     })
