@@ -24,8 +24,8 @@ import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 
-// Action
-import { loginAction } from '@/lib/actions/login'
+// NextAuth
+import { signIn } from 'next-auth/react'
 
 // Types
 interface UserLoginProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -45,8 +45,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
 
     const router = useRouter()
     const { toast } = useToast()
-    const [showDebugPanel, setShowDebugPanel] = React.useState(false)
-    const [debugResult, setDebugResult] = React.useState<any>(null)
 
     const { handleSubmit, reset, formState } = form
     const { errors, isSubmitting, isSubmitSuccessful } = formState
@@ -58,24 +56,15 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
     }, [isSubmitSuccessful, reset])
 
     async function onSubmit(data: UserLoginData) {
-        console.log('[DEBUG] Login form submission started for:', data.email)
-
         try {
-            const signInResult = await loginAction(data, returnUrl)
-            console.log('[DEBUG] Login action completed, result:', signInResult)
+            const signInResult = await signIn('credentials', {
+                email: data.email,
+                password: data.password,
+                redirect: false,
+                callbackUrl: returnUrl,
+            })
 
-            if (signInResult?.ok) {
-                console.log('[DEBUG] Login successful, redirecting to:', returnUrl)
-                toast({
-                    title: 'Success',
-                    description: 'You have successfully logged in.',
-                })
-
-                // Redirect to the returnUrl
-                router.push(returnUrl)
-            } else if (signInResult?.error) {
-                console.error('[DEBUG] Login failed with error:', signInResult.error)
-
+            if (signInResult?.error) {
                 let errorMessage = 'An error occurred during login. Please try again.'
 
                 // Provide more specific error messages based on the error type
@@ -93,8 +82,15 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                     description: errorMessage,
                     variant: 'destructive',
                 })
+            } else if (signInResult?.ok || signInResult?.url) {
+                toast({
+                    title: 'Success',
+                    description: 'You have successfully logged in.',
+                })
+
+                // Redirect to the returnUrl
+                router.push(returnUrl)
             } else {
-                console.error('[DEBUG] Login failed with unknown result:', signInResult)
                 toast({
                     title: 'Login Error',
                     description: 'Login failed for an unknown reason. Please try again.',
@@ -102,11 +98,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                 })
             }
         } catch (error) {
-            console.error('[DEBUG] Login form exception:', error)
-            console.error('[DEBUG] Error type:', error instanceof Error ? error.constructor.name : typeof error)
-            console.error('[DEBUG] Error message:', error instanceof Error ? error.message : 'Unknown error')
-            console.error('[DEBUG] Error stack:', error instanceof Error ? error.stack : 'No stack trace')
-
             let errorMessage = 'An unexpected error occurred during login. Please try again.'
 
             if (error instanceof Error) {
@@ -126,51 +117,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                 description: errorMessage,
                 variant: 'destructive',
             })
-        }
-    }
-
-    async function testDirectAuth() {
-        const formData = form.getValues()
-        if (!formData.email || !formData.password) {
-            toast({
-                title: 'Debug Test Error',
-                description: 'Please enter email and password first',
-                variant: 'destructive',
-            })
-            return
-        }
-
-        try {
-            const response = await fetch('/api/debug-auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: formData.email,
-                    password: formData.password,
-                }),
-            })
-            const result = await response.json()
-            setDebugResult(result)
-            console.log('[DEBUG] Direct auth test result:', result)
-        } catch (error) {
-            console.error('[DEBUG] Direct auth test error:', error)
-            setDebugResult({ error: error instanceof Error ? error.message : 'Unknown error' })
-        }
-    }
-
-    async function testBackendConnection() {
-        try {
-            const response = await fetch('/api/debug-auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ testType: 'connection' }),
-            })
-            const result = await response.json()
-            setDebugResult(result)
-            console.log('[DEBUG] Backend connection test result:', result)
-        } catch (error) {
-            console.error('[DEBUG] Backend connection test error:', error)
-            setDebugResult({ error: error instanceof Error ? error.message : 'Unknown error' })
         }
     }
 
@@ -249,46 +195,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                             Reset your username?
                         </Link>
                     </p>
-
-                    {/* Debug Panel - Only show in development */}
-                    {process.env.NODE_ENV === 'development' && (
-                        <div className="border-t pt-4 mt-4">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setShowDebugPanel(!showDebugPanel)}
-                                className="w-full mb-2"
-                            >
-                                {showDebugPanel ? 'Hide' : 'Show'} Debug Panel
-                            </Button>
-
-                            {showDebugPanel && (
-                                <div className="space-y-2 p-3 bg-muted rounded-md">
-                                    <p className="text-sm font-medium">Debug Tools</p>
-                                    <div className="flex gap-2">
-                                        <Button
-                                            type="button"
-                                            variant="secondary"
-                                            size="sm"
-                                            onClick={testBackendConnection}
-                                        >
-                                            Test Backend
-                                        </Button>
-                                        <Button type="button" variant="secondary" size="sm" onClick={testDirectAuth}>
-                                            Test Direct Auth
-                                        </Button>
-                                    </div>
-
-                                    {debugResult && (
-                                        <div className="mt-2 p-2 bg-background rounded text-xs overflow-auto max-h-40">
-                                            <pre>{JSON.stringify(debugResult, null, 2)}</pre>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    )}
                 </form>
             </Form>
         </div>

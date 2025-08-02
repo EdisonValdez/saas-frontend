@@ -6,27 +6,27 @@ Next.js 14 boilerplate with App Router support, Tailwind CSS, and TypeScript.
 
 ## 🧰 Features
 
--   [Next.js 14](https://nextjs.org/) with App Router support
+- [Next.js 14](https://nextjs.org/) with App Router support
 
--   [Tailwind CSS](https://tailwindcss.com/) integration
+- [Tailwind CSS](https://tailwindcss.com/) integration
 
--   [Shadcn UI](https://ui.shadcn.com/) and [Radix UI](https://www.radix-ui.com/) for UI
+- [Shadcn UI](https://ui.shadcn.com/) and [Radix UI](https://www.radix-ui.com/) for UI
 
--   Type checking with [TypeScript](https://www.typescriptlang.org)
+- Type checking with [TypeScript](https://www.typescriptlang.org)
 
--   Strict Mode for TypeScript and React 19
+- Strict Mode for TypeScript and React 19
 
--   Unit Testing with [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- Unit Testing with [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
--   E2E Testing with [Cypress](https://www.cypress.io/)
+- E2E Testing with [Cypress](https://www.cypress.io/)
 
--   Linter with [ESLint](https://eslint.org)
+- Linter with [ESLint](https://eslint.org)
 
--   Code Formatter with [Prettier](https://prettier.io)
+- Code Formatter with [Prettier](https://prettier.io)
 
--   🦊 Husky for Git Hooks
+- 🦊 Husky for Git Hooks
 
--   Lint-staged for running linters on Git staged files
+- Lint-staged for running linters on Git staged files
 
 ## 🚦 Getting Started
 
@@ -34,9 +34,9 @@ Follow these instructions to get your project up and running.
 
 ### Prerequisites
 
--   Node.js
+- Node.js
 
--   Yarn
+- Yarn
 
 ### Installation
 
@@ -89,4 +89,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) for 
 
 ## 👨‍💻 Author
 
--   [Ozan Yildirim](https://www.ozanyildirim.me/)
+- [Ozan Yildirim](https://www.ozanyildirim.me/)
