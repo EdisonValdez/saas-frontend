@@ -45,8 +45,7 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
 
     const router = useRouter()
     const { toast } = useToast()
-    const [showDebugPanel, setShowDebugPanel] = React.useState(false)
-    const [debugResult, setDebugResult] = React.useState<any>(null)
+
 
     const { handleSubmit, reset, formState } = form
     const { errors, isSubmitting, isSubmitSuccessful } = formState
@@ -135,50 +134,7 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
         }
     }
 
-    async function testDirectAuth() {
-        const formData = form.getValues()
-        if (!formData.email || !formData.password) {
-            toast({
-                title: 'Debug Test Error',
-                description: 'Please enter email and password first',
-                variant: 'destructive',
-            })
-            return
-        }
 
-        try {
-            const response = await fetch('/api/debug-auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: formData.email,
-                    password: formData.password,
-                }),
-            })
-            const result = await response.json()
-            setDebugResult(result)
-            console.log('[DEBUG] Direct auth test result:', result)
-        } catch (error) {
-            console.error('[DEBUG] Direct auth test error:', error)
-            setDebugResult({ error: error instanceof Error ? error.message : 'Unknown error' })
-        }
-    }
-
-    async function testBackendConnection() {
-        try {
-            const response = await fetch('/api/debug-auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ testType: 'connection' }),
-            })
-            const result = await response.json()
-            setDebugResult(result)
-            console.log('[DEBUG] Backend connection test result:', result)
-        } catch (error) {
-            console.error('[DEBUG] Backend connection test error:', error)
-            setDebugResult({ error: error instanceof Error ? error.message : 'Unknown error' })
-        }
-    }
 
     return (
         <div className={cn('grid gap-6', className)} {...props}>
@@ -256,45 +212,7 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                         </Link>
                     </p>
 
-                    {/* Debug Panel - Only show in development */}
-                    {process.env.NODE_ENV === 'development' && (
-                        <div className="border-t pt-4 mt-4">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setShowDebugPanel(!showDebugPanel)}
-                                className="w-full mb-2"
-                            >
-                                {showDebugPanel ? 'Hide' : 'Show'} Debug Panel
-                            </Button>
 
-                            {showDebugPanel && (
-                                <div className="space-y-2 p-3 bg-muted rounded-md">
-                                    <p className="text-sm font-medium">Debug Tools</p>
-                                    <div className="flex gap-2">
-                                        <Button
-                                            type="button"
-                                            variant="secondary"
-                                            size="sm"
-                                            onClick={testBackendConnection}
-                                        >
-                                            Test Backend
-                                        </Button>
-                                        <Button type="button" variant="secondary" size="sm" onClick={testDirectAuth}>
-                                            Test Direct Auth
-                                        </Button>
-                                    </div>
-
-                                    {debugResult && (
-                                        <div className="mt-2 p-2 bg-background rounded text-xs overflow-auto max-h-40">
-                                            <pre>{JSON.stringify(debugResult, null, 2)}</pre>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    )}
                 </form>
             </Form>
         </div>
