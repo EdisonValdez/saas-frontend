@@ -71,8 +71,10 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                     description: 'You have successfully logged in.',
                 })
 
-                // Redirect to the returnUrl
-                router.push(returnUrl)
+                // Add a small delay to allow session to be established
+                setTimeout(() => {
+                    router.push(returnUrl)
+                }, 500)
             } else if (signInResult?.error) {
                 console.error('[DEBUG] Login failed with error:', signInResult.error)
 
