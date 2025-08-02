@@ -28,6 +28,13 @@ export async function loginAction(data: any, redirectUrl?: string) {
         if (signInResult?.error) {
             console.error('[DEBUG] SignIn error details:', signInResult.error)
             console.error('[DEBUG] Full signIn result:', JSON.stringify(signInResult, null, 2))
+            return signInResult
+        }
+
+        // For successful signin, NextAuth returns url instead of error
+        if (signInResult?.url || signInResult?.ok !== false) {
+            console.log('[DEBUG] SignIn appears successful')
+            return { ok: true, url: signInResult?.url || callbackUrl }
         }
 
         return signInResult
