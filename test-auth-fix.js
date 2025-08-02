@@ -3,6 +3,7 @@
 /**
  * Test script to validate the NextAuth.js Django JWT integration fixes
  * This script simulates the authentication flow to ensure our changes work correctly
+ * mod
  */
 
 const { userLoginSchema } = require('./src/lib/validations/auth')
