@@ -28,11 +28,7 @@ export async function GET(request: Request, context: z.infer<typeof routeContext
     const workspaceId = params.workspaceId
     const endpoint = getApiURLWithEndpoint(siteConfig.backend.api.workspaces.workspaces) + `${workspaceId}/chats/`
 
-    const apiResponse = await fetch(endpoint, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `JWT ${accessToken}`,
-        },
+    const apiResponse = await createAuthorizedRequest(endpoint, {
         method: 'GET',
     })
 
