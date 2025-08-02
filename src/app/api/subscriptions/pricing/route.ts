@@ -24,7 +24,7 @@ export async function GET(request: Request) {
                 config = {
                     headers: new Headers({
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
+                        Authorization: `JWT ${accessToken}`,
                     }),
                 }
             }
