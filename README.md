@@ -38,7 +38,7 @@ Follow these instructions to get your project up and running.
 
 - Yarn
 
-### Installation
+###### Installation
 
 1. Clone the repository:
 
