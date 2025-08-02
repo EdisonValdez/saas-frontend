@@ -32,19 +32,19 @@ export function ChatApiDebug() {
     const [isLoading, setIsLoading] = useState(false)
 
     const addResult = (result: TestResult) => {
-        setResults(prev => [result, ...prev].slice(0, 10)) // Keep last 10 results
+        setResults((prev) => [result, ...prev].slice(0, 10)) // Keep last 10 results
     }
 
     const testDirectAgentInvoke = async () => {
         setIsLoading(true)
         const timestamp = new Date()
-        
+
         try {
             console.log('🔍 Testing Direct Agent Invoke API')
             console.log('Endpoint:', '/api/agents/invoke')
             console.log('Method:', 'POST')
             console.log('Payload:', { prompt: testMessage })
-            
+
             const response = await fetch('/api/agents/invoke', {
                 method: 'POST',
                 headers: {
@@ -54,7 +54,7 @@ export function ChatApiDebug() {
             })
 
             const responseData = await response.json()
-            
+
             console.log('📥 Response Status:', response.status)
             console.log('📥 Response Data:', responseData)
             console.log('📥 Response Headers:', Object.fromEntries(response.headers.entries()))
@@ -67,7 +67,7 @@ export function ChatApiDebug() {
                 status: response.status,
                 timestamp,
                 success: response.ok,
-                error: response.ok ? undefined : responseData.error || 'Unknown error'
+                error: response.ok ? undefined : responseData.error || 'Unknown error',
             })
 
             if (response.ok) {
@@ -85,7 +85,7 @@ export function ChatApiDebug() {
                 status: 0,
                 timestamp,
                 success: false,
-                error: error instanceof Error ? error.message : 'Network error'
+                error: error instanceof Error ? error.message : 'Network error',
             })
             toast.error(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`)
         } finally {
@@ -101,7 +101,7 @@ export function ChatApiDebug() {
 
         setIsLoading(true)
         const timestamp = new Date()
-        
+
         try {
             const payload = {
                 prompt: testMessage,
@@ -109,15 +109,15 @@ export function ChatApiDebug() {
                 context: {
                     session_id: 'debug-session',
                     conversation_history: [],
-                    source: 'chat-debug'
-                }
+                    source: 'chat-debug',
+                },
             }
 
             console.log('🔍 Testing Enhanced Agent Invoke API')
             console.log('Endpoint:', '/api/agents/invoke')
             console.log('Method:', 'POST')
             console.log('Payload:', payload)
-            
+
             const response = await fetch('/api/agents/invoke', {
                 method: 'POST',
                 headers: {
@@ -127,7 +127,7 @@ export function ChatApiDebug() {
             })
 
             const responseData = await response.json()
-            
+
             console.log('📥 Response Status:', response.status)
             console.log('📥 Response Data:', responseData)
 
@@ -139,7 +139,7 @@ export function ChatApiDebug() {
                 status: response.status,
                 timestamp,
                 success: response.ok,
-                error: response.ok ? undefined : responseData.error || 'Unknown error'
+                error: response.ok ? undefined : responseData.error || 'Unknown error',
             })
 
             if (response.ok) {
@@ -157,7 +157,7 @@ export function ChatApiDebug() {
                 status: 0,
                 timestamp,
                 success: false,
-                error: error instanceof Error ? error.message : 'Network error'
+                error: error instanceof Error ? error.message : 'Network error',
             })
             toast.error(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`)
         } finally {
@@ -173,7 +173,7 @@ export function ChatApiDebug() {
 
         setIsLoading(true)
         const timestamp = new Date()
-        
+
         try {
             const endpoint = `/api/workspaces/${workspaceId}/chats/${chatId}/messages`
             const payload = {
@@ -185,7 +185,7 @@ export function ChatApiDebug() {
             console.log('Endpoint:', endpoint)
             console.log('Method:', 'POST')
             console.log('Payload:', payload)
-            
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -195,7 +195,7 @@ export function ChatApiDebug() {
             })
 
             const responseData = await response.json()
-            
+
             console.log('📥 Response Status:', response.status)
             console.log('📥 Response Data:', responseData)
 
@@ -207,7 +207,7 @@ export function ChatApiDebug() {
                 status: response.status,
                 timestamp,
                 success: response.ok,
-                error: response.ok ? undefined : responseData.error || 'Unknown error'
+                error: response.ok ? undefined : responseData.error || 'Unknown error',
             })
 
             if (response.ok) {
@@ -225,7 +225,7 @@ export function ChatApiDebug() {
                 status: 0,
                 timestamp,
                 success: false,
-                error: error instanceof Error ? error.message : 'Network error'
+                error: error instanceof Error ? error.message : 'Network error',
             })
             toast.error(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`)
         } finally {
@@ -245,9 +245,7 @@ export function ChatApiDebug() {
     if (status === 'unauthenticated') {
         return (
             <Alert>
-                <AlertDescription>
-                    Please sign in to test the chat API endpoints.
-                </AlertDescription>
+                <AlertDescription>Please sign in to test the chat API endpoints.</AlertDescription>
             </Alert>
         )
     }
@@ -260,12 +258,8 @@ export function ChatApiDebug() {
                     <p className="text-muted-foreground">Test and monitor chat interface API calls</p>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Badge variant="outline">
-                        User: {session?.user?.email}
-                    </Badge>
-                    <Badge variant={status === 'authenticated' ? 'default' : 'destructive'}>
-                        Auth: {status}
-                    </Badge>
+                    <Badge variant="outline">User: {session?.user?.email}</Badge>
+                    <Badge variant={status === 'authenticated' ? 'default' : 'destructive'}>Auth: {status}</Badge>
                 </div>
             </div>
 
@@ -314,11 +308,7 @@ export function ChatApiDebug() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <Button
-                            onClick={testDirectAgentInvoke}
-                            disabled={isLoading}
-                            className="w-full"
-                        >
+                        <Button onClick={testDirectAgentInvoke} disabled={isLoading} className="w-full">
                             Test Direct Agent Invoke
                         </Button>
                         <Button
@@ -375,7 +365,7 @@ export function ChatApiDebug() {
                                                 {result.timestamp.toLocaleTimeString()}
                                             </span>
                                         </div>
-                                        
+
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                             <div>
                                                 <strong>Payload:</strong>
@@ -390,7 +380,7 @@ export function ChatApiDebug() {
                                                 </pre>
                                             </div>
                                         </div>
-                                        
+
                                         {result.error && (
                                             <div className="mt-2">
                                                 <Badge variant="destructive" className="mr-2">
