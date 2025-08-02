@@ -24,8 +24,8 @@ import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 
-// Action
-import { loginAction } from '@/lib/actions/login'
+// NextAuth
+import { signIn } from 'next-auth/react'
 
 // Types
 interface UserLoginProps extends React.HTMLAttributes<HTMLDivElement> {
