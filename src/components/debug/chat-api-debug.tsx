@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
+import { authService } from '@/lib/auth-bridge'
 
 interface TestResult {
     endpoint: string
