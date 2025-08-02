@@ -6,7 +6,6 @@ export async function loginAction(data: any, redirectUrl?: string) {
     const callbackUrl = redirectUrl || '/dashboard'
 
     try {
-
         const signInResult = await signIn('credentials', {
             email: data.email,
             password: data.password,

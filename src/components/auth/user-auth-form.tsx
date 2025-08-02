@@ -46,7 +46,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
     const router = useRouter()
     const { toast } = useToast()
 
-
     const { handleSubmit, reset, formState } = form
     const { errors, isSubmitting, isSubmitSuccessful } = formState
 
@@ -66,7 +65,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
             })
 
             if (signInResult?.error) {
-
                 let errorMessage = 'An error occurred during login. Please try again.'
 
                 // Provide more specific error messages based on the error type
@@ -100,7 +98,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                 })
             }
         } catch (error) {
-
             let errorMessage = 'An unexpected error occurred during login. Please try again.'
 
             if (error instanceof Error) {
@@ -122,8 +119,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
             })
         }
     }
-
-
 
     return (
         <div className={cn('grid gap-6', className)} {...props}>
@@ -200,8 +195,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                             Reset your username?
                         </Link>
                     </p>
-
-
                 </form>
             </Form>
         </div>
