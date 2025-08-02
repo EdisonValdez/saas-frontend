@@ -36,7 +36,7 @@ export async function POST(request: Request) {
             const userDetailResponse = await fetch(USER_DETAIL_END_POINT, {
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    Authorization: `JWT ${accessToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                 }),
             })
             userDetailData = await userDetailResponse.json()
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
                 method: 'POST',
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    Authorization: `JWT ${accessToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                 }),
                 body: JSON.stringify(checkoutBody),
             })
