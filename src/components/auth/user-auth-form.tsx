@@ -100,10 +100,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                 })
             }
         } catch (error) {
-            console.error('[DEBUG] Login form exception:', error)
-            console.error('[DEBUG] Error type:', error instanceof Error ? error.constructor.name : typeof error)
-            console.error('[DEBUG] Error message:', error instanceof Error ? error.message : 'Unknown error')
-            console.error('[DEBUG] Error stack:', error instanceof Error ? error.stack : 'No stack trace')
 
             let errorMessage = 'An unexpected error occurred during login. Please try again.'
 
