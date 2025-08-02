@@ -10,7 +10,7 @@ import { getApiURLWithEndpoint } from './utils'
 //         const response = await fetch(TeamEndpoint, {
 //             headers: {
 //                 'Content-Type': 'application/json',
-//                 Authorization: `JWT ${accessToken}`,
+//                 Authorization: `Bearer ${accessToken}`,
 //             },
 //             method: 'GET',
 //         })
@@ -29,7 +29,7 @@ export async function fetchTeam(teamId: string) {
         const response = await fetch(TeamEndpoint, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `JWT ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
             },
             method: 'GET',
         })
