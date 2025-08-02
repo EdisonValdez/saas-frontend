@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import type { NextAuthOptions } from 'next-auth'
+import { getServerSession } from 'next-auth'
 
 import { getApiURL } from './utils'
 import { userLoginSchema } from './validations/auth'
@@ -111,11 +112,8 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
 }
 
-// Configure NextAuth for App Router
-const handler = NextAuth(authOptions)
-
 // Export the auth function for use in App Router components
-export const auth = handler.auth
+export const auth = () => getServerSession(authOptions)
 
 // Export default for API routes
-export default handler
+export default NextAuth(authOptions)
