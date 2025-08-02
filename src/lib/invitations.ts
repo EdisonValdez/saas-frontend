@@ -9,7 +9,7 @@ export async function fetchInvitation(invitationId: string) {
     const response = await fetch(TeamEndpoint, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `JWT ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
         },
         method: 'GET',
     })
@@ -24,7 +24,7 @@ export async function userInvitations() {
     const response = await fetch(invitationListEndpoint, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `JWT ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
         },
         method: 'GET',
     })
