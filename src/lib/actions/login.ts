@@ -6,16 +6,6 @@ export async function loginAction(data: any, redirectUrl?: string) {
     const callbackUrl = redirectUrl || '/dashboard'
 
     try {
-        console.log('[DEBUG] Login attempt initiated for email:', data.email)
-        console.log('[DEBUG] Callback URL:', callbackUrl)
-        console.log('[DEBUG] Environment check:')
-        console.log('  - AUTH_SECRET exists:', !!process.env.AUTH_SECRET)
-        console.log('  - NEXTAUTH_SECRET exists:', !!process.env.NEXTAUTH_SECRET)
-        console.log(
-            '  - NEXT_PUBLIC_BACKEND_API_URL:',
-            process.env.NEXT_PUBLIC_BACKEND_API_URL || 'Not set (will use default)'
-        )
-        console.log('  - NODE_ENV:', process.env.NODE_ENV)
 
         const signInResult = await signIn('credentials', {
             email: data.email,
