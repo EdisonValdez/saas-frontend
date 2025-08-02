@@ -81,13 +81,17 @@ const providers: Provider[] = [
                 const userDetails = await userDetailsRes.json()
                 console.log('[DEBUG] User details fetched successfully for user:', userDetails.email)
 
+                // Return properly formatted user object for NextAuth
                 const authResult = {
-                    ...userDetails,
+                    id: userDetails.id?.toString() || userDetails.email,
+                    name: userDetails.name || userDetails.username || userDetails.email.split('@')[0],
+                    email: userDetails.email,
+                    image: userDetails.image || userDetails.avatar || null,
                     access: jwtTokens.access,
                     refresh: jwtTokens.refresh,
                 }
 
-                console.log('[DEBUG] Authorization successful, returning user data')
+                console.log('[DEBUG] Authorization successful, returning user data with id:', authResult.id)
                 return authResult
             } catch (error) {
                 console.error('[DEBUG] Exception during authorization:')
@@ -119,16 +123,26 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         async jwt({ token, user }: { token: any; user: any }) {
             console.log('[DEBUG] JWT callback called')
             if (user) {
-                console.log('[DEBUG] Adding user data to JWT token')
+                console.log('[DEBUG] Adding user data to JWT token for user:', user.email)
+                token.id = user.id
+                token.name = user.name
+                token.email = user.email
+                token.image = user.image
                 token.access = user.access
                 token.refresh = user.refresh
             }
             return token
         },
-        session({ session, token }: { session: any; token: any }) {
+        async session({ session, token }: { session: any; token: any }) {
             console.log('[DEBUG] Session callback called')
             if (token) {
-                console.log('[DEBUG] Adding token data to session')
+                console.log('[DEBUG] Adding token data to session for user:', token.email)
+                session.user = {
+                    id: token.id as string,
+                    name: token.name as string,
+                    email: token.email as string,
+                    image: token.image as string,
+                }
                 session.access = token.access
                 session.refresh = token.refresh
             }
