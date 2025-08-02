@@ -36,6 +36,7 @@ import { toast } from 'sonner'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { useAccessibility } from '@/hooks/use-accessibility'
+import { authService } from '@/lib/auth-bridge'
 
 interface Message {
     id: string
