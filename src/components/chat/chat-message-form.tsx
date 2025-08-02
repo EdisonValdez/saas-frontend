@@ -56,6 +56,16 @@ export function ChatMessageForm({ chatSession }: ChatMessageFormProps) {
         try {
             const endpoint = `${siteConfig.paths.api.workspaces.workspaces}${chatSession.workspace.id}/chats/${chatSession.id}/messages`
 
+            // Enhanced logging for debugging
+            console.log('🚀 Sending workspace chat message:', {
+                endpoint,
+                method: 'POST',
+                payload,
+                workspaceId: chatSession.workspace.id,
+                chatId: chatSession.id,
+                timestamp: new Date().toISOString(),
+            })
+
             const res = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -64,7 +74,19 @@ export function ChatMessageForm({ chatSession }: ChatMessageFormProps) {
                 body: JSON.stringify(payload),
             })
 
+            // Log response details
+            console.log('📥 Workspace chat API response:', {
+                status: res.status,
+                statusText: res.statusText,
+                headers: Object.fromEntries(res.headers.entries()),
+                ok: res.ok,
+                url: res.url,
+            })
+
             if (res.ok) {
+                const responseData = await res.json()
+                console.log('✅ Workspace chat success response:', responseData)
+
                 toast({
                     title: 'Message sent',
                     description: 'Your message has been sent successfully',
@@ -75,12 +97,15 @@ export function ChatMessageForm({ chatSession }: ChatMessageFormProps) {
                 setFocus('content') // Set focus back to the textarea
                 router.refresh() // Refresh router to get new messages if necessary
             } else {
-                throw new Error(`Error: ${res.status}`)
+                const errorData = await res.json().catch(() => ({ error: 'Unknown error' }))
+                console.error('❌ Workspace chat API error response:', errorData)
+                throw new Error(`Error: ${res.status} - ${errorData.error || res.statusText}`)
             }
         } catch (error) {
+            console.error('❌ Workspace chat message error:', error)
             toast({
                 title: 'Message not sent',
-                description: 'There was an error sending your message. Please try again.',
+                description: `There was an error sending your message: ${error instanceof Error ? error.message : 'Unknown error'}`,
                 variant: 'destructive',
             })
         }
