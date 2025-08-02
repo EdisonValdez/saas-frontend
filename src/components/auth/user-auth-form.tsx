@@ -82,7 +82,8 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                 if (signInResult.error === 'CredentialsSignin') {
                     errorMessage = 'Invalid email or password. Please check your credentials and try again.'
                 } else if (signInResult.error.includes('fetch')) {
-                    errorMessage = 'Unable to connect to the authentication server. Please check your internet connection and try again.'
+                    errorMessage =
+                        'Unable to connect to the authentication server. Please check your internet connection and try again.'
                 } else if (signInResult.error.includes('timeout')) {
                     errorMessage = 'The login request timed out. Please try again.'
                 }
@@ -145,8 +146,8 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email: formData.email,
-                    password: formData.password
-                })
+                    password: formData.password,
+                }),
             })
             const result = await response.json()
             setDebugResult(result)
@@ -162,7 +163,7 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
             const response = await fetch('/api/debug-auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ testType: 'connection' })
+                body: JSON.stringify({ testType: 'connection' }),
             })
             const result = await response.json()
             setDebugResult(result)
@@ -274,12 +275,7 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                                         >
                                             Test Backend
                                         </Button>
-                                        <Button
-                                            type="button"
-                                            variant="secondary"
-                                            size="sm"
-                                            onClick={testDirectAuth}
-                                        >
+                                        <Button type="button" variant="secondary" size="sm" onClick={testDirectAuth}>
                                             Test Direct Auth
                                         </Button>
                                     </div>

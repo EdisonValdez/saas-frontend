@@ -11,7 +11,10 @@ export async function loginAction(data: any, redirectUrl?: string) {
         console.log('[DEBUG] Environment check:')
         console.log('  - AUTH_SECRET exists:', !!process.env.AUTH_SECRET)
         console.log('  - NEXTAUTH_SECRET exists:', !!process.env.NEXTAUTH_SECRET)
-        console.log('  - NEXT_PUBLIC_BACKEND_API_URL:', process.env.NEXT_PUBLIC_BACKEND_API_URL || 'Not set (will use default)')
+        console.log(
+            '  - NEXT_PUBLIC_BACKEND_API_URL:',
+            process.env.NEXT_PUBLIC_BACKEND_API_URL || 'Not set (will use default)'
+        )
         console.log('  - NODE_ENV:', process.env.NODE_ENV)
 
         const signInResult = await signIn('credentials', {
