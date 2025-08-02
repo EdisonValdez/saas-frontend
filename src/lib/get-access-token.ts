@@ -27,7 +27,7 @@ export async function getAuthHeaders(): Promise<Record<string, string>> {
     }
 
     if (accessToken) {
-        headers.Authorization = `Bearer ${accessToken}`
+        headers.Authorization = `JWT ${accessToken}`
     }
 
     return headers
