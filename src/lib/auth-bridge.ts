@@ -151,7 +151,7 @@ class AuthService {
         }
 
         if (session?.access) {
-            headers.Authorization = `JWT ${session.access}`
+            headers.Authorization = `Bearer ${session.access}`
         }
 
         return headers
