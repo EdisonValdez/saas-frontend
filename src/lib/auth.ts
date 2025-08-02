@@ -121,7 +121,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     callbacks: {
         async jwt({ token, user }: { token: any; user: any }) {
-            console.log('[DEBUG] JWT callback called')
+            console.log('[DEBUG] JWT callback called, user present:', !!user, 'token email:', token?.email)
             if (user) {
                 console.log('[DEBUG] Adding user data to JWT token for user:', user.email)
                 token.id = user.id
