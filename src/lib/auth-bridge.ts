@@ -183,6 +183,28 @@ class AuthService {
         this.sessionCache = null
         this.sessionExpiry = 0
     }
+
+    async fetchWithAuth(url: string, options: RequestInit = {}): Promise<Response> {
+        const headers = await this.getAuthHeaders()
+
+        return fetch(url, {
+            ...options,
+            headers: {
+                ...options.headers,
+                ...headers,
+            },
+        })
+    }
+
+    async fetchWithAuthJson<T = any>(url: string, options: RequestInit = {}): Promise<T> {
+        const response = await this.fetchWithAuth(url, options)
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        }
+
+        return response.json()
+    }
 }
 
 export const authService = new AuthService()
