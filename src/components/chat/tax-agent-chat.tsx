@@ -189,18 +189,22 @@ export function TaxAgentChat() {
             try {
                 const request: AgentRequest = { prompt: content }
 
+                // Get authentication headers
+                const authHeaders = await authService.getAuthHeaders()
+
                 // Enhanced logging for debugging
                 console.log('🚀 Sending chat message to agent:', {
                     endpoint: '/api/agents/invoke',
                     method: 'POST',
                     payload: request,
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { ...authHeaders, 'Content-Type': 'application/json' },
                     timestamp: new Date().toISOString(),
                 })
 
                 const response = await fetch('/api/agents/invoke', {
                     method: 'POST',
                     headers: {
+                        ...authHeaders,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(request),
