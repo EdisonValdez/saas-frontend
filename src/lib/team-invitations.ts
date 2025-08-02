@@ -19,7 +19,7 @@ export async function getTeamInvitations(team_id: string): Promise<Workspace[] |
     const response = await fetch(UserWorkspaceListEndpoint, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session?.access}`,
+            Authorization: `JWT ${session?.access}`,
         },
         method: 'GET',
         cache: 'no-store',

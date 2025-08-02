@@ -29,7 +29,7 @@ export async function fetchTeam(teamId: string) {
         const response = await fetch(TeamEndpoint, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `JWT ${accessToken}`,
             },
             method: 'GET',
         })

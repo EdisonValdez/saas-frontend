@@ -72,7 +72,7 @@ class ApiClient {
         }
 
         if (session?.accessToken) {
-            headers.Authorization = `Bearer ${session.accessToken}`
+            headers.Authorization = `JWT ${session.accessToken}`
         }
 
         return headers

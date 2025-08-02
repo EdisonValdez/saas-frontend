@@ -35,7 +35,7 @@ export async function fetchWorkspace(workspaceId: string) {
         const response = await fetch(WorkspaceEndpoint, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `JWT ${accessToken}`,
             },
             method: 'GET',
         })

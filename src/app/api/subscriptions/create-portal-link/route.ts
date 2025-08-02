@@ -32,7 +32,7 @@ export async function POST(request: Request) {
             const billingPortalResponse = await fetch(CREATE_CUSTOMER_PORTAL_LINK, {
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
+                    Authorization: `JWT ${accessToken}`,
                 }),
                 method: 'POST',
             })

@@ -44,7 +44,7 @@ export async function getUserWorkspaces(): Promise<Workspace[] | null> {
         const response = await fetch(UserWorkspaceListEndpoint, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${session.access}`,
+                Authorization: `JWT ${session.access}`,
             },
             method: 'GET',
             cache: 'no-store',
