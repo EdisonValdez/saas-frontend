@@ -18,10 +18,12 @@ const providers: Provider[] = [
             password: { label: 'Password', type: 'password' },
         },
         async authorize(credentials, req) {
+            console.log('[DEBUG] Authorize method called with email:', credentials?.email)
+
             const { email, password } = userLoginSchema.parse(credentials)
 
             if (!credentials?.email || !credentials?.password) {
-                console.error('Email and password are required')
+                console.error('[DEBUG] Email and password are required')
                 return null
             }
 
@@ -29,7 +31,14 @@ const providers: Provider[] = [
             const USER_LOGIN_ENDPOINT = BACKEND_URL.concat('/auth/jwt/create/')
             const USER_DETAILS_ENDPOINT = BACKEND_URL.concat('/auth/users/me/')
 
+            console.log('[DEBUG] Authentication endpoints:')
+            console.log('  - Backend URL:', BACKEND_URL)
+            console.log('  - Login endpoint:', USER_LOGIN_ENDPOINT)
+            console.log('  - User details endpoint:', USER_DETAILS_ENDPOINT)
+
             try {
+                console.log('[DEBUG] Attempting to fetch JWT tokens...')
+
                 // Fetch JWT tokens
                 const jwtRes = await fetch(USER_LOGIN_ENDPOINT, {
                     method: 'POST',
@@ -37,12 +46,19 @@ const providers: Provider[] = [
                     body: JSON.stringify({ email, password }),
                 })
 
+                console.log('[DEBUG] JWT response status:', jwtRes.status, jwtRes.statusText)
+
                 if (!jwtRes.ok) {
-                    console.error('Failed to fetch tokens:', jwtRes.statusText)
+                    const errorText = await jwtRes.text()
+                    console.error('[DEBUG] Failed to fetch tokens:', jwtRes.statusText)
+                    console.error('[DEBUG] Error response body:', errorText)
                     return null
                 }
 
                 const jwtTokens = await jwtRes.json()
+                console.log('[DEBUG] JWT tokens received successfully')
+
+                console.log('[DEBUG] Attempting to fetch user details...')
 
                 // Fetch user details
                 const userDetailsRes = await fetch(USER_DETAILS_ENDPOINT, {
@@ -53,20 +69,32 @@ const providers: Provider[] = [
                     },
                 })
 
+                console.log('[DEBUG] User details response status:', userDetailsRes.status, userDetailsRes.statusText)
+
                 if (!userDetailsRes.ok) {
-                    console.error('Failed to fetch user details:', userDetailsRes.statusText)
+                    const errorText = await userDetailsRes.text()
+                    console.error('[DEBUG] Failed to fetch user details:', userDetailsRes.statusText)
+                    console.error('[DEBUG] Error response body:', errorText)
                     return null
                 }
 
                 const userDetails = await userDetailsRes.json()
+                console.log('[DEBUG] User details fetched successfully for user:', userDetails.email)
 
-                return {
+                const authResult = {
                     ...userDetails,
                     access: jwtTokens.access,
                     refresh: jwtTokens.refresh,
                 }
+
+                console.log('[DEBUG] Authorization successful, returning user data')
+                return authResult
             } catch (error) {
-                console.error('Error during login:', error)
+                console.error('[DEBUG] Exception during authorization:')
+                console.error('  - Error message:', error instanceof Error ? error.message : 'Unknown error')
+                console.error('  - Error name:', error instanceof Error ? error.name : 'Unknown')
+                console.error('  - Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+                console.error('  - Full error object:', error)
                 return null
             }
         },
