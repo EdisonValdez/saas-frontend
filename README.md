@@ -1,4 +1,4 @@
-gain# 🚀 Next.js 14 Boilerplate
+# 🚀 Next.js 14 Boilerplate
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
