@@ -129,7 +129,7 @@ async function authenticatedFetch<T>( // Added a generic type 'T' for API respon
         method,
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `JWT ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
         },
         body: body ? JSON.stringify(body) : undefined,
     })

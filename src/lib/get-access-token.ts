@@ -18,3 +18,29 @@ export async function validateAccessToken(): Promise<string | Response> {
 
     return accessToken
 }
+
+export async function getAuthHeaders(): Promise<Record<string, string>> {
+    const accessToken = await getAccessToken()
+
+    const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+    }
+
+    if (accessToken) {
+        headers.Authorization = `Bearer ${accessToken}`
+    }
+
+    return headers
+}
+
+export async function createAuthorizedRequest(url: string, options: RequestInit = {}): Promise<Response> {
+    const headers = await getAuthHeaders()
+
+    return fetch(url, {
+        ...options,
+        headers: {
+            ...options.headers,
+            ...headers,
+        },
+    })
+}

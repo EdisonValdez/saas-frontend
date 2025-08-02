@@ -31,7 +31,7 @@ export async function GET(request: Request) {
         const apiResponse = await fetch(endpoint, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `JWT ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
             },
             method: 'GET',
         })
