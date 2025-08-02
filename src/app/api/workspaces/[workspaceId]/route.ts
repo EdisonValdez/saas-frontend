@@ -48,7 +48,7 @@ export async function PUT(req: Request, context: z.infer<typeof routeContextSche
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `JWT ${accessToken}`,
             },
             body: JSON.stringify(payload),
         })
