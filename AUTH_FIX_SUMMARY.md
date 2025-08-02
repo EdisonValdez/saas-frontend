@@ -18,24 +18,25 @@ Based on your debug test results, the authentication system was failing with a 5
 **After:** Two-step authentication process:
 
 1. **Step 1:** Get JWT tokens from Django
-   ```typescript
-   const jwtRes = await fetch(USER_LOGIN_ENDPOINT, {
-     method: 'POST',
-     headers: { 'Content-Type': 'application/json' },
-     body: JSON.stringify({ email, password }),
-   })
-   ```
+
+    ```typescript
+    const jwtRes = await fetch(USER_LOGIN_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+    })
+    ```
 
 2. **Step 2:** Use access token to fetch user profile
-   ```typescript
-   const userDetailsRes = await fetch(USER_DETAILS_ENDPOINT, {
-     method: 'GET',
-     headers: {
-       'Content-Type': 'application/json',
-       Authorization: `Bearer ${jwtTokens.access}`,
-     },
-   })
-   ```
+    ```typescript
+    const userDetailsRes = await fetch(USER_DETAILS_ENDPOINT, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${jwtTokens.access}`,
+        },
+    })
+    ```
 
 ### 2. Improved User Object Structure
 
@@ -44,18 +45,19 @@ Based on your debug test results, the authentication system was failing with a 5
 
 ```typescript
 const authResult = {
-  id: userDetails.id?.toString() || userDetails.email,
-  name: userDetails.name || userDetails.username || userDetails.email.split('@')[0],
-  email: userDetails.email,
-  image: userDetails.image || userDetails.avatar || null,
-  access: jwtTokens.access,
-  refresh: jwtTokens.refresh,
+    id: userDetails.id?.toString() || userDetails.email,
+    name: userDetails.name || userDetails.username || userDetails.email.split('@')[0],
+    email: userDetails.email,
+    image: userDetails.image || userDetails.avatar || null,
+    access: jwtTokens.access,
+    refresh: jwtTokens.refresh,
 }
 ```
 
 ### 3. Enhanced Callback Functions
 
 **JWT Callback:** Now properly stores all user data including tokens
+
 ```typescript
 async jwt({ token, user }) {
   if (user) {
@@ -71,6 +73,7 @@ async jwt({ token, user }) {
 ```
 
 **Session Callback:** Creates properly structured session object
+
 ```typescript
 async session({ session, token }) {
   if (token) {
@@ -94,30 +97,30 @@ async session({ session, token }) {
 
 ```typescript
 declare module 'next-auth' {
-  interface Session extends DefaultSession {
-    access: string
-    refresh: string
-    user: {
-      id: string
-    } & DefaultSession['user']
-  }
+    interface Session extends DefaultSession {
+        access: string
+        refresh: string
+        user: {
+            id: string
+        } & DefaultSession['user']
+    }
 
-  interface User extends DefaultUser {
-    id: string
-    access: string
-    refresh: string
-  }
+    interface User extends DefaultUser {
+        id: string
+        access: string
+        refresh: string
+    }
 }
 
 declare module 'next-auth/jwt' {
-  interface JWT {
-    id: string
-    name: string
-    email: string
-    image: string
-    access: string
-    refresh: string
-  }
+    interface JWT {
+        id: string
+        name: string
+        email: string
+        image: string
+        access: string
+        refresh: string
+    }
 }
 ```
 
@@ -130,15 +133,16 @@ Once the dev server is running:
 1. Navigate to `/login`
 2. Enter valid credentials for your Django backend
 3. Check browser developer tools for debug logs:
-   - `[DEBUG] Attempting to fetch JWT tokens...`
-   - `[DEBUG] JWT tokens received successfully`
-   - `[DEBUG] Attempting to fetch user details...`
-   - `[DEBUG] User details fetched successfully`
-   - `[DEBUG] Authorization successful, returning user data`
+    - `[DEBUG] Attempting to fetch JWT tokens...`
+    - `[DEBUG] JWT tokens received successfully`
+    - `[DEBUG] Attempting to fetch user details...`
+    - `[DEBUG] User details fetched successfully`
+    - `[DEBUG] Authorization successful, returning user data`
 
 ### 2. Check Session Data
 
 After successful login, you can verify the session contains:
+
 ```javascript
 // In any component or page
 import { useSession } from 'next-auth/react'
@@ -165,6 +169,7 @@ curl -X GET http://127.0.0.1:8000/auth/users/me/ \
 ### 4. Automated Test
 
 Run the included test script:
+
 ```bash
 node test-auth-fix.js
 ```
@@ -180,6 +185,7 @@ node test-auth-fix.js
 ## Environment Requirements
 
 Ensure these environment variables are set:
+
 - `NEXT_PUBLIC_BACKEND_URL` (defaults to http://127.0.0.1:8000)
 - `AUTH_SECRET` or `NEXTAUTH_SECRET` or `SECRET`
 
