@@ -173,7 +173,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     session: {
         strategy: 'jwt',
         maxAge: 24 * 60 * 60, // Token expiration time (1 day)
-        updateAge: 60 * 60, // Frequency to update the token (1 hour)
+        updateAge: 24 * 60 * 60, // Only update at session expiry to avoid loops
     },
     debug: true, // Force debug mode for comprehensive logging
 })
