@@ -85,7 +85,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                     variant: 'destructive',
                 })
             } else if (signInResult?.ok || signInResult?.url) {
-                console.log('[DEBUG] Login successful, redirecting to:', returnUrl)
                 toast({
                     title: 'Success',
                     description: 'You have successfully logged in.',
@@ -94,7 +93,6 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                 // Redirect to the returnUrl
                 router.push(returnUrl)
             } else {
-                console.error('[DEBUG] Login failed with unknown result:', signInResult)
                 toast({
                     title: 'Login Error',
                     description: 'Login failed for an unknown reason. Please try again.',
