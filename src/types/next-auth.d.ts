@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { DefaultSession, DefaultUser } from 'next-auth'
+import NextAuth, { DefaultSession, DefaultUser } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 
-// Extend NextAuth types to include JWT tokens and proper user data
 declare module 'next-auth' {
     interface Session extends DefaultSession {
         access: string
