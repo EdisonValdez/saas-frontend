@@ -156,9 +156,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             return session
         },
         async signIn({ user, account, profile, email, credentials }) {
-            console.log('[DEBUG] SignIn callback called')
-            console.log('[DEBUG] User object:', user ? 'User exists' : 'No user')
-            console.log('[DEBUG] Account object:', account ? 'Account exists' : 'No account')
             return true
         },
     },
