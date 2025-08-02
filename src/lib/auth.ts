@@ -143,9 +143,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             return token
         },
         async session({ session, token }: { session: any; token: any }) {
-            console.log('[DEBUG] Session callback called')
             if (token) {
-                console.log('[DEBUG] Adding token data to session for user:', token.email)
                 session.user = {
                     id: token.id as string,
                     name: token.name as string,
