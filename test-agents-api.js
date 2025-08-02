@@ -2,7 +2,7 @@
 
 /**
  * Test script for /api/agents/invoke endpoint
- * 
+ *
  * This script helps verify that the JWT token forwarding is working correctly.
  * Run this after starting your Next.js development server.
  */
@@ -21,8 +21,8 @@ async function testAgentsAPI() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                prompt: 'Test prompt'
-            })
+                prompt: 'Test prompt',
+            }),
         })
 
         if (unauthResponse.status === 401) {
@@ -40,7 +40,7 @@ async function testAgentsAPI() {
             },
             body: JSON.stringify({
                 // Missing prompt field
-            })
+            }),
         })
 
         if (invalidResponse.status === 400 || invalidResponse.status === 401) {
@@ -52,7 +52,7 @@ async function testAgentsAPI() {
         // Test 3: GET request (should be method not allowed)
         console.log('\n3. Testing GET request...')
         const getResponse = await fetch(`${BASE_URL}/api/agents/invoke`, {
-            method: 'GET'
+            method: 'GET',
         })
 
         if (getResponse.status === 405) {
@@ -69,7 +69,6 @@ async function testAgentsAPI() {
         console.log('5. Make a request to the chat agent')
         console.log('6. Check the /api/agents/invoke request in the Network tab')
         console.log('7. Verify the request is being made and has proper status code')
-
     } catch (error) {
         console.error('❌ Test failed:', error.message)
         console.log('\n🔧 Make sure your Next.js server is running on http://localhost:3000')
