@@ -49,7 +49,7 @@ const providers: Provider[] = [
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `JWT ${jwtTokens.access}`,
+                        Authorization: `Bearer ${jwtTokens.access}`,
                     },
                 })
 
