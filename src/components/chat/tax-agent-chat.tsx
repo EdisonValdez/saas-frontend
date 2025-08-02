@@ -187,6 +187,16 @@ export function TaxAgentChat() {
 
             try {
                 const request: AgentRequest = { prompt: content }
+
+                // Enhanced logging for debugging
+                console.log('🚀 Sending chat message to agent:', {
+                    endpoint: '/api/agents/invoke',
+                    method: 'POST',
+                    payload: request,
+                    headers: { 'Content-Type': 'application/json' },
+                    timestamp: new Date().toISOString(),
+                })
+
                 const response = await fetch('/api/agents/invoke', {
                     method: 'POST',
                     headers: {
@@ -195,12 +205,22 @@ export function TaxAgentChat() {
                     body: JSON.stringify(request),
                 })
 
+                // Log response details
+                console.log('📥 Agent API response:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    ok: response.ok,
+                })
+
                 if (!response.ok) {
                     const errorData = await response.json()
+                    console.error('❌ Agent API error response:', errorData)
                     throw new Error(errorData.error || 'Failed to get response from agent')
                 }
 
                 const data: AgentResponse = await response.json()
+                console.log('✅ Agent API success response:', data)
 
                 setMessages((prev) =>
                     prev.map((msg) =>
