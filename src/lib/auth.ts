@@ -117,18 +117,42 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     callbacks: {
         async jwt({ token, user }: { token: any; user: any }) {
+            console.log('[DEBUG] JWT callback called')
             if (user) {
+                console.log('[DEBUG] Adding user data to JWT token')
                 token.access = user.access
                 token.refresh = user.refresh
             }
             return token
         },
         session({ session, token }: { session: any; token: any }) {
+            console.log('[DEBUG] Session callback called')
             if (token) {
+                console.log('[DEBUG] Adding token data to session')
                 session.access = token.access
                 session.refresh = token.refresh
             }
             return session
+        },
+        async signIn({ user, account, profile, email, credentials }) {
+            console.log('[DEBUG] SignIn callback called')
+            console.log('[DEBUG] User object:', user ? 'User exists' : 'No user')
+            console.log('[DEBUG] Account object:', account ? 'Account exists' : 'No account')
+            return true
+        },
+    },
+    events: {
+        async signIn(message) {
+            console.log('[DEBUG] SignIn event triggered:', message.user?.email)
+        },
+        async signOut(message) {
+            console.log('[DEBUG] SignOut event triggered')
+        },
+        async createUser(message) {
+            console.log('[DEBUG] CreateUser event triggered:', message.user.email)
+        },
+        async session(message) {
+            console.log('[DEBUG] Session event triggered')
         },
     },
     secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || process.env.SECRET,
@@ -137,5 +161,5 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         maxAge: 24 * 60 * 60, // Token expiration time (1 day)
         updateAge: 60 * 60, // Frequency to update the token (1 hour)
     },
-    debug: process.env.NODE_ENV === 'development',
+    debug: true, // Force debug mode for comprehensive logging
 })
