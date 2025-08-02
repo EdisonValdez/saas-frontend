@@ -15,7 +15,7 @@ export async function getWorkspaceChatSessions(workspaceId: string): Promise<Cha
     const response = await fetch(endpoint, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.access}`,
+            Authorization: `JWT ${session.access}`,
         },
         method: 'GET', // Change method to 'GET' to fetch data
         cache: 'no-store',
@@ -43,7 +43,7 @@ export async function getChatSession(sessionId: string, workspaceId: string): Pr
     const response = await fetch(endpoint, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.access}`,
+            Authorization: `JWT ${session.access}`,
         },
         method: 'GET', // Change method to 'GET' to fetch data
         cache: 'no-store',
@@ -97,7 +97,7 @@ export async function updateChatSession(
     const response = await fetch(endpoint, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.access}`,
+            Authorization: `JWT ${session.access}`,
         },
         method: 'PATCH', // Change method to 'PATCH' to update data
         body: JSON.stringify(updates),
@@ -127,7 +127,7 @@ export async function createChatSession(
     const response = await fetch(endpoint, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.access}`,
+            Authorization: `JWT ${session.access}`,
         },
         method: 'POST', // Change method to 'POST' to create data
         body: JSON.stringify(sessionData),
@@ -155,7 +155,7 @@ export async function deleteChatSession(sessionId: string, workspaceId: string):
     const response = await fetch(endpoint, {
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.access}`,
+            Authorization: `JWT ${session.access}`,
         },
         method: 'DELETE', // Change method to 'DELETE' to delete data
     })
