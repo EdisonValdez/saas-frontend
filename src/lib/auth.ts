@@ -159,20 +159,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             return true
         },
     },
-    events: {
-        async signIn(message) {
-            console.log('[DEBUG] SignIn event triggered:', message.user?.email)
-        },
-        async signOut(message) {
-            console.log('[DEBUG] SignOut event triggered')
-        },
-        async createUser(message) {
-            console.log('[DEBUG] CreateUser event triggered:', message.user.email)
-        },
-        async session(message) {
-            console.log('[DEBUG] Session event triggered')
-        },
-    },
+
     secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || process.env.SECRET,
     session: {
         strategy: 'jwt',
