@@ -45,6 +45,8 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
 
     const router = useRouter()
     const { toast } = useToast()
+    const [showDebugPanel, setShowDebugPanel] = React.useState(false)
+    const [debugResult, setDebugResult] = React.useState<any>(null)
 
     const { handleSubmit, reset, formState } = form
     const { errors, isSubmitting, isSubmitSuccessful } = formState
@@ -56,10 +58,14 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
     }, [isSubmitSuccessful, reset])
 
     async function onSubmit(data: UserLoginData) {
+        console.log('[DEBUG] Login form submission started for:', data.email)
+
         try {
             const signInResult = await loginAction(data, returnUrl)
+            console.log('[DEBUG] Login action completed, result:', signInResult)
 
-            if (signInResult) {
+            if (signInResult?.ok) {
+                console.log('[DEBUG] Login successful, redirecting to:', returnUrl)
                 toast({
                     title: 'Success',
                     description: 'You have successfully logged in.',
@@ -67,15 +73,104 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
 
                 // Redirect to the returnUrl
                 router.push(returnUrl)
+            } else if (signInResult?.error) {
+                console.error('[DEBUG] Login failed with error:', signInResult.error)
+
+                let errorMessage = 'An error occurred during login. Please try again.'
+
+                // Provide more specific error messages based on the error type
+                if (signInResult.error === 'CredentialsSignin') {
+                    errorMessage = 'Invalid email or password. Please check your credentials and try again.'
+                } else if (signInResult.error.includes('fetch')) {
+                    errorMessage =
+                        'Unable to connect to the authentication server. Please check your internet connection and try again.'
+                } else if (signInResult.error.includes('timeout')) {
+                    errorMessage = 'The login request timed out. Please try again.'
+                }
+
+                toast({
+                    title: 'Login Error',
+                    description: errorMessage,
+                    variant: 'destructive',
+                })
             } else {
-                throw new Error('Login failed')
+                console.error('[DEBUG] Login failed with unknown result:', signInResult)
+                toast({
+                    title: 'Login Error',
+                    description: 'Login failed for an unknown reason. Please try again.',
+                    variant: 'destructive',
+                })
             }
         } catch (error) {
+            console.error('[DEBUG] Login form exception:', error)
+            console.error('[DEBUG] Error type:', error instanceof Error ? error.constructor.name : typeof error)
+            console.error('[DEBUG] Error message:', error instanceof Error ? error.message : 'Unknown error')
+            console.error('[DEBUG] Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+
+            let errorMessage = 'An unexpected error occurred during login. Please try again.'
+
+            if (error instanceof Error) {
+                if (error.message.includes('fetch')) {
+                    errorMessage = 'Network error: Unable to connect to the authentication server.'
+                } else if (error.message.includes('timeout')) {
+                    errorMessage = 'Request timeout: The login request took too long to complete.'
+                } else if (error.message.includes('JSON')) {
+                    errorMessage = 'Server response error: The server returned an invalid response.'
+                } else if (error.message) {
+                    errorMessage = `Login error: ${error.message}`
+                }
+            }
+
             toast({
                 title: 'Login Error',
-                description: 'An error occurred during login. Please try again.',
+                description: errorMessage,
                 variant: 'destructive',
             })
+        }
+    }
+
+    async function testDirectAuth() {
+        const formData = form.getValues()
+        if (!formData.email || !formData.password) {
+            toast({
+                title: 'Debug Test Error',
+                description: 'Please enter email and password first',
+                variant: 'destructive',
+            })
+            return
+        }
+
+        try {
+            const response = await fetch('/api/debug-auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password,
+                }),
+            })
+            const result = await response.json()
+            setDebugResult(result)
+            console.log('[DEBUG] Direct auth test result:', result)
+        } catch (error) {
+            console.error('[DEBUG] Direct auth test error:', error)
+            setDebugResult({ error: error instanceof Error ? error.message : 'Unknown error' })
+        }
+    }
+
+    async function testBackendConnection() {
+        try {
+            const response = await fetch('/api/debug-auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ testType: 'connection' }),
+            })
+            const result = await response.json()
+            setDebugResult(result)
+            console.log('[DEBUG] Backend connection test result:', result)
+        } catch (error) {
+            console.error('[DEBUG] Backend connection test error:', error)
+            setDebugResult({ error: error instanceof Error ? error.message : 'Unknown error' })
         }
     }
 
@@ -154,6 +249,46 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                             Reset your username?
                         </Link>
                     </p>
+
+                    {/* Debug Panel - Only show in development */}
+                    {process.env.NODE_ENV === 'development' && (
+                        <div className="border-t pt-4 mt-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setShowDebugPanel(!showDebugPanel)}
+                                className="w-full mb-2"
+                            >
+                                {showDebugPanel ? 'Hide' : 'Show'} Debug Panel
+                            </Button>
+
+                            {showDebugPanel && (
+                                <div className="space-y-2 p-3 bg-muted rounded-md">
+                                    <p className="text-sm font-medium">Debug Tools</p>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            type="button"
+                                            variant="secondary"
+                                            size="sm"
+                                            onClick={testBackendConnection}
+                                        >
+                                            Test Backend
+                                        </Button>
+                                        <Button type="button" variant="secondary" size="sm" onClick={testDirectAuth}>
+                                            Test Direct Auth
+                                        </Button>
+                                    </div>
+
+                                    {debugResult && (
+                                        <div className="mt-2 p-2 bg-background rounded text-xs overflow-auto max-h-40">
+                                            <pre>{JSON.stringify(debugResult, null, 2)}</pre>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </form>
             </Form>
         </div>
