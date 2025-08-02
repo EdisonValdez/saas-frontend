@@ -250,6 +250,22 @@ class EnhancedApiClient {
         workspaceId: string,
         context?: any
     ): Promise<ApiResponse<{ response: string; credits_used: number }>> {
+        // For the current Next.js API route, we only send the prompt
+        // The backend handles authentication via session
+        return this.request(API_ENDPOINTS.agents.invoke, {
+            method: 'POST',
+            body: JSON.stringify({
+                prompt,
+            }),
+        })
+    }
+
+    // Method for full workspace-based agent invocation (if backend supports it)
+    async invokeAgentWithWorkspace(
+        prompt: string,
+        workspaceId: string,
+        context?: any
+    ): Promise<ApiResponse<{ response: string; credits_used: number }>> {
         return this.request(API_ENDPOINTS.agents.invoke, {
             method: 'POST',
             body: JSON.stringify({

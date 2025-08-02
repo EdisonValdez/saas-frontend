@@ -24,7 +24,7 @@ export async function POST(req: Request) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `JWT ${accessToken}`,
             },
             body: JSON.stringify(invitation),
         })

@@ -24,8 +24,8 @@ import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 
-// Action
-import { loginAction } from '@/lib/actions/login'
+// NextAuth
+import { signIn } from 'next-auth/react'
 
 // Types
 interface UserLoginProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -57,9 +57,32 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
 
     async function onSubmit(data: UserLoginData) {
         try {
-            const signInResult = await loginAction(data, returnUrl)
+            const signInResult = await signIn('credentials', {
+                email: data.email,
+                password: data.password,
+                redirect: false,
+                callbackUrl: returnUrl,
+            })
 
-            if (signInResult) {
+            if (signInResult?.error) {
+                let errorMessage = 'An error occurred during login. Please try again.'
+
+                // Provide more specific error messages based on the error type
+                if (signInResult.error === 'CredentialsSignin') {
+                    errorMessage = 'Invalid email or password. Please check your credentials and try again.'
+                } else if (signInResult.error.includes('fetch')) {
+                    errorMessage =
+                        'Unable to connect to the authentication server. Please check your internet connection and try again.'
+                } else if (signInResult.error.includes('timeout')) {
+                    errorMessage = 'The login request timed out. Please try again.'
+                }
+
+                toast({
+                    title: 'Login Error',
+                    description: errorMessage,
+                    variant: 'destructive',
+                })
+            } else if (signInResult?.ok || signInResult?.url) {
                 toast({
                     title: 'Success',
                     description: 'You have successfully logged in.',
@@ -68,12 +91,30 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
                 // Redirect to the returnUrl
                 router.push(returnUrl)
             } else {
-                throw new Error('Login failed')
+                toast({
+                    title: 'Login Error',
+                    description: 'Login failed for an unknown reason. Please try again.',
+                    variant: 'destructive',
+                })
             }
         } catch (error) {
+            let errorMessage = 'An unexpected error occurred during login. Please try again.'
+
+            if (error instanceof Error) {
+                if (error.message.includes('fetch')) {
+                    errorMessage = 'Network error: Unable to connect to the authentication server.'
+                } else if (error.message.includes('timeout')) {
+                    errorMessage = 'Request timeout: The login request took too long to complete.'
+                } else if (error.message.includes('JSON')) {
+                    errorMessage = 'Server response error: The server returned an invalid response.'
+                } else if (error.message) {
+                    errorMessage = `Login error: ${error.message}`
+                }
+            }
+
             toast({
                 title: 'Login Error',
-                description: 'An error occurred during login. Please try again.',
+                description: errorMessage,
                 variant: 'destructive',
             })
         }
