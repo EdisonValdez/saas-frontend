@@ -123,9 +123,13 @@ export function ChatApiDebug() {
             console.log('Method:', 'POST')
             console.log('Payload:', payload)
 
+            // Get authentication headers
+            const authHeaders = await authService.getAuthHeaders()
+
             const response = await fetch('/api/agents/invoke', {
                 method: 'POST',
                 headers: {
+                    ...authHeaders,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(payload),
