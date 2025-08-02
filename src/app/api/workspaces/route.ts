@@ -26,7 +26,7 @@ export async function GET(request: Request) {
         const apiResponse = await fetch(WORKSPACES_ENDPOINT, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `JWT ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
             },
             method: 'GET',
         })
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `JWT ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify(payload),
         })
