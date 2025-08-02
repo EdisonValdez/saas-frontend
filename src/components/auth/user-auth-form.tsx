@@ -45,6 +45,8 @@ export function UserLoginForm({ returnUrl, className, ...props }: UserLoginProps
 
     const router = useRouter()
     const { toast } = useToast()
+    const [showDebugPanel, setShowDebugPanel] = React.useState(false)
+    const [debugResult, setDebugResult] = React.useState<any>(null)
 
     const { handleSubmit, reset, formState } = form
     const { errors, isSubmitting, isSubmitSuccessful } = formState
