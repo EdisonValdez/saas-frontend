@@ -17,7 +17,7 @@ const providers: Provider[] = [
             },
             password: { label: 'Password', type: 'password' },
         },
-        async authorize(credentials, req) {
+        async authorize(credentials) {
             const { email, password } = userLoginSchema.parse(credentials)
 
             if (!credentials?.email || !credentials?.password) {
@@ -87,19 +87,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     pages: {
         signIn: '/login',
     },
-    cookies: {
-        sessionToken: {
-            name: 'next-auth.session-token',
-            options: {
-                httpOnly: true,
-                sameSite: 'lax',
-                path: '/',
-                secure: process.env.NODE_ENV === 'production',
-            },
-        },
+    session: {
+        strategy: 'jwt',
+        maxAge: 24 * 60 * 60, // 1 day
     },
     callbacks: {
-        async jwt({ token, user }: { token: any; user: any }) {
+        async jwt({ token, user }) {
             if (user) {
                 token.id = user.id
                 token.name = user.name
@@ -110,7 +103,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             }
             return token
         },
-        async session({ session, token }: { session: any; token: any }) {
+        async session({ session, token }) {
             if (token) {
                 session.user = {
                     id: token.id as string,
@@ -123,16 +116,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             }
             return session
         },
-        async signIn({ user, account, profile, email, credentials }) {
+        async signIn() {
             return true
         },
     },
-
-    secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || process.env.SECRET,
-    session: {
-        strategy: 'jwt',
-        maxAge: 24 * 60 * 60, // Token expiration time (1 day)
-        updateAge: 24 * 60 * 60, // Only update at session expiry to avoid loops
-    },
-    debug: false, // Disable debug mode to reduce log spam
+    secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
 })
